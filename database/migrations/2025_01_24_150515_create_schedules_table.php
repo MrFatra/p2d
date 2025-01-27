@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['Donor', 'Posyandu']);
+            $table->enum('type', ['Donor', 'Posyandu Bayi', 'Posyandu Balita', 'Posyandu Ibu Hamil', 'Posyandu Remaja', 'Posyandu Lansia']);
             $table->date('date_open');
             $table->date('date_closed');
             $table->time('opened_time');
