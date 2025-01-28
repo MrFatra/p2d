@@ -26,7 +26,7 @@ class User extends Authenticatable implements FilamentUser
         'no_kk',
         'name',
         'password',
-        'date_birth',
+        'birth_date',
         'age',
         'gender',
         'phone_number',
@@ -56,6 +56,17 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updating(function ($user) {
+            if (empty($user->password)) {
+                unset($user->password);
+            }
+        });
     }
 
     public function canAccessPanel(Panel $panel): bool
