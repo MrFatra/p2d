@@ -14,32 +14,29 @@ class ConsultationHistorySeeder extends Seeder
     {
         $consultations = [
             [
-                'user_id' => 1,
-                'reply_id' => 3,
-                'title' => 'Sakit Dada',
-                'description' => 'Tolong, dada saya sakit',
-                'reply' => 'awokaowk',
+                'patient_id' => 1,
+                'doctor_id' => 3,
+                'topic' => 'Sakit Dada',
             ],
             [
-                'user_id' => 2,
-                'reply_id' => 3,
-                'title' => 'Sakit Perut',
-                'description' => 'Tolong, perut saya sakit',
-                'reply' => 'awokaowk',
+                'patient_id' => 2,
+                'doctor_id' => 3,
+                'topic' => 'Sakit Kepala',
             ],
             [
-                'user_id' => 1,
-                'reply_id' => 3,
-                'title' => 'Sakit Kepala',
-                'description' => 'Tolong, kepala saya sakit',
-                'reply' => 'awokaowk',
+                'patient_id' => 2,
+                'doctor_id' => 3,
+                'topic' => 'Sakit Perut',
             ],
             [
-                'user_id' => 2,
-                'reply_id' => 3,
-                'title' => 'Sakit Gigi',
-                'description' => 'Tolong, gigi saya sakit',
-                'reply' => 'aowkaowk',
+                'patient_id' => 2,
+                'doctor_id' => 3,
+                'topic' => 'Sakit Gigi',
+            ],
+            [
+                'patient_id' => 1,
+                'doctor_id' => 3,
+                'topic' => 'Sakit Mata',
             ],
         ];
 
