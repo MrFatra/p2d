@@ -22,7 +22,7 @@ class ScheduleSeeder extends Seeder
                 'notes' => 'Gelar Donor Darah',
             ],
             [
-                'type' => 'Posyandu',
+                'type' => 'Posyandu Balita',
                 'date_open' => now(),
                 'date_closed' => now()->addDay(),
                 'opened_time' => '08:00:00',

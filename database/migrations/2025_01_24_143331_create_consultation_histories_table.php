@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('consultation_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('reply_id')->nullable()->constrained('users')->onDelete('cascade');
-            $table->string('title');
-            $table->string('description');
-            $table->string('reply');
+            $table->foreignId('patient_id')->nullable()->constrained()->onDelete('cascade');
+            // $table->foreignId('doctor_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('doctor_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('topic');
             $table->timestamps();
         });
     }
