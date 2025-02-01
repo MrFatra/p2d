@@ -23,56 +23,72 @@ class ScheduleResource extends Resource
 {
     protected static ?string $model = Schedule::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-clock';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
     protected static ?string $label = 'Jadwal';
 
     public static function form(Form $form): Form
     {
         return $form
-        ->schema([
-            Section::make('Informasi Jadwal')
-            ->description('Detail informasi pembuatan jadwal.')
-            ->icon('heroicon-o-information-circle')
-            ->columns(2)
             ->schema([
-            Select::make('type')
-            ->label('Pilih Jadwal Untuk:')
-            ->required()
-            ->options([
-                'Donor' => 'Donor', 
-                'Posyandu Bayi' => 'Posyandu Bayi', 
-                'Posyandu Balita' => 'Posyandu Balita', 
-                'Posyandu Ibu Hamil' => 'Posyandu Ibu Hamil', 
-                'Posyandu Remaja' => 'Posyandu Remaja', 
-                'Posyandu Lansia' => 'Posyandu Lansia', 
-            ])
-            ->native(false),
-                DatePicker::make('date_open')
-                ->native(false)
-                ->label('Tanggal Buka')
-                ->displayFormat('Y-m-d')
-                ->closeOnDateSelection()
-                ->required(),
-                DatePicker::make('date_closed')
-                ->native(false)
-                ->label('Tanggal Tutup')
-                ->displayFormat('Y-m-d')
-                ->closeOnDateSelection()
-                ->required(),
-                TimePicker::make('opened_time')
-                ->seconds(false)
-                ->label('Jam Buka')
-                ->required(),
-                TimePicker::make('closed_time')
-                ->seconds(false)
-                ->label('Jam Tutup')
-                ->required(),
-                TextInput::make('notes')
-                ->label('Deskripsi')
-                ->required()
-            ])
-        ]);    
+                Section::make('Informasi Jadwal')
+                    ->description('Detail informasi pembuatan jadwal.')
+                    ->icon('heroicon-o-information-circle')
+                    ->columns(2)
+                    ->collapsible()
+                    ->schema([
+                        Select::make('type')
+                            ->label('Pilih Jadwal Untuk:')
+                            ->required()
+                            ->options([
+                                'Donor' => 'Donor',
+                                'Posyandu Bayi' => 'Posyandu Bayi',
+                                'Posyandu Balita' => 'Posyandu Balita',
+                                'Posyandu Ibu Hamil' => 'Posyandu Ibu Hamil',
+                                'Posyandu Remaja' => 'Posyandu Remaja',
+                                'Posyandu Lansia' => 'Posyandu Lansia',
+                            ])
+                            ->native(false),
+                        TextInput::make('notes')
+                            ->label('Deskripsi')
+                            ->required(),
+                    ]),
+                Section::make('Tanggal Jadwal')
+                    ->description('Pilih tanggal jadwal buka & tutup.')
+                    ->icon('heroicon-o-calendar')
+                    ->columns(2)
+                    ->collapsible()
+                    ->schema([
+                        DatePicker::make('date_open')
+                            ->native(false)
+                            ->label('Tanggal Buka')
+                            ->displayFormat('Y-m-d')
+                            ->closeOnDateSelection()
+                            ->required(),
+                        DatePicker::make('date_closed')
+                            ->native(false)
+                            ->label('Tanggal Tutup')
+                            ->displayFormat('Y-m-d')
+                            ->closeOnDateSelection()
+                            ->required(),
+                    ]),
+                Section::make('Waktu')
+                    ->description('Pilih waktu buka & tutup.')
+                    ->icon('heroicon-o-clock')
+                    ->columns(2)
+                    ->collapsible()
+                    ->schema([
+                        TimePicker::make('opened_time')
+                            ->seconds(false)
+                            ->label('Jam Buka')
+                            ->required(),
+                        TimePicker::make('closed_time')
+                            ->seconds(false)
+                            ->label('Jam Tutup')
+                            ->required(),
+                    ]),
+
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -80,25 +96,26 @@ class ScheduleResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('type')
-                ->label('Jadwal Posyandu'),
+                    ->label('Jadwal Posyandu'),
                 TextColumn::make('date_open')
-                ->label('Tanggal Buka')
-                ->date('Y-m-d'),
+                    ->label('Tanggal Buka')
+                    ->date('Y-m-d'),
                 TextColumn::make('date_closed')
-                ->label('Tanggal Buka')
-                ->date('Y-m-d'),
+                    ->label('Tanggal Buka')
+                    ->date('Y-m-d'),
                 TextColumn::make('opened_time')
-                ->label('Waktu Buka'),
+                    ->label('Waktu Buka'),
                 TextColumn::make('closed_time')
-                ->label('Waktu Tutup'),
+                    ->label('Waktu Tutup'),
                 TextColumn::make('notes')
-                ->label('Deskripsi'),
+                    ->label('Deskripsi'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
