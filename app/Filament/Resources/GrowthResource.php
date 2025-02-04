@@ -60,6 +60,7 @@ class GrowthResource extends Resource
                                     $height = $get('height');
                                     if ($height) {
                                         $status = MyClass::calculateStuntingStatus($user->birth_date, $height);
+                                        dd($status);
                                         $set('stunting_status', $status);
                                     }
                                 }
@@ -81,6 +82,7 @@ class GrowthResource extends Resource
                                     $user = User::find($userId);
                                     if ($user) {
                                         $status = MyClass::calculateStuntingStatus($user->birth_date, $state);
+                                        dd($status);
                                         $set('stunting_status', $status);
                                     }
                                 }
@@ -126,11 +128,13 @@ class GrowthResource extends Resource
 
                         TextInput::make('stunting_status')
                             ->label('Status Stunting')
-                            ->default('Normal'),
+                            ->default('Normal')
+                            ->hidden(),
 
                         TextInput::make('imt_status')
                             ->label('Status IMT')
-                            ->default('Normal'),
+                            ->default('Normal')
+                            ->hidden(),
                     ]),
 
                 Section::make('Data Kehamilan & Anak')

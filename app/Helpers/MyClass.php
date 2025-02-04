@@ -15,24 +15,38 @@ class MyClass
      */
     public static function calculateStuntingStatus($birthDate, $height)
     {
-        // Pastikan $birthDate tidak null dan $height merupakan nilai numerik
-        if (!$birthDate || !$height) {
+        // Hitung usia dalam bulan menggunakan Carbon
+        $birth = Carbon::parse($birthDate);
+        $now   = Carbon::now();
+        $ageInMonths = $birth->diffInMonths($now);
+
+        // Validasi: hanya berlaku untuk balita (0-60 bulan)
+        if ($ageInMonths < 0 || $ageInMonths > 60) {
             return 'Normal';
         }
-        
-        // Hitung usia dalam tahun berdasarkan birth_date menggunakan Carbon
-        $age = Carbon::parse($birthDate)->age;
-    
-        // Contoh logika perhitungan (silakan sesuaikan threshold-nya dengan standar yang berlaku):
-        if ($age < 2) {
-            // Misalnya, untuk usia di bawah 2 tahun, jika tinggi < 75 cm dianggap stunting
-            return $height < 75 ? 'Stunted' : 'Normal';
-        } elseif ($age < 5) {
-            // Untuk anak usia 2 - 5 tahun, jika tinggi < 85 cm dianggap stunting
-            return $height < 85 ? 'Stunted' : 'Normal';
+
+        // Tentukan data referensi berdasarkan kelompok usia
+        if ($ageInMonths < 24) {
+            // Kelompok bayi (0-24 bulan): Pengukuran panjang badan (telentang)
+            // Data contoh: median dan standar deviasi (nilai ini hanya contoh, sesuaikan dengan data referensi WHO)
+            $median = 74.0;
+            $sd     = 2.5;
         } else {
-            // Untuk usia di atas 5 tahun, logika perhitungan bisa berbeda atau dianggap normal
-            return 'Normal';
+            // Kelompok anak (24-60 bulan): Pengukuran tinggi badan (berdiri)
+            $median = 90.0;
+            $sd     = 3.0;
+        }
+
+        // Menghitung Z-score
+        $zScore = ($height - $median) / $sd;
+
+        // Klasifikasi status gizi berdasarkan Z-score
+        if ($zScore < -3) {
+            return "Stunting";
+        } elseif ($zScore < -2) {
+            return "Kemungkinan Stunting";
+        } else {
+            return "Normal";
         }
     }
 }
