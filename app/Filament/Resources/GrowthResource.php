@@ -60,7 +60,7 @@ class GrowthResource extends Resource
                                     $height = $get('height');
                                     if ($height) {
                                         $status = MyClass::calculateStuntingStatus($user->birth_date, $height);
-                                        dd($status);
+
                                         $set('stunting_status', $status);
                                     }
                                 }
@@ -82,7 +82,6 @@ class GrowthResource extends Resource
                                     $user = User::find($userId);
                                     if ($user) {
                                         $status = MyClass::calculateStuntingStatus($user->birth_date, $state);
-                                        dd($status);
                                         $set('stunting_status', $status);
                                     }
                                 }
@@ -129,12 +128,12 @@ class GrowthResource extends Resource
                         TextInput::make('stunting_status')
                             ->label('Status Stunting')
                             ->default('Normal')
-                            ->hidden(),
+                            ->readOnly(),
 
                         TextInput::make('imt_status')
                             ->label('Status IMT')
                             ->default('Normal')
-                            ->hidden(),
+                            ->readOnly(),
                     ]),
 
                 Section::make('Data Kehamilan & Anak')
@@ -247,7 +246,7 @@ class GrowthResource extends Resource
                     'Stunted' => 'Stunted',
                 ])
                 ->searchable(),
-        
+
             Tables\Filters\SelectFilter::make('imt_status')
                 ->label('Status IMT')
                 ->options([
@@ -256,12 +255,12 @@ class GrowthResource extends Resource
                     'Underweight' => 'Underweight',
                 ])
                 ->searchable(),
-        
+
             Tables\Filters\TernaryFilter::make('smoking')
                 ->label('Perokok')
                 ->trueLabel('Ya')
                 ->falseLabel('Tidak'),
-        
+
             Tables\Filters\SelectFilter::make('gestational_category')
                 ->label('Kategori Kehamilan')
                 ->options([
@@ -270,7 +269,7 @@ class GrowthResource extends Resource
                     'Abortus' => 'Abortus',
                 ])
                 ->searchable(),
-        
+
             Tables\Filters\Filter::make('created_at')
                 ->form([
                     Forms\Components\DatePicker::make('created_from')

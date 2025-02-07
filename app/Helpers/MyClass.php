@@ -22,7 +22,7 @@ class MyClass
 
         // Validasi: hanya berlaku untuk balita (0-60 bulan)
         if ($ageInMonths < 0 || $ageInMonths > 60) {
-            return 'Normal';
+            return 'Hanya untul bayi dan balita';
         }
 
         // Tentukan data referensi berdasarkan kelompok usia
