@@ -26,7 +26,7 @@ class Whatsapp
      */
     public function __construct()
     {
-        $this->apiUrl = 'http://localhost:3000'; // Change this to your actual Express server URL
+        $this->apiUrl = 'http://localhost:3500/api'; // Change this to your actual Express server URL
     }
 
     /**
@@ -46,7 +46,10 @@ class Whatsapp
                 'message' => $message,
             ]);
 
-            return $response->json();
+            return $response->json([
+                'status'  => 'success',
+                'message' => 'Send Success',
+            ]);
         } catch (\Exception $e) {
             return [
                 'status'  => 'error',
@@ -77,7 +80,10 @@ class Whatsapp
                 'type' => $params['type']
             ]);
 
-            return $response->json();
+            return [
+                'status'  => 'success',
+                'message' => 'Send Success',
+            ];
         } catch (\Exception $e) {
             return [
                 'status'  => 'error',

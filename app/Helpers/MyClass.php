@@ -49,4 +49,8 @@ class MyClass
             return "Normal";
         }
     }
+
+    public static function calculateImtStatus($height, $weight, $birthDate){
+
+    }
 }
