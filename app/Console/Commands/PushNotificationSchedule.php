@@ -28,11 +28,8 @@ class PushNotificationSchedule extends Command
      */
     public function handle()
     {
-        // Ambil tanggal hari ini
         $today = Carbon::now()->format('Y-m-d');
 
-        // Ambil data jadwal Posyandu yang aktif hari ini.
-        // Asumsikan bahwa jadwal aktif adalah yang memiliki date_open <= hari ini dan date_closed >= hari ini.
         $schedules = Schedule::whereDate('date_open', '<=', $today)
                     ->whereDate('date_closed', '>=', $today)
                     ->whereIn('type', [
@@ -40,7 +37,7 @@ class PushNotificationSchedule extends Command
                         'Posyandu Balita',
                         'Posyandu Ibu Hamil',
                         'Posyandu Remaja',
-                        'Posyandu Lansia'
+                        'Posyandu Lansia',
                     ])
                     ->get();
 
@@ -49,16 +46,14 @@ class PushNotificationSchedule extends Command
             return;
         }
 
-        // Susun pesan notifikasi dengan detail dari tiap jadwal yang aktif
-        $message = "Reminder Posyandu untuk hari ini ({$today}):\n";
+        $message = "";
         foreach ($schedules as $schedule) {
-            $message .= "- {$schedule->type} dari {$schedule->opened_time} sampai {$schedule->closed_time}. Catatan: {$schedule->notes}\n";
+            $message .= $schedule->type;
         }
 
-        // Inisialisasi helper WhatsApp
-        $whatsapp = new Whatsapp();
+        dd($message);
 
-        // Daftar ID grup yang akan dikirimi pesan
+        $whatsapp = new Whatsapp();
 
         $groupIds = [
             '120363372345829352', // Wage
@@ -69,10 +64,7 @@ class PushNotificationSchedule extends Command
         ];
 
 
-        // Kirim notifikasi ke tiap grup
         foreach ($groupIds as $groupId) {
-            // Parameter yang dikirimkan ke API WhatsApp
-            // Sesuaikan parameter jika diperlukan, misalnya dengan mengirimkan pesan lengkap di key 'type'
             $params = [
                 'date' => $today,
                 'time' => Carbon::now()->format('H:i:s'),
