@@ -33,6 +33,7 @@ class PushNotificationSchedule extends Command
         $schedules = Schedule::whereDate('date_open', '<=', $today)
                     ->whereDate('date_closed', '>=', $today)
                     ->whereIn('type', [
+                        'Donor',
                         'Posyandu Bayi',
                         'Posyandu Balita',
                         'Posyandu Ibu Hamil',
@@ -51,7 +52,7 @@ class PushNotificationSchedule extends Command
             $message .= $schedule->type;
         }
 
-        dd($message);
+        // dd($message);
 
         $whatsapp = new Whatsapp();
 
