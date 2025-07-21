@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('replies', function (Blueprint $table) {
+        Schema::create('adults', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('consultation_history_id')->constrained()->onDelete('cascade');
-            $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('receiver_id')->constrained('users')->onDelete('cascade');
-            $table->text('message');
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->float('blood_pressure')->nullable();
+            $table->float('blood_glucose')->nullable();
+            $table->float('cholesterol')->nullable();
+            $table->float('bmi')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('replies');
+        Schema::dropIfExists('adults');
     }
 };

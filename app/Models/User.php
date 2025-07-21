@@ -110,13 +110,34 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasRole('admin');
     }
 
-    public function consultationHistories()
-    {
-        return $this->hasMany(ConsultationHistory::class);
-    }
+    // Relasi untuk data remaja
+public function teenager()
+{
+    return $this->hasOne(Teenagers::class);
+}
 
-    public function growths()
-    {
-        return $this->hasMany(Growth::class);
-    }
+// Relasi untuk data bayi
+public function infant()
+{
+    return $this->hasOne(Infant::class);
+}
+
+// Relasi untuk data ibu hamil/nifas/menyusui
+public function pregnantPostpartumBreastfeeding()
+{
+    return $this->hasOne(PregnantPostpartumBreastfeending::class);
+}
+
+// Relasi untuk data lansia
+public function elderly()
+{
+    return $this->hasOne(Erderly::class);
+}
+
+// Relasi ke banyak laporan
+public function reports()
+{
+    return $this->hasMany(Report::class);
+}
+
 }
