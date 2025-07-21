@@ -26,7 +26,7 @@ class GrowthResource extends Resource
 {
     protected static ?string $model = Growth::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-trending-up';
 
 
     protected static ?string $label = 'Pertumbuhan';
