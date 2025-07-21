@@ -26,7 +26,7 @@ class Whatsapp
      */
     public function __construct()
     {
-        $this->apiUrl = 'http://localhost:3500/api'; // Change this to your actual Express server URL
+        $this->apiUrl = 'http://localhost:3000/api'; // Change this to your actual Express server URL
     }
 
     /**
