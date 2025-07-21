@@ -4,23 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ConsultationHistory extends Model
+class Report extends Model
 {
+    // Nama tabel
+    protected $table = 'reports';
+
+    // Kolom yang bisa di-*mass assign*
     protected $fillable = [
         'user_id',
-        'reply_id',
-        'title',
+        'file_name',
+        'file_type',
         'description',
-        'reply',
+        'uploaded_at',
+        'file_path',
     ];
 
+    // Relasi ke user
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function reply()
-    {
-        return $this->belongsTo(Reply::class);
     }
 }
