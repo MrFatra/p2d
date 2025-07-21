@@ -64,7 +64,7 @@ class User extends Authenticatable implements FilamentUser
         parent::boot();
 
         static::creating(function ($user) {
-            $user->type_of_user = self::determineTypeOfUser($user->birth_date);
+            $user->assignRole(self::determineTypeOfUser($user->birth_date));
         });
 
         static::updating(function ($user) {
@@ -73,7 +73,7 @@ class User extends Authenticatable implements FilamentUser
             }
 
             if ($user->isDirty('birth_date')) {
-                $user->type_of_user = self::determineTypeOfUser($user->birth_date);
+                $user->assignRole(self::determineTypeOfUser($user->birth_date));
             }
         });
     }
@@ -81,26 +81,26 @@ class User extends Authenticatable implements FilamentUser
     private static function determineTypeOfUser($userBirthDate)
     {
         if (empty($userBirthDate)) {
-            return '-';
+            return 'none';
         }
 
         $now = now();
         $age = Carbon::parse($userBirthDate)->diffInYears($now);
 
         if ($age < 0) {
-            return 'bayi';
+            return 'baby';
         } elseif ($age < 5) {
-            return 'balita';
+            return 'toddler';
         } elseif ($age < 12) {
-            return 'anak';
+            return 'child';
         } elseif ($age < 18) {
-            return 'remaja';
+            return 'teenager';
         } elseif ($age < 60) {
-            return 'dewasa';
+            return 'adult';
         } elseif ($age >= 60) {
-            return 'lansia';
+            return 'elderly';
         } else {
-            return '-';
+            return 'none';
         }
     }
 
@@ -110,33 +110,32 @@ class User extends Authenticatable implements FilamentUser
     }
 
     // Relasi untuk data remaja
-public function teenager()
-{
-    return $this->hasOne(Teenagers::class);
-}
+    public function teenager()
+    {
+        return $this->hasOne(Teenagers::class);
+    }
 
-// Relasi untuk data bayi
-public function infant()
-{
-    return $this->hasOne(Infant::class);
-}
+    // Relasi untuk data bayi
+    public function infant()
+    {
+        return $this->hasOne(Infant::class);
+    }
 
-// Relasi untuk data ibu hamil/nifas/menyusui
-public function pregnantPostpartumBreastfeeding()
-{
-    return $this->hasOne(PregnantPostpartumBreastfeending::class);
-}
+    // Relasi untuk data ibu hamil/nifas/menyusui
+    public function pregnantPostpartumBreastfeeding()
+    {
+        return $this->hasOne(PregnantPostpartumBreastfeending::class);
+    }
 
-// Relasi untuk data lansia
-public function elderly()
-{
-    return $this->hasOne(Erderly::class);
-}
+    // Relasi untuk data lansia
+    public function elderly()
+    {
+        return $this->hasOne(Erderly::class);
+    }
 
-// Relasi ke banyak laporan
-public function reports()
-{
-    return $this->hasMany(Report::class);
-}
-
+    // Relasi ke banyak laporan
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
 }

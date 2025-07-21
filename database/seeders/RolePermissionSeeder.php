@@ -13,7 +13,21 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::firstOrCreate(['name' => 'patient']);
-        Role::firstOrCreate(['name' => 'admin']);        
+        $roles = [
+            'patient',
+            'admin',
+            'cadre',
+            'baby',
+            'toddler',
+            'child',
+            'teenager',
+            'adult',
+            'elderly',
+            'none',
+        ];
+        
+        foreach ($roles as $role) {
+            Role::firstOrCreate(['name' => $role]);
+        }
     }
 }
