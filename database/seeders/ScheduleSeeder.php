@@ -14,20 +14,28 @@ class ScheduleSeeder extends Seeder
     {
         $schedules = [
             [
-                'type' => 'Donor',
-                'date_open' => '2025-01-24',
-                'date_closed' => '2025-01-25',
-                'opened_time' => '08:00:00',
-                'closed_time' => '12:00:00',
-                'notes' => 'Gelar Donor Darah',
+                'type' => 'Infant Posyandu',
+                'date_open' => '2025-08-01',
+                'date_closed' => '2025-08-01',
+                'time_opened' => '08:00:00',
+                'time_closed' => '11:00:00',
+                'notes' => 'Bawa KMS dan buku imunisasi.'
             ],
             [
-                'type' => 'Posyandu Balita',
-                'date_open' => now(),
-                'date_closed' => now()->addDay(),
-                'opened_time' => '08:00:00',
-                'closed_time' => '12:00:00',
-                'notes' => 'Gelar Posyandu Balita',
+                'type' => 'Pregnant Women Posyandu',
+                'date_open' => '2025-08-03',
+                'date_closed' => '2025-08-03',
+                'time_opened' => '09:00:00',
+                'time_closed' => '12:00:00',
+                'notes' => 'Pemeriksaan kehamilan rutin.'
+            ],
+            [
+                'type' => 'Elderly Posyandu',
+                'date_open' => '2025-08-05',
+                'date_closed' => '2025-08-05',
+                'time_opened' => '07:30:00',
+                'time_closed' => '10:00:00',
+                'notes' => 'Cek tekanan darah dan konsultasi gizi.'
             ],
         ];
 

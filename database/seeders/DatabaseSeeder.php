@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Erderly;
+use App\Models\Report;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -16,9 +18,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolePermissionSeeder::class,
             UserSeeder::class,
-            GrowthSeeder::class,
-            ConsultationHistorySeeder::class,
             ScheduleSeeder::class,
+            AdultSeeder::class,
+            TeenagerSeeder::class,
+            InfantSeeder::class,
+            PregnantPostpartumBreastfeendingSeeder::class,
+            Erderly::class,
+            Report::class,
         ]);
     }
 }

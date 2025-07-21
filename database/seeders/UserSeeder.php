@@ -14,63 +14,52 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $user1 = User::firstOrCreate(
-            [
-                'nik' => '3208100020003000',
-            ],
-            [
-                'no_kk' => '3208100020003000',
-                'name' => 'Patient 1',
-                'password' => bcrypt('foobarrr'),
-                'birth_date' => '2000-01-01',
-                'age' => 22,
-                'gender' => 'L',
-                'phone_number' => '08881263622',
-                'address' => 'Jln. Mana Aja No.16 RT.03/RW.02',
-                'latitude' => -6.912,
-                'longitude' => 107.609,
-            ]
-        );
-
-        $user2 = User::firstOrCreate(
-            [
-                'nik' => '3208100020003001',
-            ],
-            [
-                'no_kk' => '3208100020003001',
-                'name' => 'Patient 2',
-                'password' => bcrypt('foobarrr'),
-                'birth_date' => '2001-01-01',
-                'age' => 23,
-                'gender' => 'P',
-                'phone_number' => '08881263623',
-                'address' => 'Jln. Mana Aja No.17 RT.03/RW.02',
-                'latitude' => -6.912,
-                'longitude' => 107.609,
-            ]
-        );
-
-        $admin = User::firstOrCreate(
-            [
-                'nik' => '3208100020003002',
-            ],
-            [
-                'no_kk' => '3208100020003002',
-                'name' => 'Admin 1',
-                'password' => bcrypt('foobarrr'),
-                'birth_date' => '2002-01-01',
-                'age' => 24,
-                'gender' => 'L',
-                'phone_number' => '08881263624',
-                'address' => 'Jln. Mana Aja No.18 RT.03/RW.02',
-                'latitude' => -6.912,
-                'longitude' => 107.609,
-                'password' => bcrypt('foobarrr'),
-            ]
-        );
-
+       // User 1
+        $user1 = User::create([
+            'family_card_number' => '3174012300012345',
+            'national_id' => '3174011001900001',
+            'name' => 'Andi Setiawan',
+            'password' => bcrypt('password'),
+            'birth_date' => '1990-05-10',
+            'gender' => 'L',
+            'phone_number' => '081234567890',
+            'address' => 'Jl. Merpati No.1, Jakarta',
+            'latitude' => -6.200000,
+            'longitude' => 106.816666,
+            'hamlet' => 'RW 01',
+        ]);
         $user1->assignRole('patient');
+
+        // User 2
+        $user2 = User::create([
+            'family_card_number' => '3174012300012346',
+            'national_id' => '3174012002850002',
+            'name' => 'Siti Aminah',
+            'password' => bcrypt('password'),
+            'birth_date' => '1985-08-20',
+            'gender' => 'P',
+            'phone_number' => '081298765432',
+            'address' => 'Jl. Melati No.5, Bandung',
+            'latitude' => -6.914744,
+            'longitude' => 107.609810,
+            'hamlet' => 'RW 03',
+        ]);
         $user2->assignRole('patient');
+
+        // Admin User
+        $admin = User::create([
+            'family_card_number' => '3174012300012347',
+            'national_id' => '3174011501950003',
+            'name' => 'Rudi Hartono',
+            'password' => bcrypt('password'),
+            'birth_date' => '1995-01-15',
+            'gender' => 'L',
+            'phone_number' => '085312345678',
+            'address' => 'Jl. Kenanga No.10, Surabaya',
+            'latitude' => -7.257472,
+            'longitude' => 112.752088,
+            'hamlet' => 'RW 05',
+        ]);
         $admin->assignRole('admin');
     }
 }
