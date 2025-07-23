@@ -14,7 +14,7 @@ class InfantSeeder extends Seeder
     {
          $infants = [
             [
-                'user_id' => 1,
+                'user_id' => 3,
                 'weight' => 9.5,
                 'height' => 75.0,
                 'nutrition_status' => 'Baik',
@@ -23,17 +23,6 @@ class InfantSeeder extends Seeder
                 'exclusive_breastfeeding' => true,
                 'complementary_feeding' => true,
                 'motor_development' => 'Sesuai Usia',
-            ],
-            [
-                'user_id' => 2,
-                'weight' => 8.0,
-                'height' => 70.5,
-                'nutrition_status' => 'Kurang',
-                'complete_immunization' => false,
-                'vitamin_a' => true,
-                'exclusive_breastfeeding' => false,
-                'complementary_feeding' => true,
-                'motor_development' => 'Sedikit Terlambat',
             ],
         ];
 

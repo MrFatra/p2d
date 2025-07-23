@@ -15,25 +15,11 @@ class AdultSeeder extends Seeder
     {
        $adults = [
             [
-                'user_id' => 1, 
+                'user_id' => 7, 
                 'blood_pressure' => 120.5,
                 'blood_glucose' => 95.2,
                 'cholesterol' => 180.7,
                 'bmi' => 23.5,
-            ],
-            [
-                'user_id' => 2,
-                'blood_pressure' => 130.2,
-                'blood_glucose' => 105.8,
-                'cholesterol' => 200.1,
-                'bmi' => 26.3,
-            ],
-            [
-                'user_id' => 3,
-                'blood_pressure' => 125.0,
-                'blood_glucose' => 98.4,
-                'cholesterol' => 190.0,
-                'bmi' => 24.7,
             ],
         ];
 

@@ -14,7 +14,6 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
         $roles = [
-            'patient',
             'admin',
             'cadre',
             'baby',

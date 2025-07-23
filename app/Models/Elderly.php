@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Erderly extends Model
+class Elderly extends Model
 {
     // Nama tabel eksplisit
     protected $table = 'elderly';

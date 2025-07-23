@@ -15,7 +15,7 @@ class TeenagerSeeder extends Seeder
     {
         $teenagers = [
             [
-                'user_id' => 5,
+                'user_id' => 6,
                 'weight' => 60.0,
                 'height' => 170.0,
                 'bmi' => 20.8,

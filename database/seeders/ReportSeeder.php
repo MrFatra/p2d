@@ -16,7 +16,7 @@ class ReportSeeder extends Seeder
     {
         $reports = [
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'file_name' => 'laporan_posyandu_januari_2025.pdf',
                 'file_type' => 'PDF',
                 'description' => 'Laporan kegiatan Posyandu bulan Januari 2025',
@@ -24,7 +24,7 @@ class ReportSeeder extends Seeder
                 'file_path' => 'uploads/laporan_posyandu/2025/januari/laporan_posyandu_januari_2025.pdf',
             ],
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'file_name' => 'laporan_posyandu_februari_2025.pdf',
                 'file_type' => 'PDF',
                 'description' => 'Laporan kegiatan Posyandu bulan Februari 2025',
@@ -32,7 +32,7 @@ class ReportSeeder extends Seeder
                 'file_path' => 'uploads/laporan_posyandu/2025/februari/laporan_posyandu_februari_2025.pdf',
             ],
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'file_name' => 'laporan_posyandu_maret_2025.pdf',
                 'file_type' => 'PDF',
                 'description' => 'Laporan kegiatan Posyandu bulan Maret 2025',

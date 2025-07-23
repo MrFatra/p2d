@@ -50,10 +50,10 @@ class UserSeeder extends Seeder
         $baby = User::create([
             'family_card_number' => '3174012300012349',
             'national_id' => '3174011506240005',
-            'name' => 'Bayu Saputra',
+            'name' => 'Aurelia Putri',
             'password' => bcrypt('password'),
             'birth_date' => '2024-06-15',
-            'gender' => 'L',
+            'gender' => 'P',
             'phone_number' => '081222334455',
             'address' => 'Jl. Dahlia No.9, Depok',
             'latitude' => -6.402484,
