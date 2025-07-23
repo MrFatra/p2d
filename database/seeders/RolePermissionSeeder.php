@@ -23,6 +23,7 @@ class RolePermissionSeeder extends Seeder
             'teenager',
             'adult',
             'elderly',
+            'pregnant',
             'none',
         ];
         

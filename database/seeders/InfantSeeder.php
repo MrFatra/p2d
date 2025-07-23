@@ -35,17 +35,6 @@ class InfantSeeder extends Seeder
                 'complementary_feeding' => true,
                 'motor_development' => 'Sedikit Terlambat',
             ],
-            [
-                'user_id' => 3,
-                'weight' => 10.2,
-                'height' => 78.3,
-                'nutrition_status' => 'Baik',
-                'complete_immunization' => true,
-                'vitamin_a' => false,
-                'exclusive_breastfeeding' => true,
-                'complementary_feeding' => false,
-                'motor_development' => 'Normal',
-            ],
         ];
 
         foreach ($infants as $infant) {

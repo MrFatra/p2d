@@ -32,15 +32,6 @@ class ErderlySeeder extends Seeder
                 'functional_ability' => 'Sebagian Bantuan',
                 'chronic_disease_history' => 'Diabetes',
             ],
-            [
-                'user_id' => 3,
-                'blood_pressure' => 120.0,
-                'blood_glucose' => 100.5,
-                'cholesterol' => 180.2,
-                'nutrition_status' => 'Baik',
-                'functional_ability' => 'Mandiri',
-                'chronic_disease_history' => 'Tidak Ada',
-            ],
         ];
 
         foreach ($erderlies as $erderly) {

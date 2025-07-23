@@ -31,15 +31,6 @@ class PregnantPostpartumBreastfeendingSeeder extends Seeder
                 'iron_tablets' => 20,
                 'anc_schedule' => '2025-08-15',
             ],
-            [
-                'user_id' => 3,
-                'pregnancy_status' => 'Trimester 3',
-                'muac' => 22.5,
-                'blood_pressure' => 120.30,
-                'tetanus_immunization' => 'Lengkap',
-                'iron_tablets' => 40,
-                'anc_schedule' => '2025-08-30',
-            ],
         ];
 
         foreach ($pregnants as $pregnant) {
