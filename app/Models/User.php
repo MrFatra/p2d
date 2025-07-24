@@ -78,6 +78,38 @@ class User extends Authenticatable implements FilamentUser
         });
     }
 
+    public function getUsers($kategori = null)
+    {
+        $now = Carbon::now();
+
+        switch ($kategori) {
+            case 'bayi':
+                return User::whereDate('birth_date', '>', $now->copy()->subYear())->get();
+
+            case 'balita':
+                return User::whereDate('birth_date', '<=', $now->copy()->subYear())
+                    ->whereDate('birth_date', '>', $now->copy()->subYears(5))
+                    ->get();
+
+            case 'remaja':
+                return User::whereDate('birth_date', '<=', $now->copy()->subYears(18))
+                    ->whereDate('birth_date', '>', $now->copy()->subYears(12))
+                    ->get();
+
+            case 'lansia':
+                return User::whereDate('birth_date', '<=', $now->copy()->subYears(60))->get();
+
+            case 'ibu':
+                return User::where('gender', 'P')
+                    ->whereDate('birth_date', '<=', $now->copy()->subYears(12))
+                    ->whereDate('birth_date', '>', $now->copy()->subYears(60))
+                    ->get();
+
+            default:
+                return User::all();
+        }
+    }
+
     public function getUsersByPosyanduCategory($kategori = null)
     {
         $users = User::all();
