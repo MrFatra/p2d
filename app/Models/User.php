@@ -78,6 +78,51 @@ class User extends Authenticatable implements FilamentUser
         });
     }
 
+    public function getUsersByPosyanduCategory($kategori = null)
+    {
+        $users = User::all();
+
+        $result = [
+            'bayi' => [],
+            'balita' => [],
+            'remaja' => [],
+            'lansia' => [],
+            'ibu' => [],
+        ];
+
+        foreach ($users as $user) {
+            $age = Carbon::parse($user->tanggal_lahir)->age;
+
+            if ($age < 1) {
+                $result['bayi'][] = $user;
+            }
+
+            if ($age >= 1 && $age < 5) {
+                $result['balita'][] = $user;
+            }
+
+            if ($age >= 12 && $age < 18) {
+                $result['remaja'][] = $user;
+            }
+
+            if ($age >= 60) {
+                $result['lansia'][] = $user;
+            }
+
+            if ($user->jenis_kelamin === 'P' && $age >= 12 && $age < 60) {
+                $result['ibu'][] = $user;
+            }
+        }
+
+        // parameter kategori dikirim, ambil hanya data itu
+        if ($kategori && array_key_exists($kategori, $result)) {
+            return $result[$kategori];
+        }
+
+        // tidak, kembalikan semua
+        return $result;
+    }
+
     private static function determineTypeOfUser($userBirthDate)
     {
         if (empty($userBirthDate)) {
@@ -130,7 +175,7 @@ class User extends Authenticatable implements FilamentUser
     // Relasi untuk data lansia
     public function elderly()
     {
-        return $this->hasOne(Erderly::class);
+        return $this->hasOne(Elderly::class);
     }
 
     // Relasi ke banyak laporan
