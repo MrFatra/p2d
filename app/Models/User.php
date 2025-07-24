@@ -23,17 +23,17 @@ class User extends Authenticatable implements FilamentUser
      * @var list<string>
      */
     protected $fillable = [
-        'nik',
-        'no_kk',
+        'family_card_number',
+        'national_id',
         'name',
         'password',
         'birth_date',
-        'age',
         'gender',
         'phone_number',
         'address',
         'latitude',
         'longitude',
+        'hamlet',
     ];
 
     /**
@@ -130,7 +130,7 @@ class User extends Authenticatable implements FilamentUser
     // Relasi untuk data lansia
     public function elderly()
     {
-        return $this->hasOne(Erderly::class);
+        return $this->hasOne(Elderly::class);
     }
 
     // Relasi ke banyak laporan
