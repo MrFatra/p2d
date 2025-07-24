@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
             'longitude' => 112.752088,
             'hamlet' => 'RW 05',
         ]);
-        $admin->assignRole('admin');
+        $admin->syncRoles('admin');
 
         // CADRE
         $cadre = User::create([
@@ -44,7 +44,7 @@ class UserSeeder extends Seeder
             'longitude' => 106.975572,
             'hamlet' => 'RW 02',
         ]);
-        $cadre->assignRole('cadre');
+        $cadre->syncRoles('cadre');
 
         // BABY
         $baby = User::create([
@@ -60,7 +60,6 @@ class UserSeeder extends Seeder
             'longitude' => 106.794243,
             'hamlet' => 'RW 01',
         ]);
-        $baby->assignRole('baby');
 
         // TODDLER
         $toddler = User::create([
@@ -76,7 +75,6 @@ class UserSeeder extends Seeder
             'longitude' => 106.797242,
             'hamlet' => 'RW 04',
         ]);
-        $toddler->assignRole('toddler');
 
         // CHILD
         $child = User::create([
@@ -92,7 +90,6 @@ class UserSeeder extends Seeder
             'longitude' => 106.631889,
             'hamlet' => 'RW 06',
         ]);
-        $child->assignRole('child');
 
         // TEENAGER
         $teenager = User::create([
@@ -108,7 +105,6 @@ class UserSeeder extends Seeder
             'longitude' => 106.845599,
             'hamlet' => 'RW 07',
         ]);
-        $teenager->assignRole('teenager');
 
         // ADULT
         $adult = User::create([
@@ -124,7 +120,6 @@ class UserSeeder extends Seeder
             'longitude' => 107.144285,
             'hamlet' => 'RW 08',
         ]);
-        $adult->assignRole('adult');
 
         // ELDERLY
         $elderly = User::create([
@@ -140,7 +135,6 @@ class UserSeeder extends Seeder
             'longitude' => 107.337579,
             'hamlet' => 'RW 09',
         ]);
-        $elderly->assignRole('elderly');
 
         // Pregnant
         $pregnant = User::create([
@@ -156,7 +150,6 @@ class UserSeeder extends Seeder
             'longitude' => 106.980000,
             'hamlet' => 'RW 10',
         ]);
-        $pregnant->assignRole('pregnant');
 
         // NONE
         $none = User::create([
@@ -172,6 +165,6 @@ class UserSeeder extends Seeder
             'longitude' => 106.000000,
             'hamlet' => 'RW 00',
         ]);
-        $none->assignRole('none');
+        $none->syncRoles('none');
     }
 }

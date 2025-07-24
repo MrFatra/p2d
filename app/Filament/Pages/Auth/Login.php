@@ -13,7 +13,7 @@ class Login extends BaseLogin
         parent::mount();
 
         $this->form->fill([
-            'nik' => '',
+            'national_id' => '',
             'password' => '',
         ]);
     }
@@ -21,7 +21,7 @@ class Login extends BaseLogin
     protected function throwFailureValidationException(): never
     {
         throw ValidationException::withMessages([
-            'data.nik' => __('filament-panels::pages/auth/login.messages.failed'),
+            'data.national_id' => __('filament-panels::pages/auth/login.messages.failed'),
         ]);
     }
 
@@ -31,7 +31,7 @@ class Login extends BaseLogin
             'form' => $this->form(
                 $this->makeForm()
                     ->schema([
-                        \Filament\Forms\Components\TextInput::make('nik')
+                        \Filament\Forms\Components\TextInput::make('national_id')
                             ->label('NIK')
                             ->required()
                             ->autofocus()
@@ -48,7 +48,7 @@ class Login extends BaseLogin
     protected function getCredentialsFromFormData(array $data): array
     {
         return [
-            'nik' => $data['nik'],
+            'national_id' => $data['national_id'],
             'password' => $data['password'],
         ];
     }

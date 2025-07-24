@@ -15,7 +15,8 @@ class PregnantPostpartumBreastfeendingSeeder extends Seeder
         $pregnants = [
             [
                 'user_id' => 9,
-                'pregnancy_status' => 'Trimester 1',
+                // 'pregnancy_status' => 'Trimester 1',
+                'pregnancy_status' => 'pregnant',
                 'muac' => 24.5,
                 'blood_pressure' => 110.75,
                 'tetanus_immunization' => 'TT1',

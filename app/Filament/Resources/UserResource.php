@@ -37,11 +37,11 @@ class UserResource extends Resource
                     ->collapsible()
                     ->columns(2)
                     ->schema([
-                        Forms\Components\TextInput::make('nik')
+                        Forms\Components\TextInput::make('national_id')
                             ->label('NIK')
                             ->numeric()
                             ->required(),
-                        Forms\Components\TextInput::make('no_kk')
+                        Forms\Components\TextInput::make('family_card_number')
                             ->required()
                             ->numeric()
                             ->label('No. KK'),
@@ -54,16 +54,10 @@ class UserResource extends Resource
                             ->displayFormat('Y-m-d')
                             ->required()
                             ->label('Tanggal Lahir'),
-                        Forms\Components\TextInput::make('age')
-                            ->required()
-                            ->label('Usia'),
-                        Forms\Components\Select::make('gender')
+                        Forms\Components\TextInput::make('gender')
                             ->required()
                             ->label('Jenis Kelamin')
-                            ->options([
-                                'L' => 'Laki-laki',
-                                'P' => 'Perempuan',
-                            ]),
+                            ->datalist(['L' => 'Laki-laki', 'P' => 'Perempuan']),
                     ]),
 
                 Section::make('Kontak')
@@ -90,6 +84,8 @@ class UserResource extends Resource
                             ->label('Latitude'),
                         Forms\Components\TextInput::make('longitude')
                             ->label('Longitude'),
+                        Forms\Components\TextInput::make('hamlet')
+                            ->label('Dusun'),
                     ]),
 
                 Section::make('Keamanan')
@@ -101,16 +97,11 @@ class UserResource extends Resource
                         Forms\Components\Select::make('roles')
                             ->relationship('roles', 'name')
                             ->preload()
-                            ->options(
-                                Role::all()->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
-                                    return [$id => \Illuminate\Support\Str::title($name)];
-                                })
-                            )
-                            ->label('Roles'),
+                            ->label('Peran'),
                         Forms\Components\TextInput::make('password')
                             ->password()
                             ->label('Password')
-                            ->hiddenOn('view')
+                            ->hiddenOn('view'),
                     ]),
             ]);
     }
@@ -119,28 +110,31 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nik')
+                TextColumn::make('national_id')
                     ->label('NIK')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('no_kk')
+
+                TextColumn::make('family_card_number')
                     ->label('No. KK')
                     ->sortable()
                     ->searchable(),
+
                 TextColumn::make('name')
                     ->label('Nama')
                     ->sortable()
                     ->searchable(),
+
                 TextColumn::make('birth_date')
                     ->label('Tanggal Lahir')
                     ->date('Y-m-d')
                     ->sortable()
                     ->searchable(),
+
                 TextColumn::make('gender')
                     ->label('Jenis Kelamin')
                     ->sortable()
                     ->badge()
-                    ->searchable()
                     ->colors([
                         'info' => 'L',
                         'pink' => 'P',
@@ -148,32 +142,51 @@ class UserResource extends Resource
                     ->formatStateUsing(fn($state) => match ($state) {
                         'L' => 'Laki-laki',
                         'P' => 'Perempuan',
+                        default => '-',
                     }),
+
                 TextColumn::make('phone_number')
                     ->label('Nomor Telepon')
                     ->sortable()
                     ->searchable(),
+
                 TextColumn::make('address')
                     ->label('Alamat')
                     ->limit(30)
                     ->tooltip(fn($record) => $record->address)
                     ->sortable()
                     ->searchable(),
+
                 TextColumn::make('roles.name')
-                    ->label('Role')
+                    ->label('Peran')
                     ->badge()
-                    ->sortable()
-                    ->searchable()
-                    ->colors([
-                        'warning' => 'admin',
-                        'info' => 'patient',
-                        'success' => 'doctor',
-                    ])
                     ->formatStateUsing(fn($state) => match ($state) {
                         'admin' => 'Admin',
-                        'patient' => 'Pasien',
-                        'doctor' => 'Dokter',
-                    }),
+                        'cadre' => 'Kader',
+                        'baby' => 'Bayi',
+                        'toddler' => 'Balita',
+                        'child' => 'Anak',
+                        'teenager' => 'Remaja',
+                        'adult' => 'Dewasa',
+                        'elderly' => 'Lansia',
+                        'pregnant' => 'Ibu Hamil',
+                        'none' => 'Tidak Ada',
+                        default => ucfirst($state),
+                    })
+                    ->color(fn($state) => match ($state) {
+                        'admin' => 'warning',
+                        'cadre' => 'warning',
+                        'baby' => 'info',
+                        'toddler' => 'info',
+                        'child' => 'cyan',
+                        'teenager' => 'purple',
+                        'adult' => 'emerald',
+                        'elderly' => 'indigo',
+                        'pregnant' => 'pink',
+                        'none' => 'neutral',
+                        default => 'gray',
+                    })
+
             ])
             ->filters([
                 //
