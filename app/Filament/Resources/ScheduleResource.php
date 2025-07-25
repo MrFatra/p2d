@@ -27,67 +27,89 @@ class ScheduleResource extends Resource
 
     protected static ?string $label = 'Jadwal';
 
+    protected static ?string $navigationGroup = 'Jadwal';
+
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Section::make('Informasi Jadwal')
-                    ->description('Detail informasi pembuatan jadwal.')
-                    ->icon('heroicon-o-information-circle')
-                    ->columns(2)
-                    ->collapsible()
-                    ->schema([
-                        Select::make('type')
-                            ->label('Pilih Jadwal Untuk:')
-                            ->required()
-                            ->options([
-                                'Donor' => 'Donor',
-                                'Posyandu Bayi' => 'Posyandu Bayi',
-                                'Posyandu Balita' => 'Posyandu Balita',
-                                'Posyandu Ibu Hamil' => 'Posyandu Ibu Hamil',
-                                'Posyandu Remaja' => 'Posyandu Remaja',
-                                'Posyandu Lansia' => 'Posyandu Lansia',
-                            ])
-                            ->native(false),
-                        TextInput::make('notes')
-                            ->label('Deskripsi')
-                            ->required(),
-                    ]),
-                Section::make('Tanggal Jadwal')
-                    ->description('Pilih tanggal jadwal buka & tutup.')
-                    ->icon('heroicon-o-calendar')
-                    ->columns(2)
-                    ->collapsible()
-                    ->schema([
-                        DatePicker::make('date_open')
-                            ->native(false)
-                            ->label('Tanggal Buka')
-                            ->displayFormat('Y-m-d')
-                            ->closeOnDateSelection()
-                            ->required(),
-                        DatePicker::make('date_closed')
-                            ->native(false)
-                            ->label('Tanggal Tutup')
-                            ->displayFormat('Y-m-d')
-                            ->closeOnDateSelection()
-                            ->required(),
-                    ]),
-                Section::make('Waktu')
-                    ->description('Pilih waktu buka & tutup.')
-                    ->icon('heroicon-o-clock')
-                    ->columns(2)
-                    ->collapsible()
-                    ->schema([
-                        TimePicker::make('opened_time')
-                            ->seconds(false)
-                            ->label('Jam Buka')
-                            ->required(),
-                        TimePicker::make('closed_time')
-                            ->seconds(false)
-                            ->label('Jam Tutup')
-                            ->required(),
-                    ]),
+        ->schema([
+            Section::make('Informasi Kehamilan')
+                ->description('Status kehamilan ibu saat ini.')
+                ->icon('heroicon-o-user')
+                ->columns(1)
+                ->collapsible()
+                ->schema([
+                    Select::make('pregnancy_status')
+                        ->label('Status Kehamilan')
+                        ->required()
+                        ->options([
+                            'Trimester 1' => 'Trimester 1',
+                            'Trimester 2' => 'Trimester 2',
+                            'Trimester 3' => 'Trimester 3',
+                            'Postpartum' => 'Postpartum',
+                        ])
+                        ->native(false),
+                ]),
 
+            Section::make('Pemeriksaan Fisik')
+                ->description('Data hasil pemeriksaan fisik ibu hamil.')
+                ->icon('heroicon-o-clipboard-document')
+                ->columns(2)
+                ->collapsible()
+                ->schema([
+                    TextInput::make('muac')
+                        ->label('Lingkar Lengan Atas (cm)')
+                        ->numeric()
+                        ->required()
+                        ->suffix('cm'),
+
+                    TextInput::make('blood_pressure')
+                        ->label('Tekanan Darah')
+                        ->placeholder('Contoh: 120/80')
+                        ->required(),
+                ]),
+
+            Section::make('Imunisasi & Suplemen')
+                ->description('Catatan imunisasi dan konsumsi tablet penambah darah.')
+                ->icon('heroicon-o-shield-check')
+                ->columns(2)
+                ->collapsible()
+                ->schema([
+                    Select::make('tetanus_immunization')
+                        ->label('Status Imunisasi Tetanus')
+                        ->options([
+                            'Lengkap' => 'Lengkap',
+                            'Belum Lengkap' => 'Belum Lengkap',
+                            'Tidak Diketahui' => 'Tidak Diketahui',
+                        ])
+                        ->native(false)
+                        ->required(),
+
+                    Select::make('iron_tablets')
+                        ->label('Jumlah Tablet Tambah Darah')
+                        ->options([
+                            '0' => '0 Tablet',
+                            '30' => '30 Tablet',
+                            '60' => '60 Tablet',
+                            '90' => '90 Tablet',
+                        ])
+                        ->native(false)
+                        ->required(),
+                ]),
+
+            Section::make('Jadwal Pemeriksaan (ANC)')
+                ->description('Tanggal kunjungan atau jadwal pemeriksaan ANC berikutnya.')
+                ->icon('heroicon-o-calendar-days')
+                ->columns(1)
+                ->collapsible()
+                ->schema([
+                    DatePicker::make('anc_schedule')
+                        ->label('Jadwal Pemeriksaan ANC')
+                        ->native(false)
+                        ->displayFormat('Y-m-d')
+                        ->closeOnDateSelection()
+                        ->required(),
+                ]),
             ]);
     }
 
