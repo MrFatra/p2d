@@ -21,8 +21,8 @@ return new class extends Migration
             $table->boolean('anemia')->nullable();
             $table->integer('iron_tablets')->nullable();
             // must ask
-            $table->integer('reproductive_health')->nullable();
-            $table->integer('mental_health')->nullable();
+            $table->enum('reproductive_health', ['baik', 'cukup', 'kurang'])->nullable();
+            $table->enum('mental_health', ['baik', 'cukup', 'kurang'])->nullable();
 
             $table->timestamps();
         });

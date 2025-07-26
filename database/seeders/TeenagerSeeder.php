@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Teenagers;
+use App\Models\Teenager;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -22,13 +22,13 @@ class TeenagerSeeder extends Seeder
                 'blood_pressure' => 115.4,
                 'anemia' => true,
                 'iron_tablets' => 6,
-                'reproductive_health' => 4,
-                'mental_health' => 3,
+                'reproductive_health' => 'baik',
+                'mental_health' => 'cukup',
             ],
         ];
 
         foreach ($teenagers as $teenager) {
-            Teenagers::create($teenager);
+            Teenager::create($teenager);
         }
     }
 }
