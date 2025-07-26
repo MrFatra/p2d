@@ -78,28 +78,28 @@ class User extends Authenticatable implements FilamentUser
         });
     }
 
-    public function getUsers($kategori = null)
+    public static function getUsers($category = null)
     {
         $now = Carbon::now();
 
-        switch ($kategori) {
-            case 'bayi':
+        switch ($category) {
+            case 'baby':
                 return User::whereDate('birth_date', '>', $now->copy()->subYear())->get();
 
-            case 'balita':
+            case 'toddler':
                 return User::whereDate('birth_date', '<=', $now->copy()->subYear())
                     ->whereDate('birth_date', '>', $now->copy()->subYears(5))
                     ->get();
 
-            case 'remaja':
-                return User::whereDate('birth_date', '<=', $now->copy()->subYears(18))
-                    ->whereDate('birth_date', '>', $now->copy()->subYears(12))
+            case 'teenager':
+                return User::whereDate('birth_date', '<=', $now->copy()->subYears(12))
+                    ->whereDate('birth_date', '>', $now->copy()->subYears(18))
                     ->get();
 
-            case 'lansia':
+            case 'elderly':
                 return User::whereDate('birth_date', '<=', $now->copy()->subYears(60))->get();
 
-            case 'ibu':
+            case 'mother':
                 return User::where('gender', 'P')
                     ->whereDate('birth_date', '<=', $now->copy()->subYears(12))
                     ->whereDate('birth_date', '>', $now->copy()->subYears(60))
@@ -110,6 +110,31 @@ class User extends Authenticatable implements FilamentUser
         }
     }
 
+    private static function determineTypeOfUser($userBirthDate)
+    {
+        if (empty($userBirthDate)) {
+            return 'none';
+        }
+
+        $now = now();
+        $age = Carbon::parse($userBirthDate)->diffInYears($now);
+
+        if ($age < 0) {
+            return 'baby';
+        } elseif ($age < 5) {
+            return 'toddler';
+        } elseif ($age < 12) {
+            return 'child';
+        } elseif ($age < 18) {
+            return 'teenager';
+        } elseif ($age < 60) {
+            return 'adult';
+        } elseif ($age >= 60) {
+            return 'elderly';
+        } else {
+            return 'none';
+        }
+    }
 
     public function canAccessPanel(Panel $panel): bool
     {
@@ -119,7 +144,7 @@ class User extends Authenticatable implements FilamentUser
     // Relasi untuk data remaja
     public function teenager()
     {
-        return $this->hasOne(Teenagers::class);
+        return $this->hasOne(Teenager::class);
     }
 
     // Relasi untuk data bayi
