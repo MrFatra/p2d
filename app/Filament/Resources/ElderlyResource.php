@@ -41,7 +41,7 @@ class ElderlyResource extends Resource
     {
         return $form
             ->schema([
-                Section::make('Data Remaja')
+                Section::make('Data Lansia')
                     ->description('Pilih nama lansia berdasarkan NIK untuk mulai mengisi data.')
                     ->icon('heroicon-o-user')
                     ->schema([
