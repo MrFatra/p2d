@@ -19,7 +19,7 @@ class ElderlySeeder extends Seeder
                 'blood_pressure' => 130.5,
                 'blood_glucose' => 110.2,
                 'cholesterol' => 190.4,
-                'nutrition_status' => 'Cukup',
+                'nutrition_status' => 'Gizi Baik',
                 'functional_ability' => 'Mandiri',
                 'chronic_disease_history' => 'Hipertensi',
             ],
