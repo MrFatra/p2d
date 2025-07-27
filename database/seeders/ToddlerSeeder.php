@@ -26,6 +26,7 @@ class ToddlerSeeder extends Seeder
                 'parenting_education' => true,
                 'motor_development' => 'Normal',
                 'checkup_date' => Carbon::now(),
+                'created_at' => Carbon::now(),
             ],
             [
                 'user_id' => 4,
@@ -39,6 +40,7 @@ class ToddlerSeeder extends Seeder
                 'parenting_education' => true,
                 'motor_development' => 'Normal',
                 'checkup_date' => Carbon::now()->subMonth(),
+                'created_at' => Carbon::now()->subMonth(),
             ],
             [
                 'user_id' => 4,
@@ -52,6 +54,7 @@ class ToddlerSeeder extends Seeder
                 'parenting_education' => false,
                 'motor_development' => 'Perlu Pemantauan',
                 'checkup_date' => Carbon::now()->subMonths(2),
+                'created_at' => Carbon::now()->subMonths(2),
             ],
         ];
 
