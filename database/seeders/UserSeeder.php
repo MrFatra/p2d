@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
             'national_id' => '3174011506240005',
             'name' => 'Aurelia Putri',
             'password' => bcrypt('password'),
-            'birth_date' => '2024-06-15',
+            'birth_date' => '2025-06-15',
             'gender' => 'P',
             'phone_number' => '081222334455',
             'address' => 'Jl. Dahlia No.9, Depok',
