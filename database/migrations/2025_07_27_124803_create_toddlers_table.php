@@ -11,21 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('infants', function (Blueprint $table) {
+        Schema::create('toddlers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->float('weight')->nullable();
             $table->float('height')->nullable();
-            $table->float('head_circumference')->nullable();
-            $table->float('birth_weight')->nullable();
-            $table->float('birth_length')->nullable();
-            $table->date('checkup_date')->nullable();
+            $table->float('upper_arm_circumference')->nullable();
             $table->string('nutrition_status')->nullable();
-            $table->boolean('complete_immunization')->nullable();
             $table->boolean('vitamin_a')->nullable();
-            $table->boolean('exclusive_breastfeeding')->nullable();
-            $table->boolean('complementary_feeding')->nullable();
+            $table->boolean('immunization_followup')->nullable(); // booster
+            $table->boolean('food_supplement')->nullable(); // PMT
+            $table->boolean('parenting_education')->nullable(); // penyuluhan
             $table->string('motor_development')->nullable();
+            $table->date('checkup_date')->nullable();
             $table->timestamps();
         });
     }
@@ -35,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('infants');
+        Schema::dropIfExists('toddlers');
     }
 };
