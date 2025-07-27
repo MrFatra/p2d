@@ -17,12 +17,12 @@ return new class extends Migration
             $table->float('weight')->nullable();
             $table->float('height')->nullable();
             $table->float('upper_arm_circumference')->nullable();
-            $table->string('nutrition_status')->nullable();
+            $table->enum('nutrition_status', ['Gizi Baik', 'Gizi Cukup', 'Gizi Kurang'])->nullable();
             $table->boolean('vitamin_a')->nullable();
-            $table->boolean('immunization_followup')->nullable(); // booster
-            $table->boolean('food_supplement')->nullable(); // PMT
-            $table->boolean('parenting_education')->nullable(); // penyuluhan
-            $table->string('motor_development')->nullable();
+            $table->boolean('immunization_followup')->nullable();
+            $table->boolean('food_supplement')->nullable();
+            $table->boolean('parenting_education')->nullable();
+            $table->enum('motor_development', ['Normal', 'Perlu Pemantauan', 'Terlambat'])->nullable();
             $table->date('checkup_date')->nullable();
             $table->timestamps();
         });
