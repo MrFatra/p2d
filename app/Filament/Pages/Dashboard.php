@@ -9,4 +9,6 @@ class Dashboard extends BaseDashboard
 {
     protected static string $view = 'filament.pages.dashboard';
 
+    protected static ?string $navigationLabel = 'Beranda';
+
 }

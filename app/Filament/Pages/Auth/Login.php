@@ -13,8 +13,8 @@ class Login extends BaseLogin
         parent::mount();
 
         $this->form->fill([
-            'national_id' => '',
-            'password' => '',
+            'national_id' => config('app.env') === 'local' ? '3174011501950003' : '',
+            'password' => config('app.env') === 'local' ? 'password' : '',
         ]);
     }
 

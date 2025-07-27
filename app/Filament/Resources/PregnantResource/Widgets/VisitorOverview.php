@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\TeenagerResource\Widgets;
+namespace App\Filament\Resources\PregnantResource\Widgets;
 
-use App\Filament\Resources\TeenagerResource\Pages\ListTeenagers;
+use App\Filament\Resources\PregnantResource\Pages\ListPregnants;
 use Carbon\Carbon;
 use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -14,7 +14,7 @@ class VisitorOverview extends BaseWidget
 
     protected function getTablePage(): string
     {
-        return ListTeenagers::class;
+        return ListPregnants::class;
     }
 
     protected function getStats(): array
@@ -42,11 +42,11 @@ class VisitorOverview extends BaseWidget
         $isUp = $percentage >= 0;
 
         return [
-            Stat::make('Kunjungan Bulan Ini', $thisMonthVisits . ' Bumi')
+            Stat::make('Kunjungan Bulan Ini', $thisMonthVisits . ' Bumil')
                 ->description('Data per ' . $now->translatedFormat('F Y'))
                 ->color('success'),
 
-            Stat::make('Kunjungan Bulan Lalu', $lastMonthVisits . ' Remaja')
+            Stat::make('Kunjungan Bulan Lalu', $lastMonthVisits . ' Bumil')
                 ->description('Data dari ' . $lastMonth->translatedFormat('F Y'))
                 ->color('gray'),
 

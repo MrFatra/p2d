@@ -29,13 +29,13 @@ class PregnantResource extends Resource
 
     protected static ?string $navigationGroup = 'Posyandu';
 
-    protected static ?string $navigationLabel = 'Posyandu Ibu Hamil';
+    protected static ?string $navigationLabel = 'Data Ibu Hamil';
 
-    protected static ?string $breadcrumb = 'Posyandu Ibu Hamil';
+    protected static ?string $breadcrumb = 'Data Ibu Hamil';
 
-    protected static ?string $label = 'Posyandu Ibu Hamil';
+    protected static ?string $label = 'Ibu Hamil';
 
-    protected static ?int $navigationSort = 99;
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {

@@ -34,6 +34,8 @@ class TeenagerResource extends Resource
 
     protected static ?string $label = 'Data Remaja';
 
+    protected static ?int $navigationSort = 2;
+
     public static function form(Form $form): Form
     {
         return $form

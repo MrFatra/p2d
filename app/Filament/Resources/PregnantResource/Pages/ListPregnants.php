@@ -3,12 +3,15 @@
 namespace App\Filament\Resources\PregnantResource\Pages;
 
 use App\Filament\Resources\PregnantResource;
+use App\Filament\Resources\PregnantResource\Widgets\VisitorOverview;
 use Filament\Actions;
+use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Pages\ListRecords;
-use App\Filament\Resources\PregnantResource\Widgets\PregnantGrowthStats; // ✅ pastikan namespace benar
 
 class ListPregnants extends ListRecords
 {
+    use ExposesTableToWidgets;
+
     protected static string $resource = PregnantResource::class;
 
     protected function getHeaderActions(): array
@@ -22,7 +25,7 @@ class ListPregnants extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            PregnantGrowthStats::class,
+            VisitorOverview::class,
         ];
     }
 }
