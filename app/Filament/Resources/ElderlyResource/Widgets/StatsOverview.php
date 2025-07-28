@@ -22,9 +22,8 @@ class StatsOverview extends BaseWidget
     {
         $now = Carbon::now();
 
-        $thisMonthVisits = $this->getPageTableQuery()
+        $thisMonthVisits = Elderly::whereYear('created_at', $now->year)
             ->whereMonth('created_at', $now->month)
-            ->whereYear('created_at', $now->year)
             ->count();
 
         $lastMonth = $now->copy()->subMonth();

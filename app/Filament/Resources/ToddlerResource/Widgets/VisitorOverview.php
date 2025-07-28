@@ -22,8 +22,7 @@ class VisitorOverview extends BaseWidget
     {
         $now = Carbon::now();
 
-        $thisMonthVisits = $this->getPageTableQuery()
-            ->whereMonth('created_at', $now->month)
+        $thisMonthVisits = Toddler::whereMonth('created_at', $now->month)
             ->whereYear('created_at', $now->year)
             ->count();
 
