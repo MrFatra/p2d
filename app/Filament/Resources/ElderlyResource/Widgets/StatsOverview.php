@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ElderlyResource\Widgets;
 
 use App\Filament\Resources\ElderlyResource\Pages\ListElderlies;
+use App\Models\Elderly;
 use Carbon\Carbon;
 use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -28,9 +29,8 @@ class StatsOverview extends BaseWidget
 
         $lastMonth = $now->copy()->subMonth();
 
-        $lastMonthVisits = $this->getPageTableQuery()
+        $lastMonthVisits = Elderly::whereYear('created_at', $lastMonth->year)
             ->whereMonth('created_at', $lastMonth->month)
-            ->whereYear('created_at', $lastMonth->year)
             ->count();
 
         $diff = $thisMonthVisits - $lastMonthVisits;
@@ -39,7 +39,13 @@ class StatsOverview extends BaseWidget
             ? round(($diff / $lastMonthVisits) * 100, 2)
             : ($thisMonthVisits > 0 ? 100 : 0);
 
-        $isUp = $percentage >= 0;
+        if ($percentage > 0) {
+            $description = 'Naik dibanding bulan lalu';
+            $color = 'success';
+        } elseif ($percentage < 0) {
+            $description = 'Turun dibanding bulan lalu';
+            $color = 'danger';
+        }
 
         return [
             Stat::make('Kunjungan Bulan Ini', $thisMonthVisits . ' Lansia')
@@ -51,8 +57,8 @@ class StatsOverview extends BaseWidget
                 ->color('gray'),
 
             Stat::make('Perubahan Kunjungan', $percentage . '%')
-                ->description($isUp ? 'Naik dibanding bulan lalu' : 'Turun dibanding bulan lalu')
-                ->color($isUp ? 'success' : 'danger'),
+                ->description($description)
+                ->color($color),
         ];
     }
 }

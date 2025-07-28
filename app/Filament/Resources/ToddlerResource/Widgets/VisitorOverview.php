@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ToddlerResource\Widgets;
 
 use App\Filament\Resources\ToddlerResource\Pages\ListToddlers;
+use App\Models\Toddler;
 use Carbon\Carbon;
 use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -28,9 +29,8 @@ class VisitorOverview extends BaseWidget
 
         $lastMonth = $now->copy()->subMonth();
 
-        $lastMonthVisits = $this->getPageTableQuery()
+        $lastMonthVisits = Toddler::whereYear('created_at', $lastMonth->year)
             ->whereMonth('created_at', $lastMonth->month)
-            ->whereYear('created_at', $lastMonth->year)
             ->count();
 
         $diff = $thisMonthVisits - $lastMonthVisits;
@@ -39,7 +39,16 @@ class VisitorOverview extends BaseWidget
             ? round(($diff / $lastMonthVisits) * 100, 2)
             : ($thisMonthVisits > 0 ? 100 : 0);
 
-        $isUp = $percentage >= 0;
+        $description = 'Standar';
+        $color = 'gray';
+
+        if ($percentage > 0) {
+            $description = 'Naik dibanding bulan lalu';
+            $color = 'success';
+        } elseif ($percentage < 0) {
+            $description = 'Turun dibanding bulan lalu';
+            $color = 'danger';
+        }
 
         return [
             Stat::make('Kunjungan Bulan Ini', $thisMonthVisits . ' Balita')
@@ -51,8 +60,8 @@ class VisitorOverview extends BaseWidget
                 ->color('gray'),
 
             Stat::make('Perubahan Kunjungan', $percentage . '%')
-                ->description($isUp ? 'Naik dibanding bulan lalu' : 'Turun dibanding bulan lalu')
-                ->color($isUp ? 'success' : 'danger'),
+                ->description($description)
+                ->color($color),
         ];
     }
 }
