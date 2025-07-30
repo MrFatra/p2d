@@ -6,23 +6,23 @@ const FAQ = () => {
     const faqs = [
         {
             id: "faq1",
-            question: "Apa itu P2D?",
-            answer: "P2D adalah singkatan dari Pusat Pengembangan Diri yang merupakan tempat untuk mengembangkan diri melalui berbagai kegiatan positif."
+            question: "Apa itu Siposyandu?",
+            answer: "Siposyandu adalah singkatan dari Pusat Pengembangan Diri yang merupakan tempat untuk mengembangkan diri melalui berbagai kegiatan positif."
         },
         {
             id: "faq2",
-            question: "Bagaimana cara bergabung dengan P2D?",
-            answer: "Anda bisa mendaftar melalui website resmi P2D atau datang langsung ke kantor kami untuk informasi lebih lanjut."
+            question: "Bagaimana cara bergabung dengan Siposyandu?",
+            answer: "Anda bisa mendaftar melalui website resmi Siposyandu atau datang langsung ke kantor kami untuk informasi lebih lanjut."
         },
         {
             id: "faq3",
-            question: "Apa saja layanan yang tersedia di P2D?",
-            answer: "P2D menyediakan berbagai layanan seperti pelatihan, konsultasi, dan workshop untuk pengembangan diri."
+            question: "Apa saja layanan yang tersedia di Siposyandu?",
+            answer: "Siposyandu menyediakan berbagai layanan seperti pelatihan, konsultasi, dan workshop untuk pengembangan diri."
         },
         {
             id: "faq4",
             question: "Apakah ada biaya untuk bergabung?",
-            answer: "Tidak ada biaya untuk bergabung dengan layanan P2D, beberapa kegiatan di P2D juga bersifat gratis. Silakan cek informasi lengkapnya di website kami."
+            answer: "Tidak ada biaya untuk bergabung dengan layanan Siposyandu, beberapa kegiatan di Siposyandu juga bersifat gratis. Silakan cek informasi lengkapnya di website kami."
         }
     ];
 
@@ -32,9 +32,9 @@ const FAQ = () => {
 
                 <div className="flex flex-col self-center flex-1 lg:mb-0 mb-5 lg:text-left text-center">
                     <p className="text-shades font-bold md:text-2xl text-xl">FAQ</p>
-                    <p className="text-xl md:text-3xl font-bold">Punya Pertanyaan Seputar P2D?</p>
+                    <p className="text-xl md:text-3xl font-bold">Punya Pertanyaan Seputar SIPOSYANDU?</p>
                     <p className="font-light mt-2 text-sm md:text-base">
-                        Temukan jawaban dari pertanyaan yang sering diajukan langsung di sini untuk informasi tentang layanan, jadwal, dan fasilitas P2D.
+                        Temukan jawaban dari pertanyaan yang sering diajukan langsung di sini untuk informasi tentang layanan, jadwal, dan fasilitas SIPOSYANDU.
                     </p>
                 </div>
 

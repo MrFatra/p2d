@@ -10,7 +10,7 @@ const About = () => {
         <div className="w-lg lg:pl-10">
           <img
             src="/images/nurses_about.png"
-            className="w-full"
+            className="w-[550px] h-[550px]"
             alt="Tentang Kami"
           />
         </div>
