@@ -5,3 +5,4 @@ export { default as Article } from "./Article";
 export { default as Statistic } from "./Statistic";
 export { default as FAQ } from "./FAQ";
 export { default as ListArticle } from "./ListArticle";
+export { default as ArticleDetail } from "./ArticleDetail";
