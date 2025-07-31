@@ -1,32 +1,26 @@
 import { FiArrowRight } from "react-icons/fi";
 
 const ArticleCard = ({ title, description, link, image }) => {
-  return (
-    <div className="flex flex-col md:flex-row gap-6 rounded-2xl bg-white border-2 border-shades overflow-hidden text-foreground">
-      <div className="flex-1 p-6 md:p-10 flex flex-col order-2 md:order-1">
-        <div className="flex flex-col flex-1 justify-center">
-          <p className="font-bold text-xl md:text-2xl mb-4">{title}</p>
-          <p className="text-gray-600 mb-6 line-clamp-3 text-sm md:text-base">
-            {description}
-          </p>
+    return (
+        <div className="flex border border-custom-emerald rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
+            <div className="w-2/3 p-4">
+                <h3 className="font-semibold text-md text-gray-900">{title}</h3>
+                <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+                    {description}
+                </p>
+                <p className="text-custom-emerald text-sm mt-2 font-medium">
+                    <a href={link}>Klik untuk lihat selengkapnya</a>
+                </p>
+            </div>
+            <div className="w-1/3">
+                <img
+                    src={image}
+                    alt={title}
+                    className="w-full h-full object-cover"
+                />
+            </div>
         </div>
-        <div className="gap-2 p-3 border rounded-lg border-shades text-shades hover:bg-gray-50 transition-colors w-fit">
-          <a href={link} className="flex items-center gap-2 text-sm md:text-base">
-            Lihat Selengkapnya
-            <FiArrowRight size={18} />
-          </a>
-        </div>
-      </div>
-
-      <div className="flex-1 max-w-full md:max-w-none order-1 md:order-2">
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-48 md:h-96 object-cover"
-        />
-      </div>
-    </div>
-  );
+    );
 };
 
 export default ArticleCard;
