@@ -1,5 +1,5 @@
 import AppLayout from "../layouts/AppLayouts";
-import { About, Article, FAQ, Header, Schedule, Statistic } from "../sections";
+import { About, Article, FAQ, Header, Schedule, Statistic, ListArticle } from "../sections";
 
 const Home = () => {
   return (
@@ -10,6 +10,7 @@ const Home = () => {
       <Article />
       <Statistic />
       <FAQ />
+      <ListArticle />
     </div>
   );
 };
