@@ -1,5 +1,5 @@
 import { FaArrowRight } from "react-icons/fa";
-import { Link } from "@inertiajs/react"; // ✅ GANTI IMPORT
+import { Link } from "@inertiajs/react";
 
 const ArrowRightIcon = (props) => <FaArrowRight {...props} />;
 
@@ -13,7 +13,7 @@ const Header = () => {
                 backgroundAttachment: "fixed",
             }}
         >
-            <div className="lg:mt-24 mt-36 gap-14 justify-center flex flex-wrap items-center px-10 lg:px-20 text-foreground">
+            <div className="container mx-auto lg:mt-24 mt-36 gap-14 justify-center flex flex-wrap items-center px-10 text-foreground">
                 <div className="w-full self-center lg:w-1/3 text-center lg:text-start">
                     <h3 className="text-2xl font-bold text-custom-emerald">
                         Posyandu Peduli Desa
