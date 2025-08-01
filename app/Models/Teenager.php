@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class Teenager extends Model
 {
@@ -19,6 +20,16 @@ class Teenager extends Model
         'reproductive_health',
         'mental_health',
     ];
+
+    public function scopeExclude($query, $columnsToExclude = [])
+    {
+        $table = $this->getTable();
+        $allColumns = Schema::getColumnListing($table);
+        $columns = array_diff($allColumns, (array) $columnsToExclude);
+
+        return $query->select($columns);
+    }
+
 
     // Relasi ke model User
     public function user()

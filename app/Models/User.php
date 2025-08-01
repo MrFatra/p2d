@@ -64,7 +64,7 @@ class User extends Authenticatable implements FilamentUser
         parent::boot();
 
         static::creating(function ($user) {
-            $user->assignRole(self::determineTypeOfUser($user->birth_date));
+            $user->syncRoles(self::determineTypeOfUser($user->birth_date));
         });
 
         static::updating(function ($user) {
@@ -72,8 +72,8 @@ class User extends Authenticatable implements FilamentUser
                 unset($user->password);
             }
 
-            if ($user->isDirty('birth_date')) {
-                $user->assignRole(self::determineTypeOfUser($user->birth_date));
+            if ($user->isDirty('birth_date') && !$user->hasRole('admin')) {
+                $user->syncRoles(self::determineTypeOfUser($user->birth_date));
             }
         });
     }
