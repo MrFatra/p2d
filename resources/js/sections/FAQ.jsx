@@ -28,7 +28,7 @@ const FAQ = () => {
 
     return (
         <div className="my-28 lg:py-28">
-            <div className="container mx-auto px-4 lg:flex gap-10 text-foreground">
+            <div className="container mx-auto px-4 lg:flex gap-10 max-w-7xl text-foreground">
                 <div className="flex flex-col self-center flex-1 lg:mb-0 mb-5 lg:text-left text-center">
                     <p className="text-shades font-bold md:text-2xl text-xl">
                         FAQ

@@ -53,7 +53,7 @@ export default function ImmunizationSchedule() {
     };
 
     return (
-        <div className="container mx-auto my-28 px-8 w-full text-foreground">
+        <div className="container mx-auto my-28 px-8 max-w-7xl text-foreground">
             <h2 className="text-custom-emerald text-2xl md:text-3xl font-bold mb-2 text-center">
                 Jadwal Kegiatan Posyandu
             </h2>

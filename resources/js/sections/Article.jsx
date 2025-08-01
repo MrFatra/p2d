@@ -21,7 +21,7 @@ const Article = () => {
 
     return (
         <section className="px-4 py-10">
-            <div className="container mx-auto flex flex-col lg:flex-row justify-between items-start gap-8">
+            <div className="container mx-auto flex flex-col lg:flex-row justify-between items-start max-w-7xl gap-8">
                 <div className="w-full lg:w-1/2 flex flex-col gap-4">
                     <h2 className="text-lg font-bold text-custom-emerald">
                         Baca Artikel Terkait Kesehatan
