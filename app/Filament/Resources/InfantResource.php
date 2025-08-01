@@ -39,6 +39,8 @@ class InfantResource extends Resource
 
     protected static ?string $label = 'Data Bayi';
 
+    protected static ?int $navigationSort = 9;
+
     public static function form(Form $form): Form
     {
         return $form

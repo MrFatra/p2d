@@ -6,6 +6,7 @@ use App\Filament\Resources\PregnantResource\Pages;
 use App\Filament\Resources\PregnantResource\RelationManagers;
 use App\Models\Pregnant;
 use App\Models\PregnantPostpartumBreastfeending;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
@@ -20,6 +21,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\HtmlString;
 
 class PregnantResource extends Resource
 {
@@ -29,9 +31,9 @@ class PregnantResource extends Resource
 
     protected static ?string $navigationGroup = 'Posyandu';
 
-    protected static ?string $navigationLabel = 'Data Ibu Hamil';
+    protected static ?string $navigationLabel = 'Ibu Hamil';
 
-    protected static ?string $breadcrumb = 'Data Ibu Hamil';
+    protected static ?string $breadcrumb = 'Ibu Hamil';
 
     protected static ?string $label = 'Ibu Hamil';
 
@@ -44,21 +46,18 @@ class PregnantResource extends Resource
             Section::make('Informasi Warga')
             ->schema([
                 Select::make('user_id')
-                    ->label('Pilih Ibu')
-                    ->options(function () {
-                        $now = \Carbon\Carbon::now();
-
-                        return \App\Models\User::where('gender', 'P')
-                            ->whereDate('birth_date', '<=', $now->copy()->subYears(12))
-                            ->whereDate('birth_date', '>', $now->copy()->subYears(60))
-                            ->get()
-                            ->mapWithKeys(function ($user) {
-                                return [$user->id => "{$user->name} - {$user->national_id}"];
-                            });
-                    })
-                    ->searchable()
-                    ->required()
-                    ->placeholder('Pilih Ibu yang Hamil'),
+                ->label('Nama - NIK')
+                ->options(function () {
+                    return User::getUsers('elderly')
+                        ->mapWithKeys(function ($user) {
+                            return [$user->id => "{$user->name} - {$user->national_id}"];
+                        })->toArray();
+                })
+                ->getOptionLabelUsing(fn($value) => User::find($value)?->name ?? $value)
+                ->searchable()
+                ->helperText(fn() => new HtmlString('<span><strong>Catatan: </strong> Anda bisa mencari data berdasarkan Nama/NIK. </span>'))
+                ->required()
+                ->placeholder('Contoh: Siti Aminah - 1234567890'),
             ]),
             Section::make('Informasi Kehamilan')
                 ->description('Status kehamilan ibu saat ini.')
