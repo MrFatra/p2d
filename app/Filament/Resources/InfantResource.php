@@ -73,21 +73,21 @@ class InfantResource extends Resource
                             ->label('Berat Lahir')
                             ->numeric()
                             ->suffix('kg')
-                            ->nullable()
+                            ->required()
                             ->helperText('Dalam Satuan Kg. Contoh: 3.2'),
 
                         TextInput::make('birth_length')
                             ->label('Panjang Lahir')
                             ->numeric()
                             ->suffix('cm')
-                            ->nullable()
+                            ->required()
                             ->helperText('Dalam Satuan cm. Contoh: 49.5'),
 
                         TextInput::make('head_circumference')
                             ->label('Lingkar Kepala')
                             ->numeric()
                             ->suffix('cm')
-                            ->nullable()
+                            ->required()
                             ->helperText('Dalam Satuan cm. Contoh: 34.0'),
                     ]),
 
@@ -100,14 +100,14 @@ class InfantResource extends Resource
                             ->label('Berat Badan (kg)')
                             ->suffix('kg')
                             ->numeric()
-                            ->nullable()
+                            ->required()
                             ->helperText('Berat badan saat pemeriksaan terakhir. Dalam Satuan Kg. Contoh: 3.2'),
 
                         TextInput::make('height')
                             ->label('Tinggi Badan (cm)')
                             ->suffix('cm')
                             ->numeric()
-                            ->nullable()
+                            ->required()
                             ->helperText('Tinggi badan saat pemeriksaan terakhir. Dalam Satuan cm. Contoh: 34.0'),
                     ]),
 
@@ -118,7 +118,7 @@ class InfantResource extends Resource
                         ToggleButtons::make('nutrition_status')
                             ->label('Status Gizi')
                             ->inline()
-                            ->nullable()
+                            ->required()
                             ->options([
                                 'Gizi Baik' => 'Gizi Baik',
                                 'Gizi Cukup' => 'Gizi Cukup',
@@ -147,14 +147,14 @@ class InfantResource extends Resource
                                     ->label('Imunisasi Lanjutan')
                                     ->inline()
                                     ->boolean()
-                                    ->nullable()
+                                    ->required()
                                     ->helperText('Contoh: DPT, Campak, Hepatitis.'),
 
                                 ToggleButtons::make('vitamin_a')
                                     ->label('Vitamin A')
                                     ->inline()
                                     ->boolean()
-                                    ->nullable()
+                                    ->required()
                                     ->helperText('Apakah telah mendapatkan vitamin A bulan Februari/Agustus?'),
                             ]),
                     ]),
@@ -167,6 +167,7 @@ class InfantResource extends Resource
                         ToggleButtons::make('exclusive_breastfeeding')
                             ->label('ASI Eksklusif')
                             ->inline()
+                            ->required()
                             ->options([true => 'Ya', false => 'Tidak'])
                             ->icons([true => 'heroicon-o-check-circle', false => 'heroicon-o-x-circle'])
                             ->colors([true => 'success', false => 'danger'])
@@ -175,6 +176,7 @@ class InfantResource extends Resource
                         ToggleButtons::make('complementary_feeding')
                             ->label('MP-ASI')
                             ->inline()
+                            ->required()
                             ->options([true => 'Ya', false => 'Tidak'])
                             ->icons([true => 'heroicon-o-check-circle', false => 'heroicon-o-x-circle'])
                             ->colors([true => 'success', false => 'danger'])

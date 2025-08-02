@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class Infant extends Model
 {
@@ -20,6 +21,15 @@ class Infant extends Model
         'complementary_feeding',
         'motor_development',
     ];
+
+        public function scopeExclude($query, $columnsToExclude = [])
+    {
+        $table = $this->getTable();
+        $allColumns = Schema::getColumnListing($table);
+        $columns = array_diff($allColumns, (array) $columnsToExclude);
+
+        return $query->select($columns);
+    }
 
     // Relasi ke user
     public function user()
