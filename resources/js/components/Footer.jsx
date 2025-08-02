@@ -62,7 +62,26 @@ const Footer = () => {
                 </div>
 
                 <div className="mt-20 text-center text-xs md:text-sm font-light">
-                    &copy; {new Date().getFullYear()} Siposyandu. All rights reserved.
+                    &copy; {new Date().getFullYear()} Siposyandu. All rights
+                    reserved.
+                </div>
+
+                <div className="mt-5 flex justify-center gap-6">
+                    <img
+                        src="/images/logo/berdampak.png"
+                        alt="Logo 1"
+                        className="w-8 h-8"
+                    />
+                    <img
+                        src="/images/logo/tutwurihandayani.png"
+                        alt="Logo 2"
+                        className="w-8 h-8"
+                    />
+                    <img
+                        src="/images/logo/uniku.png"
+                        alt="Logo 3"
+                        className="w-8 h-8"
+                    />
                 </div>
             </div>
         </footer>
