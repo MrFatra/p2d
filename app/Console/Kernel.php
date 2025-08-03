@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('notify:posyandu')->dailyAt('07:00');
+        $schedule->command('user:update-roles')->daily();
     }
 
     /**
