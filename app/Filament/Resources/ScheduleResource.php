@@ -46,11 +46,11 @@ class ScheduleResource extends Resource
                             ->required()
                             ->options([
                                 'Donor' => 'Donor',
-                                'Posyandu Bayi' => 'Posyandu Bayi',
-                                'Posyandu Balita' => 'Posyandu Balita',
-                                'Posyandu Ibu Hamil' => 'Posyandu Ibu Hamil',
-                                'Posyandu Remaja' => 'Posyandu Remaja',
-                                'Posyandu Lansia' => 'Posyandu Lansia',
+                                'Infant Posyandu' => 'Posyandu Bayi',
+                                'Toddler Posyandu' => 'Posyandu Balita',
+                                'Pregnant Women Posyandu' => 'Posyandu Ibu Hamil',
+                                'Teenager Posyandu' => 'Posyandu Remaja',
+                                'Elderly Posyandu' => 'Posyandu Lansia',
                             ])
                             ->native(false),
                         TextInput::make('notes')
@@ -102,7 +102,25 @@ class ScheduleResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('type')
-                    ->label('Jadwal Posyandu'),
+                    ->label('Jadwal Posyandu')
+                    ->badge()
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        'Donor' => 'Donor',
+                        'Infant Posyandu' => 'Posyandu Bayi',
+                        'Toddler Posyandu' => 'Posyandu Balita',
+                        'Pregnant Women Posyandu' => 'Posyandu Ibu Hamil',
+                        'Teenager Posyandu' => 'Posyandu Remaja',
+                        'Elderly Posyandu' => 'Posyandu Lansia',
+                    })
+                    ->color(fn(string $state): string => match ($state) {
+                        'Donor' => 'danger',
+                        'Infant Posyandu' => 'warning',
+                        'Toddler Posyandu' => 'success',
+                        'Pregnant Women Posyandu' => 'secondary',
+                        'Teenager Posyandu' => 'primary',
+                        'Elderly Posyandu' => 'info',
+                        default => 'gray',
+                    }),
                 TextColumn::make('date_open')
                     ->label('Tanggal Buka')
                     ->date('Y-m-d'),
@@ -119,7 +137,9 @@ class ScheduleResource extends Resource
                     ->label('Deskripsi'),
             ])
             ->filters([
-                //
+
+            ])->headerActions([
+
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

@@ -26,7 +26,7 @@ class Whatsapp
      */
     public function __construct()
     {
-        $this->apiUrl = 'http://localhost:3000/api'; // Change this to your actual Express server URL
+        $this->apiUrl = 'http://localhost:3500/api/'; // Change this to your actual Express server URL
     }
 
     /**
@@ -41,10 +41,11 @@ class Whatsapp
     public function sendMessageToPersonal(string $phone, string $message)
     {
         try {
-            $response = Http::post("{$this->apiUrl}/send-message", [
+            $response = Http::post("{$this->apiUrl}send-message", [
                 'number'   => $phone,
                 'message' => $message,
             ]);
+
 
             return $response->json([
                 'status'  => 'success',
@@ -73,18 +74,31 @@ class Whatsapp
     public function sendMessageToGroup(string $idGrup, array $params)
     {
         try {
-            $response = Http::post("{$this->apiUrl}/send-group", [
-                'number'   => $idGrup,
-                'date' => $params['date'],
-                'time' => $params['time'],
-                'type' => $params['type']
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept'       => 'application/json',
+
+            ])->post("{$this->apiUrl}send-group", [
+                'number' => $idGrup,
+                'date'   => $params['date'] ?? now()->toDateString(),
+                'time'   => $params['time'] ?? now()->format('H:i'),
+                'type'   => $params['type'] ?? 'text',
             ]);
 
+            if ($response->successful()) {
+                return [
+                    'status'  => 'success',
+                    'message' => 'Send Success',
+                    'data'    => $response->json(),
+                ];
+            }
+
             return [
-                'status'  => 'success',
-                'message' => 'Send Success',
+                'status'  => 'failed',
+                'message' => $response->json('message') ?? 'Failed to send message',
+                'code'    => $response->status(),
             ];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return [
                 'status'  => 'error',
                 'message' => $e->getMessage(),

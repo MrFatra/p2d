@@ -33,12 +33,7 @@ class PushNotificationSchedule extends Command
         $schedules = Schedule::whereDate('date_open', '<=', $today)
                     ->whereDate('date_closed', '>=', $today)
                     ->whereIn('type', [
-                        'Donor',
-                        'Posyandu Bayi',
-                        'Posyandu Balita',
-                        'Posyandu Ibu Hamil',
-                        'Posyandu Remaja',
-                        'Posyandu Lansia',
+                      'Donor', 'Infant Posyandu', 'Toddler Posyandu', 'Pregnant Women Posyandu', 'Teenager Posyandu', 'Elderly Posyandu'
                     ])
                     ->get();
 
@@ -73,6 +68,7 @@ class PushNotificationSchedule extends Command
             ];
 
             $response = $whatsapp->sendMessageToGroup($groupId, $params);
+
 
             if ($response['status'] === 'success') {
                 $this->info("Notifikasi Posyandu berhasil dikirim ke grup: $groupId");
