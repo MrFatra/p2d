@@ -84,8 +84,9 @@ class User extends Authenticatable implements FilamentUser
 
         switch ($category) {
             case 'baby':
-                return User::whereDate('birth_date', '>', $now->copy()->subYear()) // User yang lahir dalam satu tahun terakhir
+                return User::whereDate('birth_date', '>', $now->copy()->subYear())
                     ->whereDate('birth_date', '<=', $now)
+                    // TODO: This query may be used to all roles...
                     ->whereDoesntHave('infant', function ($query) use ($now) {
                         $query->whereMonth('created_at', $now->month)
                             ->whereYear('created_at', $now->year);
@@ -141,6 +142,11 @@ class User extends Authenticatable implements FilamentUser
         } else {
             return 'none';
         }
+    }
+
+    public function getAgeCategoryAttribute(): string
+    {
+        return self::determineTypeOfUser($this->birth_date);
     }
 
     public function canAccessPanel(Panel $panel): bool
