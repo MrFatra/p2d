@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pregnant_postpartum_breastfeeding', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->enum('pregnancy_status', ['postpartum', 'pregnant', 'abortus', 'none'])->default('none');
+            $table->enum('pregnancy_status', ['trimester 1', 'trimester 2', 'trimester 3', 'postpartum', 'pregnant', 'abortus', 'none'])->default('none');
             // MUAC = LILA = Lingkar Lengan Atas
             $table->float('muac')->nullable();
             $table->float('blood_pressure')->nullable();

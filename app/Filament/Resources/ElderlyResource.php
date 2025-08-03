@@ -25,7 +25,9 @@ class ElderlyResource extends Resource
 {
     protected static ?string $model = Elderly::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'icon-person-cane-solid-full';
+    
+    protected static ?string $activeNavigationIcon = 'icon-person-cane-solid-active';
 
     protected static ?string $navigationGroup = 'Posyandu';
 

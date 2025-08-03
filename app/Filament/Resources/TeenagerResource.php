@@ -195,11 +195,21 @@ class TeenagerResource extends Resource
 
                 TextColumn::make('reproductive_health')
                     ->label('Kesehatan Reproduksi')
-                    ->formatStateUsing(fn($state) => ucfirst($state)),
+                    ->formatStateUsing(fn($state) => new HtmlString('<strong>' . ucfirst($state) . '</strong>'))
+                    ->color(fn($state) => match ($state) {
+                        'baik' => 'success',
+                        'cukup' => 'warning',
+                        'kurang' => 'danger',
+                    }),
 
                 TextColumn::make('mental_health')
                     ->label('Kesehatan Mental')
-                    ->formatStateUsing(fn($state) => ucfirst($state)),
+                    ->formatStateUsing(fn($state) => new HtmlString('<strong>' . ucfirst($state) . '</strong>'))
+                    ->color(fn($state) => match ($state) {
+                        'baik' => 'success',
+                        'cukup' => 'warning',
+                        'kurang' => 'danger',
+                    }),
 
                 TextColumn::make('created_at')
                     ->label('Tanggal Input')

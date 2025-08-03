@@ -11,4 +11,6 @@ class Dashboard extends BaseDashboard
 
     protected static ?string $navigationLabel = 'Beranda';
 
+    protected static ?string $navigationIcon = 'heroicon-s-home';
+
 }

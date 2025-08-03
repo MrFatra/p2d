@@ -84,9 +84,14 @@ class User extends Authenticatable implements FilamentUser
 
         switch ($category) {
             case 'baby':
-                return User::whereDate('birth_date', '>', $now->copy()->subYear())
+                return User::whereDate('birth_date', '>', $now->copy()->subYear()) // User yang lahir dalam satu tahun terakhir
                     ->whereDate('birth_date', '<=', $now)
+                    ->whereDoesntHave('infant', function ($query) use ($now) {
+                        $query->whereMonth('created_at', $now->month)
+                            ->whereYear('created_at', $now->year);
+                    })
                     ->get();
+
 
             case 'toddler':
                 return User::whereDate('birth_date', '<=', $now->copy()->subYear())

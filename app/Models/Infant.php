@@ -12,14 +12,18 @@ class Infant extends Model
     // Field yang bisa di-*mass assign*
     protected $fillable = [
         'user_id',
+        'birth_weight',
+        'birth_height',
         'weight',
         'height',
+        'head_circumference',
         'nutrition_status',
         'complete_immunization',
         'vitamin_a',
         'exclusive_breastfeeding',
         'complementary_feeding',
         'motor_development',
+        'checkup_date',
     ];
 
         public function scopeExclude($query, $columnsToExclude = [])

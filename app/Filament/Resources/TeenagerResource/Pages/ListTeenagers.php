@@ -7,6 +7,7 @@ use App\Filament\Resources\TeenagerResource\Widgets\VisitorOverview;
 use Filament\Actions;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListTeenagers extends ListRecords
 {
@@ -22,8 +23,11 @@ class ListTeenagers extends ListRecords
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->action(function () {
+                    $query = $this->getFilteredTableQuery();
+                    $data = $query->get();
+
                     return response()->streamDownload(
-                        fn() => print(\Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\TeenagerExport, 'remaja.xlsx')->getFile()->getContent()),
+                        fn() => print(\Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\TeenagerExport($data), 'remaja.xlsx')->getFile()->getContent()),
                         'laporan-list-data-remaja.xlsx'
                     );
                 }),

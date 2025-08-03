@@ -18,6 +18,18 @@ class ListToddlers extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+            Actions\Action::make('export-excel')
+                ->label('Export Excel')
+                ->icon('heroicon-o-arrow-up-tray')
+                ->action(function () {
+                    $query = $this->getFilteredTableQuery();
+                    $data = $query->get();
+
+                    return response()->streamDownload(
+                        fn() => print(\Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\ToddlerExport($data), 'balita.xlsx')->getFile()->getContent()),
+                        'laporan-list-data-balita.xlsx'
+                    );
+                }),
         ];
     }
 
