@@ -29,7 +29,9 @@ class InfantResource extends Resource
 {
     protected static ?string $model = Infant::class;
 
-    protected static ?string $navigationIcon = 'icon-child-reaching-solid-full';
+    protected static ?string $navigationIcon = 'icon-baby-solid-full';
+    
+    protected static ?string $activeNavigationIcon = 'icon-baby-solid-full-active';
 
     protected static ?string $navigationGroup = 'Posyandu';
 
@@ -73,21 +75,18 @@ class InfantResource extends Resource
                             ->label('Berat Lahir')
                             ->numeric()
                             ->suffix('kg')
-                            ->nullable()
                             ->helperText('Dalam Satuan Kg. Contoh: 3.2'),
 
-                        TextInput::make('birth_length')
+                        TextInput::make('birth_height')
                             ->label('Panjang Lahir')
                             ->numeric()
                             ->suffix('cm')
-                            ->nullable()
                             ->helperText('Dalam Satuan cm. Contoh: 49.5'),
 
                         TextInput::make('head_circumference')
                             ->label('Lingkar Kepala')
                             ->numeric()
                             ->suffix('cm')
-                            ->nullable()
                             ->helperText('Dalam Satuan cm. Contoh: 34.0'),
                     ]),
 
@@ -100,14 +99,12 @@ class InfantResource extends Resource
                             ->label('Berat Badan (kg)')
                             ->suffix('kg')
                             ->numeric()
-                            ->nullable()
                             ->helperText('Berat badan saat pemeriksaan terakhir. Dalam Satuan Kg. Contoh: 3.2'),
 
                         TextInput::make('height')
                             ->label('Tinggi Badan (cm)')
                             ->suffix('cm')
                             ->numeric()
-                            ->nullable()
                             ->helperText('Tinggi badan saat pemeriksaan terakhir. Dalam Satuan cm. Contoh: 34.0'),
                     ]),
 
@@ -118,7 +115,6 @@ class InfantResource extends Resource
                         ToggleButtons::make('nutrition_status')
                             ->label('Status Gizi')
                             ->inline()
-                            ->nullable()
                             ->options([
                                 'Gizi Baik' => 'Gizi Baik',
                                 'Gizi Cukup' => 'Gizi Cukup',
@@ -147,14 +143,12 @@ class InfantResource extends Resource
                                     ->label('Imunisasi Lanjutan')
                                     ->inline()
                                     ->boolean()
-                                    ->nullable()
                                     ->helperText('Contoh: DPT, Campak, Hepatitis.'),
 
                                 ToggleButtons::make('vitamin_a')
                                     ->label('Vitamin A')
                                     ->inline()
                                     ->boolean()
-                                    ->nullable()
                                     ->helperText('Apakah telah mendapatkan vitamin A bulan Februari/Agustus?'),
                             ]),
                     ]),
@@ -198,6 +192,7 @@ class InfantResource extends Resource
 
                 TextColumn::make('checkup_date')
                     ->label('Tanggal Pemeriksaan')
+                    ->date('d M Y')
                     ->sortable(),
 
                 TextColumn::make('weight')
@@ -219,7 +214,7 @@ class InfantResource extends Resource
                     ->label('Berat Lahir (kg)')
                     ->numeric(),
 
-                TextColumn::make('birth_length')
+                TextColumn::make('birth_height')
                     ->label('Panjang Lahir (cm)')
                     ->numeric(),
 

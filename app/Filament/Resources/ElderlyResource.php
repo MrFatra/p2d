@@ -10,6 +10,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -24,7 +25,9 @@ class ElderlyResource extends Resource
 {
     protected static ?string $model = Elderly::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'icon-person-cane-solid-full';
+    
+    protected static ?string $activeNavigationIcon = 'icon-person-cane-solid-active';
 
     protected static ?string $navigationGroup = 'Posyandu';
 
@@ -63,6 +66,7 @@ class ElderlyResource extends Resource
                 Section::make('Pemeriksaan Kesehatan')
                     ->description('Masukkan hasil pemeriksaan dasar seperti tekanan darah dan gula darah.')
                     ->icon('heroicon-o-heart')
+                    ->columns(3)
                     ->schema([
                         TextInput::make('blood_pressure')
                             ->label('Tekanan Darah (mmHg)')
@@ -86,32 +90,54 @@ class ElderlyResource extends Resource
                 Section::make('Kondisi Kesehatan Umum')
                     ->description('Informasi tambahan mengenai kondisi dan riwayat kesehatan remaja.')
                     ->icon('heroicon-o-clipboard-document-check')
+                    ->columns(2)
                     ->schema([
-                        Select::make('nutrition_status')
+                        ToggleButtons::make('nutrition_status')
                             ->label('Status Gizi')
+                            ->inline()
+                            ->required()
                             ->options([
                                 'Gizi Baik' => 'Gizi Baik',
                                 'Gizi Cukup' => 'Gizi Cukup',
-                                'Gizi Kurang' => 'Gizi Kurang',
+                                'Gizi Kurang' => 'Gizi Kurang'
                             ])
-                            ->required()
-                            ->placeholder('Pilih Status Gizi')
-                            ->helperText('Contoh: Gizi Baik, Gizi Cukup, atau Gizi Kurang.'),
+                            ->colors([
+                                'Gizi Baik' => 'success',
+                                'Gizi Cukup' => 'success',
+                                'Gizi Kurang' => 'danger',
+                            ])
+                            ->icons([
+                                'Gizi Baik' => 'heroicon-o-check-circle',
+                                'Gizi Cukup' => 'heroicon-o-check-circle',
+                                'Gizi Kurang' => 'heroicon-o-x-mark',
+                            ])
+                            ->helperText('Pilih berdasarkan hasil perhitungan IMT/grafik pertumbuhan.'),
 
-                        Select::make('functional_ability')
+                        ToggleButtons::make('functional_ability')
                             ->label('Kemampuan Fungsional')
+                            ->inline()
                             ->options([
                                 'Mandiri' => 'Mandiri',
                                 'Butuh Bantuan' => 'Butuh Bantuan',
                                 'Tidak Mandiri' => 'Tidak Mandiri',
                             ])
-                            ->required()
-                            ->placeholder('Pilih Kemampuan Fungsional')
-                            ->helperText('Contoh: Mandiri, Butuh Bantuan, atau Tidak Mandiri.'),
+                            ->icons([
+                                'Mandiri' => 'heroicon-o-check-circle',
+                                'Butuh Bantuan' => 'heroicon-o-exclamation-circle',
+                                'Tidak Mandiri' => 'heroicon-o-x-mark',
+                            ])
+                            ->colors([
+                                'Mandiri' => 'success',
+                                'Butuh Bantuan' => 'warning',
+                                'Tidak Mandiri' => 'danger',
+                            ])
+                            ->helperText('Contoh: Mandiri, Butuh Bantuan, atau Tidak Mandiri.')
+                            ->required(),
 
                         TextInput::make('chronic_disease_history')
                             ->label('Riwayat Penyakit Kronis')
                             ->nullable()
+                            ->required()
                             ->helperText('Contoh: Diabetes, Hipertensi, atau Tidak Ada.'),
                     ])
 

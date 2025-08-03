@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ArticleResource\Pages;
 use App\Filament\Resources\ArticleResource\RelationManagers;
+use App\Helpers\Auth;
 use App\Models\Article;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
@@ -26,7 +27,7 @@ class ArticleResource extends Resource
 {
     protected static ?string $model = Article::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-s-document-text';
     protected static ?string $navigationLabel = 'Artikel';
     protected static ?string $pluralLabel = 'Artikel';
     protected static ?string $navigationGroup = 'Artikel';
@@ -104,7 +105,7 @@ class ArticleResource extends Resource
                 ->schema([
                     TextInput::make('user_id')
                         ->hidden()
-                        ->default(fn () => auth()->user()->id)
+                        ->default(fn () => Auth::user()->id)
                         ->required(),
 
                     Select::make('status')
@@ -167,5 +168,10 @@ class ArticleResource extends Resource
             'create' => Pages\CreateArticle::route('/create'),
             'edit' => Pages\EditArticle::route('/{record}/edit'),
         ];
+    }
+
+    public static function canAccess(): bool
+    {
+        return Auth::filamentUserHasRole('admin');
     }
 }

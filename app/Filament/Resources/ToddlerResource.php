@@ -175,6 +175,8 @@ class ToddlerResource extends Resource
                 ->schema([
                     DatePicker::make('checkup_date')
                         ->label('Tanggal Pemeriksaan')
+                        ->native(false)
+                        ->readOnly()
                         ->default(now()),
                 ]),
 

@@ -23,7 +23,7 @@ class ScheduleResource extends Resource
 {
     protected static ?string $model = Schedule::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+    protected static ?string $navigationIcon = 'heroicon-s-calendar';
 
     protected static ?string $label = 'Jadwal';
 
@@ -82,13 +82,15 @@ class ScheduleResource extends Resource
                     ->columns(2)
                     ->collapsible()
                     ->schema([
-                        TimePicker::make('opened_time')
+                        TimePicker::make('time_opened')
                             ->seconds(false)
                             ->label('Jam Buka')
+                            ->native(false)
                             ->required(),
-                        TimePicker::make('closed_time')
+                        TimePicker::make('time_closed')
                             ->seconds(false)
                             ->label('Jam Tutup')
+                            ->native(false)
                             ->required(),
                     ]),
 
@@ -107,9 +109,11 @@ class ScheduleResource extends Resource
                 TextColumn::make('date_closed')
                     ->label('Tanggal Buka')
                     ->date('Y-m-d'),
-                TextColumn::make('opened_time')
+                TextColumn::make('time_opened')
+                    ->time('H:i')
                     ->label('Waktu Buka'),
-                TextColumn::make('closed_time')
+                TextColumn::make('time_closed')
+                    ->time('H:i')
                     ->label('Waktu Tutup'),
                 TextColumn::make('notes')
                     ->label('Deskripsi'),

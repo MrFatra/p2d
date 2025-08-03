@@ -4,7 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ArticleCategoryResource\Pages;
 use App\Filament\Resources\ArticleCategoryResource\RelationManagers;
+use App\Helpers\Auth;
 use App\Models\ArticleCategory;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
@@ -19,7 +21,7 @@ class ArticleCategoryResource extends Resource
 {
     protected static ?string $model = ArticleCategory::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-tag';
 
     protected static ?string $navigationLabel = 'Kategori Artikel';
     protected static ?string $pluralLabel = 'Kategori Artikel';
@@ -39,17 +41,17 @@ class ArticleCategoryResource extends Resource
                     ->columns(1)
                     ->schema([
                         Forms\Components\TextInput::make('name')
-                        ->label('Nama Kategori')
-                        ->required()
-                        ->maxLength(255),
+                            ->label('Nama Kategori')
+                            ->required()
+                            ->maxLength(255),
 
 
                         Forms\Components\Textarea::make('description')
                             ->label('Deskripsi')
                             ->rows(3)
                             ->maxLength(500),
-                        ]),
-                ]);
+                    ]),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -67,7 +69,7 @@ class ArticleCategoryResource extends Resource
                 Tables\Columns\TextColumn::make('description')
                     ->label('Deskripsi')
                     ->limit(50),
-                ])
+            ])
             ->filters([
                 //
             ])
@@ -100,5 +102,10 @@ class ArticleCategoryResource extends Resource
             'create' => Pages\CreateArticleCategory::route('/create'),
             'edit' => Pages\EditArticleCategory::route('/{record}/edit'),
         ];
+    }
+
+    public static function canAccess(): bool
+    {
+        return Auth::filamentUserHasRole('admin');
     }
 }

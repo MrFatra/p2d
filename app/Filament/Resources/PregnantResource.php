@@ -27,7 +27,9 @@ class PregnantResource extends Resource
 {
     protected static ?string $model = PregnantPostpartumBreastfeending::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'icon-person-pregnant-solid-full';
+
+    protected static ?string $activeNavigationIcon = 'icon-person-pregnant-solid-active';
 
     protected static ?string $navigationGroup = 'Posyandu';
 
