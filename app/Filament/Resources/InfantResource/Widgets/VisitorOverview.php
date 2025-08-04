@@ -49,6 +49,19 @@ class VisitorOverview extends BaseWidget
             $color = 'gray';
         }
 
+        $stuntingUsers = Infant::query()
+            ->whereIn('stunting_status', ['Stunting', 'Kemungkinan Stunting'])
+            ->get()
+            ->filter(function ($infant) use ($now) {
+                // Hitung usia dalam bulan
+                $ageInMonths = Carbon::parse($infant->birth_date)->diffInMonths($now);
+                return $ageInMonths <= 60;
+            })
+            ->groupBy('user_id')
+            ->count();
+
+
+
         return [
             Stat::make('Kunjungan Bulan Ini', $thisMonthVisits . ' Bayi')
                 ->description('Data per ' . $now->translatedFormat('F Y'))
@@ -61,6 +74,10 @@ class VisitorOverview extends BaseWidget
             Stat::make('Perubahan Kunjungan', $percentage . '%')
                 ->description($description)
                 ->color($color),
+
+            Stat::make('Total User dengan Stunting', $stuntingUsers . ' Bayi')
+                ->description('Hanya yang masih kategori bayi/balita')
+                ->color('danger'),
         ];
     }
 }

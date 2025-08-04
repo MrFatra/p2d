@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\MyClass;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
 
@@ -20,13 +21,14 @@ class Infant extends Model
         'nutrition_status',
         'complete_immunization',
         'vitamin_a',
+        'stunting_status',
         'exclusive_breastfeeding',
         'complementary_feeding',
         'motor_development',
         'checkup_date',
     ];
 
-        public function scopeExclude($query, $columnsToExclude = [])
+    public function scopeExclude($query, $columnsToExclude = [])
     {
         $table = $this->getTable();
         $allColumns = Schema::getColumnListing($table);
@@ -39,5 +41,58 @@ class Infant extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * boot untuk mendiagnosa status stunting dan kesehatan nya
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($infant) {
+            if (
+                $infant->height &&
+                $infant->weight &&
+                $infant->head_circumference &&
+                $infant->user &&
+                $infant->user->birth_date
+            ) {
+                // Konversi gender dari P/L menjadi female/male
+                $gender = strtolower($infant->user->gender ?? 'L') === 'p' ? 'female' : 'male';
+
+                $result = MyClass::calculateStuntingStatus(
+                    $infant->user->birth_date,
+                    $infant->height,
+                    $infant->weight,
+                    $infant->head_circumference,
+                    $gender
+                );
+
+                $infant->stunting_status = $result['status']; // Ambil status
+            }
+        });
+
+        static::updating(function ($infant) {
+            if (
+                $infant->height &&
+                $infant->weight &&
+                $infant->head_circumference &&
+                $infant->user &&
+                $infant->user->birth_date
+            ) {
+                $gender = strtolower($infant->user->gender ?? 'L') === 'p' ? 'female' : 'male';
+
+                $result = MyClass::calculateStuntingStatus(
+                    $infant->user->birth_date,
+                    $infant->height,
+                    $infant->weight,
+                    $infant->head_circumference,
+                    $gender
+                );
+
+                $infant->stunting_status = $result['status'];
+            }
+        });
     }
 }

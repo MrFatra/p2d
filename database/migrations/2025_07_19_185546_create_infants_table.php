@@ -23,6 +23,7 @@ return new class extends Migration
             $table->enum('nutrition_status', ['Gizi Baik', 'Gizi Cukup', 'Gizi Kurang'])->nullable();
             $table->boolean('complete_immunization')->nullable();
             $table->boolean('vitamin_a')->nullable();
+            $table->string('stunting_status')->nullable();
             $table->boolean('exclusive_breastfeeding')->nullable();
             $table->boolean('complementary_feeding')->nullable();
             $table->string('motor_development')->nullable();

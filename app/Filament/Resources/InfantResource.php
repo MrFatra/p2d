@@ -30,7 +30,7 @@ class InfantResource extends Resource
     protected static ?string $model = Infant::class;
 
     protected static ?string $navigationIcon = 'icon-baby-solid-full';
-    
+
     protected static ?string $activeNavigationIcon = 'icon-baby-solid-full-active';
 
     protected static ?string $navigationGroup = 'Posyandu';
@@ -205,6 +205,20 @@ class InfantResource extends Resource
                     ->numeric()
                     ->sortable(),
 
+                TextColumn::make('stunting_status')
+                    ->label('Status Stunting')
+                    ->formatStateUsing(fn($state) => match ($state) {
+                        'Normal' => new HtmlString('<strong>Normal</strong>'),
+                        'Kemungkinan Stunting' => new HtmlString('<strong>Kemungkinan Stunting</strong>'),
+                        'Stunting' => new HtmlString('<strong>Stunting</strong>'),
+                        default => new HtmlString('<strong>Tidak Diketahui</strong>'),
+                    })
+                    ->color(fn($state) => match ($state) {
+                        'Normal' => 'success',
+                        'Kemungkinan Stunting' => 'warning',
+                        'Stunting' => 'danger',
+                        default => 'gray',
+                    }),
                 TextColumn::make('head_circumference')
                     ->label('Lingkar Kepala (cm)')
                     ->numeric()
