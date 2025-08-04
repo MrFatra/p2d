@@ -80,15 +80,15 @@ class UserResource extends Resource
                     ->collapsible()
                     ->columns(2)
                     ->schema([
-                        Forms\Components\TextInput::make('address')
-                            ->required()
-                            ->label('Alamat'),
-                        Forms\Components\TextInput::make('latitude')
-                            ->label('Latitude'),
-                        Forms\Components\TextInput::make('longitude')
-                            ->label('Longitude'),
+                        Forms\Components\TextInput::make('rt')
+                            ->label('RT'),
+                        Forms\Components\TextInput::make('rw')
+                            ->label('RW'),
                         Forms\Components\TextInput::make('hamlet')
                             ->label('Dusun'),
+                        Forms\Components\Textarea::make('address')
+                            ->required()
+                            ->label('Alamat'),
                     ]),
 
                 Section::make('Keamanan')
