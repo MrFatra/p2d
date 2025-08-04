@@ -44,6 +44,9 @@ class StatsOverview extends BaseWidget
         } elseif ($percentage < 0) {
             $description = 'Turun dibanding bulan lalu';
             $color = 'danger';
+        } else {
+            $description = 'Tidak ada kunjungan.';
+            $color = 'gray';
         }
 
         return [
