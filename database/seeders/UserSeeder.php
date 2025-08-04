@@ -7,11 +7,6 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run(): void
     {
         // ADMIN
@@ -24,9 +19,9 @@ class UserSeeder extends Seeder
             'gender' => 'L',
             'phone_number' => '085312345678',
             'address' => 'Jl. Kenanga No.10, Surabaya',
-            'latitude' => -7.257472,
-            'longitude' => 112.752088,
-            'hamlet' => 'RW 05',
+            'hamlet' => 'Pahing',
+            'rt' => 1,
+            'rw' => 5,
         ]);
         $admin->syncRoles('admin');
 
@@ -40,9 +35,9 @@ class UserSeeder extends Seeder
             'gender' => 'P',
             'phone_number' => '081311223344',
             'address' => 'Jl. Mawar No.7, Bekasi',
-            'latitude' => -6.238270,
-            'longitude' => 106.975572,
-            'hamlet' => 'RW 02',
+            'hamlet' => 'Manis',
+            'rt' => 2,
+            'rw' => 6,
         ]);
         $cadre->syncRoles('cadre');
 
@@ -56,9 +51,9 @@ class UserSeeder extends Seeder
             'gender' => 'P',
             'phone_number' => '081222334455',
             'address' => 'Jl. Dahlia No.9, Depok',
-            'latitude' => -6.402484,
-            'longitude' => 106.794243,
-            'hamlet' => 'RW 01',
+            'hamlet' => 'Pahing',
+            'rt' => 3,
+            'rw' => 1,
         ]);
 
         // TODDLER
@@ -71,9 +66,9 @@ class UserSeeder extends Seeder
             'gender' => 'P',
             'phone_number' => '081333445566',
             'address' => 'Jl. Cempaka No.3, Bogor',
-            'latitude' => -6.596298,
-            'longitude' => 106.797242,
-            'hamlet' => 'RW 04',
+            'hamlet' => 'Manis',
+            'rt' => 4,
+            'rw' => 2,
         ]);
 
         // CHILD
@@ -86,9 +81,9 @@ class UserSeeder extends Seeder
             'gender' => 'L',
             'phone_number' => '081344556677',
             'address' => 'Jl. Sawo No.10, Tangerang',
-            'latitude' => -6.176558,
-            'longitude' => 106.631889,
-            'hamlet' => 'RW 06',
+            'hamlet' => 'Kliwon',
+            'rt' => 5,
+            'rw' => 3,
         ]);
 
         // TEENAGER
@@ -101,9 +96,9 @@ class UserSeeder extends Seeder
             'gender' => 'P',
             'phone_number' => '081355667788',
             'address' => 'Jl. Anggrek No.8, Jakarta',
-            'latitude' => -6.208763,
-            'longitude' => 106.845599,
-            'hamlet' => 'RW 07',
+            'hamlet' => 'Pon',
+            'rt' => 6,
+            'rw' => 4,
         ]);
 
         // ADULT
@@ -116,9 +111,9 @@ class UserSeeder extends Seeder
             'gender' => 'L',
             'phone_number' => '081366778899',
             'address' => 'Jl. Flamboyan No.4, Cikarang',
-            'latitude' => -6.288533,
-            'longitude' => 107.144285,
-            'hamlet' => 'RW 08',
+            'hamlet' => 'Pon',
+            'rt' => 7,
+            'rw' => 5,
         ]);
 
         // ELDERLY
@@ -131,9 +126,9 @@ class UserSeeder extends Seeder
             'gender' => 'P',
             'phone_number' => '081377889900',
             'address' => 'Jl. Cemara No.6, Karawang',
-            'latitude' => -6.323644,
-            'longitude' => 107.337579,
-            'hamlet' => 'RW 09',
+            'hamlet' => 'Manis',
+            'rt' => 8,
+            'rw' => 6,
         ]);
 
         // Pregnant
@@ -146,9 +141,9 @@ class UserSeeder extends Seeder
             'gender' => 'P',
             'phone_number' => '081399001122',
             'address' => 'Jl. Teratai No.12, Bekasi',
-            'latitude' => -6.240000,
-            'longitude' => 106.980000,
-            'hamlet' => 'RW 10',
+            'hamlet' => 'Pahing',
+            'rt' => 9,
+            'rw' => 1,
         ]);
 
         // NONE
@@ -161,9 +156,9 @@ class UserSeeder extends Seeder
             'gender' => 'L',
             'phone_number' => '081388990011',
             'address' => 'Jl. Tidak Diketahui, Unknown',
-            'latitude' => -6.000000,
-            'longitude' => 106.000000,
-            'hamlet' => 'RW 00',
+            'hamlet' => 'Pon',
+            'rt' => 0,
+            'rw' => 0,
         ]);
         $none->syncRoles('none');
     }
