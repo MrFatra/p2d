@@ -50,7 +50,7 @@ class PregnantResource extends Resource
                 Select::make('user_id')
                 ->label('Nama - NIK')
                 ->options(function () {
-                    return User::getUsers('elderly')
+                    return User::getUsers('mother')
                         ->mapWithKeys(function ($user) {
                             return [$user->id => "{$user->name} - {$user->national_id}"];
                         })->toArray();
