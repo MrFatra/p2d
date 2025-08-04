@@ -86,15 +86,16 @@ class EditProfile extends BaseEditProfile implements HasForms
                     TextInput::make('hamlet')
                         ->label('Dusun')
                         ->required(),
+                    TextInput::make('rt')
+                        ->label('RT')
+                        ->required(),
+                    TextInput::make('rw')
+                        ->label('RW')
+                        ->required(),
                     Textarea::make('address')
                         ->label('Alamat Lengkap')
                         ->required(),
-                    TextInput::make('latitude')
-                        ->label('Latitude')
-                        ->required(),
-                    TextInput::make('longitude')
-                        ->label('Longitude')
-                        ->required(),
+
                 ])
         ])
             ->operation('edit')
