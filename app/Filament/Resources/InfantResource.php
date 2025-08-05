@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\InfantResource\Pages;
 use App\Filament\Resources\InfantResource\RelationManagers;
 use App\Models\Infant;
+use App\Helpers\Family;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -181,6 +182,20 @@ class InfantResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('ayah')
+                    ->label('Nama Ayah')
+                    ->getStateUsing(
+                        fn($record) =>
+                        \App\Helpers\Family::getFatherName($record->user?->family_card_number)
+                    ),
+
+                TextColumn::make('ibu')
+                    ->label('Nama Ibu')
+                    ->getStateUsing(
+                        fn($record) =>
+                        \App\Helpers\Family::getMotherName($record->user?->family_card_number)
+                    ),
+
                 TextColumn::make('user.name')
                     ->label('Nama Bayi')
                     ->searchable()
