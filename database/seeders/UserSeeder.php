@@ -96,7 +96,7 @@ class UserSeeder extends Seeder
             'gender' => 'P',
             'phone_number' => '081355667788',
             'address' => 'Jl. Anggrek No.8, Jakarta',
-            'hamlet' => 'Pon',
+            'hamlet' => 'Wage',
             'rt' => 6,
             'rw' => 4,
         ]);
@@ -111,7 +111,7 @@ class UserSeeder extends Seeder
             'gender' => 'L',
             'phone_number' => '081366778899',
             'address' => 'Jl. Flamboyan No.4, Cikarang',
-            'hamlet' => 'Pon',
+            'hamlet' => 'Puhun',
             'rt' => 7,
             'rw' => 5,
         ]);
@@ -156,7 +156,7 @@ class UserSeeder extends Seeder
             'gender' => 'L',
             'phone_number' => '081388990011',
             'address' => 'Jl. Tidak Diketahui, Unknown',
-            'hamlet' => 'Pon',
+            'hamlet' => 'Kliwon',
             'rt' => 0,
             'rw' => 0,
         ]);
