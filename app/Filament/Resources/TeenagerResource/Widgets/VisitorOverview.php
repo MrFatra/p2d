@@ -61,6 +61,9 @@ class VisitorOverview extends BaseWidget
             Stat::make('Perubahan Kunjungan', $percentage . '%')
                 ->description($description)
                 ->color($color),
+            Stat::make('Total Remaja', '1 Orang')
+                ->description('Terdata sebagai Remaja saat ini')
+                ->color($color),
         ];
     }
 }

@@ -22,7 +22,7 @@ class VisitorOverview extends BaseWidget
     {
         $now = Carbon::now();
 
-       $thisMonthVisits = PregnantPostpartumBreastfeending::whereMonth('created_at', $now->month)
+        $thisMonthVisits = PregnantPostpartumBreastfeending::whereMonth('created_at', $now->month)
             ->whereYear('created_at', $now->year)
             ->count();
 
@@ -60,6 +60,10 @@ class VisitorOverview extends BaseWidget
 
             Stat::make('Perubahan Kunjungan', $percentage . '%')
                 ->description($description)
+                ->color($color),
+
+            Stat::make('Total Ibu Hamil','1 Orang')
+                ->description('Terdata sebagai ibu hamil saat ini')
                 ->color($color),
         ];
     }

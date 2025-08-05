@@ -78,6 +78,10 @@ class VisitorOverview extends BaseWidget
             Stat::make('Total User dengan Stunting', $stuntingUsers . ' Bayi')
                 ->description('Hanya yang masih kategori bayi/balita')
                 ->color('danger'),
+
+            Stat::make('Total Bayi', '1 Orang')
+                ->description('Terdata sebagai Bayi saat ini')
+                ->color($color),
         ];
     }
 }

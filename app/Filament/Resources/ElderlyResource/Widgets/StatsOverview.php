@@ -61,6 +61,9 @@ class StatsOverview extends BaseWidget
             Stat::make('Perubahan Kunjungan', $percentage . '%')
                 ->description($description)
                 ->color($color),
+            Stat::make('Total Lansia', '1 Orang')
+                ->description('Terdata sebagai Lamsia saat ini')
+                ->color($color),
         ];
     }
 }
