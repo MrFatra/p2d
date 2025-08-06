@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Auth;
 
+use App\Mail\OtpMail;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Component;
@@ -18,6 +19,7 @@ use Filament\Pages\Auth\EditProfile as BaseEditProfile;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class EditProfile extends BaseEditProfile implements HasForms
 {
@@ -29,6 +31,8 @@ class EditProfile extends BaseEditProfile implements HasForms
 
     public ?array $profileData = [];
     public ?array $passwordData = [];
+    public ?array $otpData = [];
+    public bool $isOtpStep = false;
 
     public function mount(): void
     {
@@ -37,7 +41,7 @@ class EditProfile extends BaseEditProfile implements HasForms
 
     protected function getForms(): array
     {
-        return ['editProfileForm', 'editPasswordForm'];
+        return ['editProfileForm', 'editPasswordForm', 'otpForm'];
     }
 
     public static function isSimple(): bool
@@ -117,11 +121,27 @@ class EditProfile extends BaseEditProfile implements HasForms
             ->statePath('passwordData');
     }
 
+    public function otpForm(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Section::make('Verifikasi OTP')
+                    ->schema([
+                        TextInput::make('otp')
+                            ->label('Kode OTP')
+                            ->numeric()
+                            ->length(6)
+                            ->required(),
+                    ])
+            ])
+            ->statePath('otpData');
+    }
+
     public function updateProfile(): void
     {
         $this->getUser()->update($this->profileData);
         Notification::make()
-            ->title('Profil berhasil diperbarui')
+            ->title('Profil berhasil diperbarui.')
             ->success()
             ->send();
     }
@@ -135,26 +155,90 @@ class EditProfile extends BaseEditProfile implements HasForms
             $this->resetErrorBag('passwordData.passwordConfirmation');
         }
 
-        $this->getUser()->update([
-            'password' => Hash::make($this->passwordData['password']),
+        session([
+            'otp_user_id' => $this->getUser()->id,
+            'otp_new_password' => Hash::make($this->passwordData['password']),
         ]);
 
         $this->passwordData = [];
 
+        $otp = rand(100000, 999999);
+
+        $this->getUser()->update([
+            'otp' => $otp,
+            'otp_expires_at' => now()->addMinutes(10),
+        ]);
+
+        try {
+            Mail::to($this->getUser()->email)->send(new OtpMail($otp, $this->getUser()->name));
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Gagal mengirimkan OTP ke email yang bersangkutan.')
+                ->danger()
+                ->send();
+            return;
+        }
+
+        $this->isOtpStep = true;
+
         Notification::make()
-            ->title('Password berhasil diperbarui')
+            ->title('Kode OTP telah dikirim ke email Anda.')
             ->success()
             ->send();
     }
 
+    public function verifyOtp(): void
+    {
+        $user = $this->getUser();
+        $otpInput = $this->otpData['otp'] ?? null;
+
+        if (
+            $user->otp !== $otpInput ||
+            $user->otp_expires_at->isPast()
+        ) {
+            $this->addError('otpData.otp', 'OTP tidak valid atau telah kedaluwarsa.');
+            return;
+        }
+
+        $user->update([
+            'otp' => null,
+            'otp_expires_at' => null,
+        ]);
+
+        $user->password = session('otp_new_password');
+        $user->save();
+
+        session()->forget(['otp_user_id', 'otp_new_password']);
+        $this->otpData = [];
+        $this->isOtpStep = false;
+
+        Notification::make()
+            ->title('Password berhasil diubah.')
+            ->success()
+            ->send();
+    }
+
+
     protected function getUpdateProfileFormActions(): array
     {
-        return [Action::make('save')->label('Simpan')->submit('updateProfile')];
+        return [
+            Action::make('save')->label('Simpan')->submit('updateProfile')
+        ];
     }
+
+    protected function getOtpFormActions(): array
+    {
+        return [
+            Action::make('verify')->label('Verifikasi OTP')->submit('verifyOtp'),
+        ];
+    }
+
 
     protected function getUpdatePasswordFormActions(): array
     {
-        return [Action::make('change')->label('Ganti Password')->submit('updatePassword')];
+        return [
+            Action::make('change')->label('Ganti Password')->submit('updatePassword')
+        ];
     }
 
     public function getUser(): Authenticatable & Model

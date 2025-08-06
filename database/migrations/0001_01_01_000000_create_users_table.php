@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('national_id')->unique();
             $table->string('name');
             $table->string('password');
+            $table->string('email')->unique();
             $table->date('birth_date')->nullable();
             $table->enum('gender', ['L', 'P'])->nullable();
             $table->string('phone_number')->nullable();
@@ -25,6 +26,8 @@ return new class extends Migration
             $table->integer('rt')->nullable();
             $table->integer('rw')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('otp')->nullable();
+            $table->timestamp('otp_expires_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
