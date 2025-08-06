@@ -20,11 +20,7 @@ export default {
                 foreground: "#212121",
             },
             fontFamily: {
-                sans: [
-                    "Graphik",
-                    "sans-serif",
-                    ...defaultTheme.fontFamily.sans,
-                ],
+                sans: ['Inter', 'sans-serif'],
                 serif: ["Merriweather", "serif"],
             },
         },
