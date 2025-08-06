@@ -2,6 +2,7 @@ import AppLayout from "../layouts/AppLayouts";
 import { About, Article, FAQ, Header, Schedule, Statistic} from "../sections";
 
 const Home = () => {
+
   return (
     <div className="mt-20">
       <Header />
