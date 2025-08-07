@@ -187,6 +187,20 @@ class ToddlerResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('ayah')
+                    ->label('Nama Ayah')
+                    ->getStateUsing(
+                        fn($record) =>
+                        \App\Helpers\Family::getFatherName($record->user?->family_card_number)
+                    ),
+
+                Tables\Columns\TextColumn::make('ibu')
+                    ->label('Nama Ibu')
+                    ->getStateUsing(
+                        fn($record) =>
+                        \App\Helpers\Family::getMotherName($record->user?->family_card_number)
+                    ),
+
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama Balita')
                     ->searchable(),
