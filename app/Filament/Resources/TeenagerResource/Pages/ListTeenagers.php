@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\TeenagerResource\Pages;
 
 use App\Filament\Resources\TeenagerResource;
+use App\Filament\Resources\TeenagerResource\Widgets\TeenagerVisitsChart;
 use App\Filament\Resources\TeenagerResource\Widgets\VisitorOverview;
 use Filament\Actions;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
@@ -37,6 +38,7 @@ class ListTeenagers extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
+            TeenagerVisitsChart::class,
             VisitorOverview::class
         ];
     }

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\PregnantResource\Pages;
 
 use App\Filament\Resources\PregnantResource;
+use App\Filament\Resources\PregnantResource\Widgets\PregnantVisitsChart;
 use App\Filament\Resources\PregnantResource\Widgets\VisitorOverview;
 use Filament\Actions;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
@@ -37,6 +38,7 @@ class ListPregnants extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
+            PregnantVisitsChart::class,
             VisitorOverview::class,
         ];
     }

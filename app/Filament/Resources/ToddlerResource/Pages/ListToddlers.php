@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ToddlerResource\Pages;
 
 use App\Filament\Resources\ToddlerResource;
+use App\Filament\Resources\ToddlerResource\Widgets\ToddlerVisitsChart;
 use App\Filament\Resources\ToddlerResource\Widgets\VisitorOverview;
 use Filament\Actions;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
@@ -36,6 +37,7 @@ class ListToddlers extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
+            ToddlerVisitsChart::class,
             VisitorOverview::class
         ];
     }

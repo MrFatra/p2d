@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ElderlyResource\Pages;
 
 use App\Filament\Resources\ElderlyResource;
+use App\Filament\Resources\ElderlyResource\Widgets\ElderlyVisitsChart;
 use App\Filament\Resources\ElderlyResource\Widgets\StatsOverview;
 use Filament\Actions;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
@@ -33,6 +34,7 @@ class ListElderlies extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
+            ElderlyVisitsChart::class,
             StatsOverview::class
         ];
     }
