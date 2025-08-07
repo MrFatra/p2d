@@ -17,7 +17,7 @@ return new class extends Migration
             $table->float('weight')->nullable();
             $table->float('height')->nullable();
             $table->float('upper_arm_circumference')->nullable();
-            $table->enum('nutrition_status', ['Gizi Baik', 'Gizi Cukup', 'Gizi Kurang'])->nullable();
+            $table->enum('nutrition_status', ['Gizi Baik', 'Gizi Cukup', 'Gizi Kurang', 'Gizi Buruk', 'Obesitas'])->nullable();
             $table->boolean('vitamin_a')->nullable();
             $table->boolean('immunization_followup')->nullable();
             $table->boolean('food_supplement')->nullable();
