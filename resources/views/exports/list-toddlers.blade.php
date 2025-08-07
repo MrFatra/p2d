@@ -8,8 +8,10 @@
     {
         return match ($value) {
             'Gizi Baik' => ['#22C55E', 'white'],
-            'Gizi Cukup' => ['#FACC15', 'black'],
-            'Gizi Kurang' => ['#EF4444', 'white'],
+            'Gizi Cukup' => ['#FDBA74', 'black'],
+            'Gizi Kurang' => ['#F59E0B', 'black'],
+            'Gizi Buruk' => ['#DC2626', 'white'],
+            'Gizi Obesitas' => ['#8B5CF6', 'white'],
             default => ['white', 'black'],
         };
     }
