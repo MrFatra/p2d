@@ -17,6 +17,7 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Role;
 
 class UserResource extends Resource
@@ -29,9 +30,10 @@ class UserResource extends Resource
     protected static ?string $navigationGroup = 'Master';
 
     protected static ?int $navigationSort = 0;
-    public static function shouldRegisterNavigation(): bool
+
+    public static function canAccess(): bool
     {
-        return auth()->user()->can('read users');
+        return auth()->user()->hasPermissionTo('users:read');
     }
 
     public static function form(Form $form): Form
@@ -199,14 +201,18 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+               Tables\Actions\ViewAction::make()
+                    ->visible(fn () => Gate::allows('users:read')),
+
+                Tables\Actions\EditAction::make()
+                    ->visible(fn () => Gate::allows('users:edit')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+                Tables\Actions\DeleteBulkAction::make()
+                    ->visible(fn () => auth()->user()->can('users:delete')),
+            ]),
+        ]);
     }
 
     public static function getRelations(): array
