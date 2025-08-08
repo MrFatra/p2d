@@ -2,7 +2,10 @@
 
 namespace App\Exports;
 
+use App\Helpers\Family;
+use App\Models\Toddler;
 use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
@@ -12,13 +15,18 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class ToddlerExport implements
-    FromView,
+    FromCollection,
     WithMapping,
     WithHeadings,
     ShouldAutoSize,
     WithColumnFormatting
 {
     protected $toddlers;
+
+    public function collection()
+    {
+        return Toddler::exclude(['id', 'updated_at'])->get();
+    }
 
     public function __construct($toddlers)
     {
@@ -34,13 +42,15 @@ class ToddlerExport implements
             'toddlers' => $this->toddlers
         ]);
     }
-    
+
     /**
      * Map data for each row
      */
     public function map($toddler): array
     {
         return [
+            Family::getFatherName($toddler->user?->family_card_number),
+            Family::getMotherName($toddler->user?->family_card_number),
             $toddler->user->name,
             $toddler->weight,
             $toddler->height,
@@ -61,7 +71,9 @@ class ToddlerExport implements
     public function headings(): array
     {
         return [
-            'Nama',
+            'Nama Ayah',
+            'Nama Ibu',
+            'Nama Balita',
             'Berat Badan',
             'Tinggi Badan',
             'Lingkar Lengan Atas',

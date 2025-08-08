@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class Toddler extends Model
 {
@@ -21,6 +22,15 @@ class Toddler extends Model
         'motor_development',
         'checkup_date',
     ];
+
+    public function scopeExclude($query, $columnsToExclude = [])
+    {
+        $table = $this->getTable();
+        $allColumns = Schema::getColumnListing($table);
+        $columns = array_diff($allColumns, (array) $columnsToExclude);
+
+        return $query->select($columns);
+    }
 
     public function user()
     {
