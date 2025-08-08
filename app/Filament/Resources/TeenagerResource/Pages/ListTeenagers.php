@@ -6,6 +6,7 @@ use App\Filament\Resources\TeenagerResource;
 use App\Filament\Resources\TeenagerResource\Widgets\TeenagerVisitsChart;
 use App\Filament\Resources\TeenagerResource\Widgets\VisitorOverview;
 use Filament\Actions;
+use Filament\Forms\Components\TextInput;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,12 +24,38 @@ class ListTeenagers extends ListRecords
             Actions\Action::make('export-excel')
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
-                ->action(function () {
+                ->modalSubmitActionLabel('Export')
+                ->form([
+                    TextInput::make('month')
+                        ->type('month') // HTML5 input type
+                        ->label('Pilih Bulan')
+                        ->default(now()->format('Y-m')) // Default format yang valid: '2025-08'
+                        ->required()
+                    // \Filament\Forms\Components\DatePicker::make('month')
+                    //     ->label('Pilih Bulan')
+                    //     ->native(false)
+                    //     ->extraInputAttributes(['type' => 'month'])
+                    //     ->format('m/Y')
+                    //     ->displayFormat('F Y') // Format bulan & tahun
+                    //     ->required(),
+                ])
+                ->action(function (array $data) {
                     $query = $this->getFilteredTableQuery();
-                    $data = $query->get();
+
+                    // Filter berdasarkan bulan terpilih
+                    if (!empty($data['month'])) {
+                        $month = \Carbon\Carbon::parse($data['month']);
+                        $query->whereMonth('created_at', $month->month)
+                            ->whereYear('created_at', $month->year);
+                    }
+
+                    $filteredData = $query->get();
 
                     return response()->streamDownload(
-                        fn() => print(\Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\TeenagerExport($data), 'remaja.xlsx')->getFile()->getContent()),
+                        fn() => print(\Maatwebsite\Excel\Facades\Excel::download(
+                            new \App\Exports\TeenagerExport($filteredData),
+                            'remaja.xlsx'
+                        )->getFile()->getContent()),
                         'laporan-list-data-remaja.xlsx'
                     );
                 }),

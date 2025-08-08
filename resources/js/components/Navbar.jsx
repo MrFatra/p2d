@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { FiLogIn, FiMenu, FiX } from "react-icons/fi";
 
 const Navbar = () => {
+    const { auth } = usePage().props;
     const [isOpen, setIsOpen] = useState(false);
     const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -42,12 +43,26 @@ const Navbar = () => {
                         >
                             Cek Pertumbuhan
                         </Link>
-                        <Link
-                            href="/login"
-                            className="lg:flex hidden bg-shades py-2.5 px-5 rounded-lg font-semibold text-white whitespace-nowrap items-center gap-2 text-sm"
-                        >
-                            Masuk <FiLogIn />
-                        </Link>
+                        {auth.user ? (
+                            <div className="flex items-center gap-4">
+                                <span className="text-white">{auth.user.name}</span>
+                                <Link
+                                    href="/logout"
+                                    method="post"
+                                    as="button"
+                                    className="lg:flex hidden bg-shades py-2.5 px-5 rounded-lg font-semibold text-white whitespace-nowrap items-center gap-2 text-sm"
+                                >
+                                    Logout
+                                </Link>
+                            </div>
+                        ) : (
+                            <Link
+                                href={route('login.index')}
+                                className="lg:flex hidden bg-shades py-2.5 px-5 rounded-lg font-semibold text-white whitespace-nowrap items-center gap-2 text-sm"
+                            >
+                                Masuk <FiLogIn />
+                            </Link>
+                        )}
                     </div>
                     <div className="relative lg:hidden">
                         <button
@@ -89,12 +104,23 @@ const Navbar = () => {
                                 >
                                     Cek Pertumbuhan
                                 </Link>
-                                <Link
-                                    href="/login"
-                                    className="bg-shades py-2 px-5 rounded-lg font-medium text-white flex items-center gap-2 text-sm"
-                                >
-                                    Masuk <FiLogIn />
-                                </Link>
+                                {auth.user ? (
+                                    <Link
+                                        href="/logout"
+                                        method="post"
+                                        as="button"
+                                        className="bg-shades py-2 px-5 rounded-lg font-medium text-white flex items-center gap-2 text-sm"
+                                    >
+                                        Logout
+                                    </Link>
+                                ) : (
+                                    <Link
+                                        href="/login"
+                                        className="bg-shades py-2 px-5 rounded-lg font-medium text-white flex items-center gap-2 text-sm"
+                                    >
+                                        Masuk <FiLogIn />
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -22,7 +22,7 @@ const Header = () => {
                         Merangkul Keluarga untuk Masa Depan Sehat Bersama.
                     </h2>
                     <Link
-                        href={route('login.view')}
+                        href={route('login.index')}
                         className="lg:flex inline-flex items-center justify-center gap-3 lg:mt-10 mt-5 border-2 border-custom-emerald py-2.5 px-5 rounded-lg font-bold text-custom-emerald hover:shadow-lg hover:bg-custom-emerald hover:text-white transition-all duration-200"
                     >
                         Ayo Mulai <ArrowRightIcon />
