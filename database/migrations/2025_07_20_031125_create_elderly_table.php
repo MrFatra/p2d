@@ -17,7 +17,7 @@ return new class extends Migration
             $table->float('blood_pressure')->nullable();
             $table->float('blood_glucose')->nullable();
             $table->float('cholesterol')->nullable();
-            $table->enum('nutrition_status', ['Gizi Baik', 'Gizi Cukup', 'Gizi Kurang'])->nullable();
+            $table->enum('nutrition_status', ['Gizi Baik', 'Gizi Cukup', 'Gizi Kurang', 'Gizi Buruk', 'Obesitas'])->nullable();
             $table->enum('functional_ability', ['Mandiri', 'Butuh Bantuan', 'Tidak Mandiri'])->nullable();
             $table->string('chronic_disease_history')->nullable();
             $table->timestamps();

@@ -16,7 +16,7 @@ class ToddlerSeeder extends Seeder
         $toddlers = [
             [
                 'user_id' => 4,
-                'weight' => 13.5, 
+                'weight' => 13.5,
                 'height' => 90.2,
                 'upper_arm_circumference' => 15.0,
                 'nutrition_status' => 'Gizi Baik',
@@ -55,6 +55,34 @@ class ToddlerSeeder extends Seeder
                 'motor_development' => 'Perlu Pemantauan',
                 'checkup_date' => Carbon::now()->subMonths(2),
                 'created_at' => Carbon::now()->subMonths(2),
+            ],
+            [
+                'user_id' => 4,
+                'weight' => 9.5,
+                'height' => 85.0,
+                'upper_arm_circumference' => 11.5,
+                'nutrition_status' => 'Gizi Buruk',
+                'vitamin_a' => false,
+                'immunization_followup' => false,
+                'food_supplement' => false,
+                'parenting_education' => false,
+                'motor_development' => 'Terlambat',
+                'checkup_date' => Carbon::now()->subMonths(3),
+                'created_at' => Carbon::now()->subMonths(3),
+            ],
+            [
+                'user_id' => 4,
+                'weight' => 18.0,
+                'height' => 87.0,
+                'upper_arm_circumference' => 17.0,
+                'nutrition_status' => 'Obesitas',
+                'vitamin_a' => true,
+                'immunization_followup' => true,
+                'food_supplement' => false,
+                'parenting_education' => true,
+                'motor_development' => 'Normal',
+                'checkup_date' => Carbon::now()->subMonths(4),
+                'created_at' => Carbon::now()->subMonths(4),
             ],
         ];
 

@@ -14,6 +14,7 @@ class UserSeeder extends Seeder
             'family_card_number' => '3174012300012347',
             'national_id' => '3174011501950003',
             'name' => 'Rudi Hartono',
+            'email' => 'admin@example.com',
             'password' => bcrypt('password'),
             'birth_date' => '1995-01-15',
             'gender' => 'L',
@@ -30,6 +31,7 @@ class UserSeeder extends Seeder
             'family_card_number' => '3174012300012348',
             'national_id' => '3174011804900004',
             'name' => 'Dewi Lestari',
+            'email' => 'cadre@example.com',
             'password' => bcrypt('password'),
             'birth_date' => '1990-04-18',
             'gender' => 'P',
@@ -43,9 +45,10 @@ class UserSeeder extends Seeder
 
         // BABY
         $baby = User::create([
-            'family_card_number' => '3174012300012349',
+            'family_card_number' => '3174012300012347',
             'national_id' => '3174011506240005',
             'name' => 'Aurelia Putri',
+            'email' => 'aurelia.putri@example.com',
             'password' => bcrypt('password'),
             'birth_date' => '2025-06-15',
             'gender' => 'P',
@@ -58,9 +61,10 @@ class UserSeeder extends Seeder
 
         // TODDLER
         $toddler = User::create([
-            'family_card_number' => '3174012300012350',
+            'family_card_number' => '3174012300012347',
             'national_id' => '3174011003220006',
             'name' => 'Tasya Kamila',
+            'email' => 'tasya.kamila@example.com',
             'password' => bcrypt('password'),
             'birth_date' => '2022-03-10',
             'gender' => 'P',
@@ -73,9 +77,10 @@ class UserSeeder extends Seeder
 
         // CHILD
         $child = User::create([
-            'family_card_number' => '3174012300012351',
+            'family_card_number' => '3174012300012347',
             'national_id' => '3174011407150007',
             'name' => 'Agung Prasetyo',
+            'email' => 'agung.prasetyo@example.com',
             'password' => bcrypt('password'),
             'birth_date' => '2015-07-14',
             'gender' => 'L',
@@ -88,9 +93,10 @@ class UserSeeder extends Seeder
 
         // TEENAGER
         $teenager = User::create([
-            'family_card_number' => '3174012300012352',
+            'family_card_number' => '3174012300012347',
             'national_id' => '3174011603090008',
             'name' => 'Rina Marlina',
+            'email' => 'rina.marlina@example.com',
             'password' => bcrypt('password'),
             'birth_date' => '2009-03-16',
             'gender' => 'P',
@@ -106,6 +112,7 @@ class UserSeeder extends Seeder
             'family_card_number' => '3174012300012353',
             'national_id' => '3174011901900009',
             'name' => 'Yudi Pranata',
+            'email' => 'yudi.pranata@example.com',
             'password' => bcrypt('password'),
             'birth_date' => '1990-01-19',
             'gender' => 'L',
@@ -121,6 +128,7 @@ class UserSeeder extends Seeder
             'family_card_number' => '3174012300012354',
             'national_id' => '3174010405500010',
             'name' => 'Sukirah',
+            'email' => 'sukirah@example.com',
             'password' => bcrypt('password'),
             'birth_date' => '1950-05-04',
             'gender' => 'P',
@@ -131,11 +139,12 @@ class UserSeeder extends Seeder
             'rw' => 6,
         ]);
 
-        // Pregnant
+        // PREGNANT
         $pregnant = User::create([
             'family_card_number' => '3174012300012356',
             'national_id' => '3174012109970012',
             'name' => 'Fitri Handayani',
+            'email' => 'fitri.handayani@example.com',
             'password' => bcrypt('password'),
             'birth_date' => '1997-09-21',
             'gender' => 'P',
@@ -151,6 +160,7 @@ class UserSeeder extends Seeder
             'family_card_number' => '3174012300012355',
             'national_id' => '3174010101010011',
             'name' => 'Anonim',
+            'email' => 'anonim@example.com',
             'password' => bcrypt('password'),
             'birth_date' => '2000-01-01',
             'gender' => 'L',

@@ -1,8 +1,34 @@
-import { HiLogin } from "react-icons/hi";
-import { useState } from "react";
+import { BiLogIn } from "react-icons/bi";
+import { useEffect, useState } from "react";
+import { useForm, usePage } from "@inertiajs/react";
+import { useToast } from "../../components/Toast/ToastProvider";
 
 const Login = () => {
+    const { flash } = usePage().props
+    const { addToast } = useToast()
+
+    const { data, setData, post, processing, errors } = useForm({
+        national_id: '',
+        password: '',
+    })
+
     const [visiblePass, setVisiblePass] = useState(false);
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        post(route('login'))
+    }
+
+    useEffect(() => {
+        if (flash?.success) {
+            addToast({ title: 'Success', message: flash.success, type: 'success', variant: 'outline', position: 'topRight' })
+        }
+        
+        if (flash?.error) {
+            addToast({ title: 'Success', message: flash.error, type: 'error', variant: 'outline', position: 'topRight' })
+        }
+    }, [flash]);
+
 
     return (
         <div className="flex items-center justify-center h-screen w-screen">
@@ -20,42 +46,61 @@ const Login = () => {
                 <p className="text-lg md:text-2xl font-bold mt-5">
                     Selamat Datang!
                 </p>
-                <p className="text-gray-500 font-medium mb-5 md:text-base text-sm">
+                <p className="text-gray-500 mb-5 text-sm">
                     Silahkan isi form dibawah ini.
                 </p>
 
-                <form className="flex flex-col w-full">
+                <form onSubmit={handleSubmit} className="flex flex-col w-full">
                     <div className="mb-4">
                         <label
-                            className="block md:text-sm text-xs font-bold mb-2"
-                            htmlFor="NIK"
+                            className="block md:text-sm text-xs font-bold mb-2 text-gray-500"
+                            htmlFor="national_id"
                         >
                             NIK
                         </label>
                         <input
-                            className="shadow appearance-none border rounded-lg w-full p-3 leading-tight focus:outline-none focus:shadow-outline font-medium md:text-base text-sm"
-                            id="NIK"
+                            className={`shadow border ${errors.national_id ? 'border-red-500' : 'border-gray-300 focus:border-custom-emerald focus:ring-custom-emerald focus:ring-1'} rounded-lg w-full p-3 mb-3 leading-tight focus:outline-none font-medium md:text-base text-sm`}
+                            id="national_id"
                             type="number"
-                            placeholder="NIK"
+                            value={data.national_id}
+                            onChange={(e) => {
+                                setData('national_id', e.target.value)
+                                if (errors.national_id) errors.national_id = null
+                            }}
+
                         />
+                        {
+                            errors.national_id &&
+                            <p className="text-red-500 text-xs italic">
+                                {errors.national_id}
+                            </p>
+                        }
                     </div>
 
                     <div className="mb-6">
                         <label
-                            className="block text-sm font-bold mb-2"
+                            className="block text-sm font-bold mb-2 text-gray-500"
                             htmlFor="password"
                         >
                             Password
                         </label>
                         <input
-                            className="shadow appearance-none border border-red-500 rounded-lg w-full p-3 mb-3 leading-tight focus:outline-none focus:shadow-outline font-medium md:text-base text-sm"
+                            className={`shadow border ${errors.password ? 'border-red-500' : 'border-gray-300 focus:border-custom-emerald focus:ring-custom-emerald focus:ring-1'} rounded-lg w-full p-3 mb-3 leading-tight focus:outline-none font-medium md:text-base text-sm`}
                             id="password"
                             type={visiblePass ? "text" : "password"}
-                            placeholder="******************"
+                            value={data.password}
+                            onChange={(e) => {
+                                setData('password', e.target.value)
+                                if (errors.password) errors.password = null
+                            }}
+
                         />
-                        <p className="text-red-500 text-xs italic">
-                            Please choose a password.
-                        </p>
+                        {
+                            errors.password &&
+                            <p className="text-red-500 text-xs italic">
+                                {errors.password}
+                            </p>
+                        }
                     </div>
 
                     <div className="flex justify-between items-center mb-10 mt-2">
@@ -95,19 +140,30 @@ const Login = () => {
                         </div>
                         <a
                             className="inline-block align-baseline font-bold md:text-sm text-xs text-shades hover:underline"
-                            href="#"
+                            href={route('password.index')}
                         >
                             Lupa Password?
                         </a>
                     </div>
 
                     <button
-                        className="flex w-full items-center justify-center gap-3 bg-shades hover:bg-shades/70 hover:cursor-pointer text-white font-bold py-3 rounded-lg focus:outline-none focus:shadow-outline md:text-base text-sm"
-                        type="button"
+                        className={`flex w-full items-center justify-center gap-1 bg-shades ${processing && 'bg-shades/70 disabled:cursor-not-allowed'} hover:bg-emerald-800 hover:cursor-pointer text-white font-bold py-3 rounded-lg focus:outline-none focus:shadow-outline md:text-base text-sm disabled:opacity-60 duration-200`}
+                        type="submit"
+                        disabled={processing}
                     >
-                        Login
-                        <HiLogin className="text-xl" />
+                        {processing ? (
+                            <>
+                                <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                                <span>Loading</span>
+                            </>
+                        ) : (
+                            <>
+                                <span>Login</span>
+                                <BiLogIn className="text-xl" />
+                            </>
+                        )}
                     </button>
+
                 </form>
             </div>
         </div>

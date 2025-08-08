@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\InfantResource\Pages;
 
 use App\Filament\Resources\InfantResource;
+use App\Filament\Resources\InfantResource\Widgets\InfantVisitsChart;
 use App\Filament\Resources\InfantResource\Widgets\VisitorOverview;
 use Filament\Actions;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
@@ -34,6 +35,7 @@ class ListInfants extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
+            InfantVisitsChart::class,
             VisitorOverview::class,
         ];
     }

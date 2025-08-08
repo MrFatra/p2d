@@ -15,7 +15,8 @@ class ListUsers extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->visible(fn () => auth()->user()->can('users:create')),
             Actions\Action::make('export-excel')
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')

@@ -99,17 +99,23 @@ class ElderlyResource extends Resource
                             ->options([
                                 'Gizi Baik' => 'Gizi Baik',
                                 'Gizi Cukup' => 'Gizi Cukup',
-                                'Gizi Kurang' => 'Gizi Kurang'
+                                'Gizi Kurang' => 'Gizi Kurang',
+                                'Gizi Buruk' => 'Gizi Buruk',
+                                'Obesitas' => 'Obesitas',
                             ])
                             ->colors([
                                 'Gizi Baik' => 'success',
                                 'Gizi Cukup' => 'success',
                                 'Gizi Kurang' => 'danger',
+                                'Gizi Buruk' => 'danger',
+                                'Obesitas' => 'danger',
                             ])
                             ->icons([
                                 'Gizi Baik' => 'heroicon-o-check-circle',
                                 'Gizi Cukup' => 'heroicon-o-check-circle',
                                 'Gizi Kurang' => 'heroicon-o-x-mark',
+                                'Gizi Buruk' => 'heroicon-o-x-mark',
+                                'Obesitas' => 'heroicon-o-x-mark',
                             ])
                             ->helperText('Pilih berdasarkan hasil perhitungan IMT/grafik pertumbuhan.'),
 
