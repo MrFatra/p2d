@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Helpers\Family;
 use App\Models\Infant;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -18,7 +19,7 @@ class InfantExport implements WithMapping, FromCollection, WithHeadings, ShouldA
      */
     public function collection()
     {
-        return Infant::exclude(['user_id', 'id', 'updated_at'])->get();
+        return Infant::exclude(['id', 'updated_at'])->get();
     }
 
     function boolToText($val)
@@ -29,6 +30,9 @@ class InfantExport implements WithMapping, FromCollection, WithHeadings, ShouldA
     public function map($infant): array
     {
         return [
+            Family::getFatherName($infant->user?->family_card_number),
+            Family::getMotherName($infant->user?->family_card_number),
+            $infant->user->name,
             $infant->weight,
             $infant->height,
             $infant->head_circumference,
@@ -48,6 +52,9 @@ class InfantExport implements WithMapping, FromCollection, WithHeadings, ShouldA
     public function headings(): array
     {
         return [
+            'Nama Ayah',
+            'Nama Ibu',
+            'Nama Bayi',
             'Berat Badan',
             'Tinggi Badan',
             'Lingkar Kepala',
