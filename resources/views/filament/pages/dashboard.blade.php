@@ -5,7 +5,7 @@
 
     <x-filament-widgets::widgets :columns="$this->getColumns()" :data="[...property_exists($this, 'filters') ? ['filters' => $this->filters] : [], ...$this->getWidgetData()]" :widgets="$this->getVisibleWidgets()" />
 
-    <div class="sticky right-0 justify-self-end py-5 rounded-full shadow-lg"
+    {{-- <div class="sticky right-0 justify-self-end py-5 rounded-full shadow-lg"
         style="background-color: rgb(20, 184, 166); bottom: 10px; padding-inline: 23px;">
         <button
             class="relative"
@@ -23,11 +23,11 @@
                     d="M17 8h2a2 2 0 012 2v10a2 2 0 01-2 2H7l-4 4V10a2 2 0 012-2h2m0 0h10m-10 0V6a2 2 0 012-2h4a2 2 0 012 2v2m-6 4h6m-6 4h4" />
             </svg>
         </button>
-    </div>
+    </div> --}}
 
-    <script>
+    {{-- <script>
         function handleChatClick() {
             alert('Chat button clicked!');
         }
-    </script>
+    </script> --}}
 </x-filament-panels::page>
