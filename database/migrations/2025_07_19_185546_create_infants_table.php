@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('stunting_status')->nullable();
             $table->boolean('exclusive_breastfeeding')->nullable();
             $table->boolean('complementary_feeding')->nullable();
-            $table->string('motor_development')->nullable();
+            $table->enum('motor_development', ['Normal', 'Perlu Pemantauan', 'Terlambat'])->nullable();
             $table->timestamps();
         });
     }

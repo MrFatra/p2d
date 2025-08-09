@@ -2,23 +2,36 @@
 
 namespace App\Exports;
 
-use App\Models\Infant;
+use App\Helpers\Family;
+use Illuminate\Contracts\View\View;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class InfantExport implements WithMapping, FromCollection, WithHeadings, ShouldAutoSize, WithColumnFormatting
+class InfantExport implements
+    FromView,
+    WithMapping,
+    WithHeadings,
+    ShouldAutoSize,
+    WithColumnFormatting
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function collection()
+
+    protected $infants;
+
+    public function __construct($infants)
     {
-        return Infant::exclude(['user_id', 'id', 'updated_at'])->get();
+        $this->infants = $infants;
+    }
+
+    public function view(): View
+    {
+        return view('exports.list-infants', [
+            'infants' => $this->infants
+        ]);
     }
 
     function boolToText($val)
@@ -29,6 +42,9 @@ class InfantExport implements WithMapping, FromCollection, WithHeadings, ShouldA
     public function map($infant): array
     {
         return [
+            Family::getFatherName($infant->user?->family_card_number),
+            Family::getMotherName($infant->user?->family_card_number),
+            $infant->user->name,
             $infant->weight,
             $infant->height,
             $infant->head_circumference,
@@ -48,6 +64,9 @@ class InfantExport implements WithMapping, FromCollection, WithHeadings, ShouldA
     public function headings(): array
     {
         return [
+            'Nama Ayah',
+            'Nama Ibu',
+            'Nama Bayi',
             'Berat Badan',
             'Tinggi Badan',
             'Lingkar Kepala',

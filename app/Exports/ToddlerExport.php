@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Helpers\Family;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -34,13 +35,15 @@ class ToddlerExport implements
             'toddlers' => $this->toddlers
         ]);
     }
-    
+
     /**
      * Map data for each row
      */
     public function map($toddler): array
     {
         return [
+            Family::getFatherName($toddler->user?->family_card_number),
+            Family::getMotherName($toddler->user?->family_card_number),
             $toddler->user->name,
             $toddler->weight,
             $toddler->height,
@@ -61,7 +64,9 @@ class ToddlerExport implements
     public function headings(): array
     {
         return [
-            'Nama',
+            'Nama Ayah',
+            'Nama Ibu',
+            'Nama Balita',
             'Berat Badan',
             'Tinggi Badan',
             'Lingkar Lengan Atas',

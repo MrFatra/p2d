@@ -28,15 +28,6 @@ class Infant extends Model
         'checkup_date',
     ];
 
-    public function scopeExclude($query, $columnsToExclude = [])
-    {
-        $table = $this->getTable();
-        $allColumns = Schema::getColumnListing($table);
-        $columns = array_diff($allColumns, (array) $columnsToExclude);
-
-        return $query->select($columns);
-    }
-
     // Relasi ke user
     public function user()
     {

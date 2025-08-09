@@ -2,20 +2,15 @@
 
 namespace App\Exports;
 
+use App\Helpers\Family;
 use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Conditional;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class TeenagerExport implements
     FromView,
@@ -48,6 +43,8 @@ class TeenagerExport implements
     public function map($teenager): array
     {
         return [
+            Family::getFatherName($teenager->user?->family_card_number),
+            Family::getMotherName($teenager->user?->family_card_number),
             $teenager->user->name,
             $teenager->weight,
             $teenager->height,
@@ -67,7 +64,9 @@ class TeenagerExport implements
     public function headings(): array
     {
         return [
-            'Nama',
+            'Nama Ayah',
+            'Nama Ibu',
+            'Nama Remaja',
             'Berat Badan',
             'Tinggi Badan',
             'BMI',

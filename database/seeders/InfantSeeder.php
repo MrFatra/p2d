@@ -26,7 +26,7 @@ class InfantSeeder extends Seeder
                 'vitamin_a' => true,
                 'exclusive_breastfeeding' => true,
                 'complementary_feeding' => true,
-                'motor_development' => 'Sesuai Usia',
+                'motor_development' => 'Normal',
                 'checkup_date' => Carbon::now(),
             ],
             [
@@ -41,7 +41,7 @@ class InfantSeeder extends Seeder
                 'vitamin_a' => false,
                 'exclusive_breastfeeding' => true,
                 'complementary_feeding' => true,
-                'motor_development' => 'Sesuai Usia',
+                'motor_development' => 'Normal',
                 'checkup_date' => Carbon::now()->subMonth(),
             ],
             [
@@ -71,7 +71,7 @@ class InfantSeeder extends Seeder
                 'vitamin_a' => false,
                 'exclusive_breastfeeding' => false,
                 'complementary_feeding' => false,
-                'motor_development' => 'Tertunda',
+                'motor_development' => 'Terlambat',
                 'checkup_date' => Carbon::now()->subMonths(3),
             ],
             [
@@ -86,7 +86,7 @@ class InfantSeeder extends Seeder
                 'vitamin_a' => true,
                 'exclusive_breastfeeding' => false,
                 'complementary_feeding' => true,
-                'motor_development' => 'Sesuai Usia',
+                'motor_development' => 'Normal',
                 'checkup_date' => Carbon::now()->subMonths(4),
             ],
         ];

@@ -10,7 +10,9 @@
     }
 
     $headers = [
-        'Nama',
+        'Nama Ayah',
+        'Nama Ibu',
+        'Nama Remaja',
         'Berat Badan',
         'Tinggi Badan',
         'BMI',
@@ -42,6 +44,8 @@
             @endphp
 
             <tr>
+                <td>{{ \App\Helpers\Family::getFatherName($teenager->user?->family_card_number) }}</td>
+                <td>{{ \App\Helpers\Family::getMotherName($teenager->user?->family_card_number) }}</td>
                 <td style="text-align: left;">{{ $teenager->user->name }}</td>
                 <td style="text-align: right;">{{ $teenager->weight }}</td>
                 <td style="text-align: right;">{{ $teenager->height }}</td>

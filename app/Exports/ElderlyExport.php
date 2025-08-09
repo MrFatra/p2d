@@ -2,23 +2,35 @@
 
 namespace App\Exports;
 
-use App\Models\Elderly;
+use Illuminate\Contracts\View\View;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class ElderlyExport implements WithMapping, FromCollection, WithHeadings, ShouldAutoSize, WithColumnFormatting
+class ElderlyExport implements
+    FromView,
+    WithMapping,
+    WithHeadings,
+    ShouldAutoSize,
+    WithColumnFormatting
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function collection()
+
+    protected $elderlies;
+
+    public function __construct($elderlies)
     {
-        return Elderly::exclude(['user_id', 'id', 'updated_at'])->get();
+        $this->elderlies = $elderlies;
+    }
+
+    public function view(): View
+    {
+        return view('exports.list-elderlies', [
+            'elderlies' => $this->elderlies,
+        ]);
     }
 
     function boolToText($val)

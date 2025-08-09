@@ -21,15 +21,6 @@ class Elderly extends Model
         'chronic_disease_history',
     ];
 
-    public function scopeExclude($query, $columnsToExclude = [])
-    {
-        $table = $this->getTable();
-        $allColumns = Schema::getColumnListing($table);
-        $columns = array_diff($allColumns, (array) $columnsToExclude);
-
-        return $query->select($columns);
-    }
-
     // Relasi ke user
     public function user()
     {

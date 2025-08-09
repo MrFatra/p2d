@@ -109,9 +109,9 @@ class InfantResource extends Resource
                             ->helperText('Tinggi badan saat pemeriksaan terakhir. Dalam Satuan cm. Contoh: 34.0'),
                     ]),
 
-                Section::make('Status Gizi')
+                Section::make('Status Gizi & Perkembangan')
                     ->icon('heroicon-o-clipboard-document-list')
-                    ->description('Penilaian status gizi bayi.')
+                    ->description('Penilaian status gizi dan perkembangan motorik bayi.')
                     ->schema([
                         ToggleButtons::make('nutrition_status')
                             ->label('Status Gizi')
@@ -138,6 +138,26 @@ class InfantResource extends Resource
                                 'Obesitas' => 'heroicon-o-x-mark',
                             ])
                             ->helperText('Pilih berdasarkan hasil perhitungan IMT/grafik pertumbuhan.'),
+                        ToggleButtons::make('motor_development')
+                            ->label('Perkembangan Motorik')
+                            ->helperText('Contoh: Normal, Perlu Pemantauan, Terlambat')
+                            ->inline()
+                            ->nullable()
+                            ->options([
+                                'Normal' => 'Normal',
+                                'Perlu Pemantauan' => 'Perlu Pemantauan',
+                                'Terlambat' => 'Terlambat'
+                            ])
+                            ->colors([
+                                'Normal' => 'success',
+                                'Perlu Pemantauan' => 'warning',
+                                'Terlambat' => 'danger',
+                            ])
+                            ->icons([
+                                'Normal' => 'heroicon-o-check-circle',
+                                'Perlu Pemantauan' => 'heroicon-o-check-circle',
+                                'Terlambat' => 'heroicon-o-x-mark',
+                            ]),
                     ]),
 
                 Section::make('Imunisasi')

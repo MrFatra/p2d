@@ -21,16 +21,6 @@ class Teenager extends Model
         'mental_health',
     ];
 
-    public function scopeExclude($query, $columnsToExclude = [])
-    {
-        $table = $this->getTable();
-        $allColumns = Schema::getColumnListing($table);
-        $columns = array_diff($allColumns, (array) $columnsToExclude);
-
-        return $query->select($columns);
-    }
-
-
     // Relasi ke model User
     public function user()
     {
