@@ -6,7 +6,6 @@ import {
     Header,
     Schedule,
     Statistic,
-    CheckHistory,
 } from "../sections";
 
 const Home = () => {
@@ -18,7 +17,6 @@ const Home = () => {
             <Article />
             <Statistic />
             <FAQ />
-            <CheckHistory />
         </div>
     );
 };
