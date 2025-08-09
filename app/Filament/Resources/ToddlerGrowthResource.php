@@ -2,8 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\InfantGrowthResource\Pages;
-use App\Filament\Resources\InfantGrowthResource\RelationManagers;
+use App\Filament\Resources\ToddlerGrowthResource\Pages;
+use App\Filament\Resources\ToddlerGrowthResource\RelationManagers;
+use App\Models\ToddlerGrowth;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -14,21 +15,21 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class InfantGrowthResource extends Resource
+class ToddlerGrowthResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'icon-baby-solid-full';
+    protected static ?string $navigationIcon = 'icon-child-reaching-solid-full';
 
-    protected static ?string $activeNavigationIcon = 'icon-baby-solid-full-active';
+    protected static ?string $activeNavigationIcon = 'icon-child-reaching-solid-full-active';
 
     protected static ?string $navigationGroup = 'Pertumbuhan';
 
-    protected static ?string $navigationLabel = 'Bayi';
+    protected static ?string $navigationLabel = 'Balita';
 
-    protected static ?string $breadcrumb = 'Pertumbuhan Bayi';
+    protected static ?string $breadcrumb = 'Pertumbuhan Balita';
 
-    protected static ?string $label = 'Pertumbuhan Bayi';
+    protected static ?string $label = 'Pertumbuhan Balita';
 
     public static function form(Form $form): Form
     {
@@ -62,7 +63,7 @@ class InfantGrowthResource extends Resource
                     ->toggleable(),
             ])
             ->filters([
-                // Tambahkan filter jika diperlukan
+                //
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -85,10 +86,10 @@ class InfantGrowthResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListInfantGrowths::route('/'),
-            'create' => Pages\CreateInfantGrowth::route('/create'),
-            'view' => Pages\ViewInfantGrowth::route('/{record}'),
-            'edit' => Pages\EditInfantGrowth::route('/{record}/edit'),
+            'index' => Pages\ListToddlerGrowths::route('/'),
+            'create' => Pages\CreateToddlerGrowth::route('/create'),
+            'view' => Pages\ViewToddlerGrowth::route('/{record}'),
+            'edit' => Pages\EditToddlerGrowth::route('/{record}/edit'),
         ];
     }
 
@@ -107,6 +108,7 @@ class InfantGrowthResource extends Resource
         $now = \Carbon\Carbon::now();
 
         return parent::getEloquentQuery()
-            ->whereDate('birth_date', '>', $now->copy()->subYears(1));
+            ->whereDate('birth_date', '>', $now->copy()->subYears(5))
+            ->whereDate('birth_date', '<=', $now->copy()->subYears(1));
     }
 }

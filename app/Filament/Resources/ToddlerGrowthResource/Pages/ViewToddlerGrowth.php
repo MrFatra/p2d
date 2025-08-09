@@ -1,29 +1,20 @@
 <?php
 
-namespace App\Filament\Resources\InfantGrowthResource\Pages;
+namespace App\Filament\Resources\ToddlerGrowthResource\Pages;
 
-use App\Filament\Resources\InfantGrowthResource;
-use App\Filament\Resources\InfantGrowthResource\Widgets\InfantGrowthChart;
-use App\Filament\Resources\InfantGrowthResource\Widgets\InfantGrowthTable;
-use App\Models\Infant;
+use App\Filament\Resources\ToddlerGrowthResource;
+use App\Filament\Resources\ToddlerGrowthResource\Widgets\ToddlerGrowthChart;
+use App\Filament\Resources\ToddlerGrowthResource\Widgets\ToddlerGrowthTable;
 use Filament\Actions;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Table;
-use Illuminate\Contracts\View\View;
 
-class ViewInfantGrowth extends ViewRecord
-// implements HasTable
+class ViewToddlerGrowth extends ViewRecord
 {
-    // use InteractsWithTable;
-
-    protected static string $resource = InfantGrowthResource::class;
+    protected static string $resource = ToddlerGrowthResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -80,11 +71,12 @@ class ViewInfantGrowth extends ViewRecord
             ]);
     }
 
+
     protected function getFooterWidgets(): array
     {
         return [
-            InfantGrowthTable::make(),
-            InfantGrowthChart::make(),
+            ToddlerGrowthTable::make(),
+            ToddlerGrowthChart::make(),
         ];
     }
 }

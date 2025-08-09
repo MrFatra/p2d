@@ -27,7 +27,7 @@ class User extends Authenticatable implements FilamentUser
         'address',
         'hamlet',
         'otp',
-        'otp_expires_at'
+        'otp_expires_at',
     ];
 
     protected $hidden = [
@@ -119,13 +119,13 @@ class User extends Authenticatable implements FilamentUser
 
         $query->whereDoesntHave($config['relation'], function ($q) use ($now) {
             $q->whereYear('created_at', $now->year)
-              ->whereMonth('created_at', $now->month);
+                ->whereMonth('created_at', $now->month);
         });
 
         return $query->get();
     }
 
-    private static function determineTypeOfUser($userBirthDate)
+    public static function determineTypeOfUser($userBirthDate): string
     {
         if (empty($userBirthDate)) {
             return 'none';
@@ -134,21 +134,21 @@ class User extends Authenticatable implements FilamentUser
         $now = now();
         $age = Carbon::parse($userBirthDate)->diffInYears($now);
 
-        if ($age < 0) {
+        if ($age <= 1) {
             return 'baby';
-        } elseif ($age < 5) {
+        } elseif ($age > 1 && $age <= 5) {
             return 'toddler';
-        } elseif ($age < 12) {
+        } elseif ($age >= 6 && $age < 12) {
             return 'child';
-        } elseif ($age < 18) {
+        } elseif ($age >= 12 && $age < 18) {
             return 'teenager';
-        } elseif ($age < 60) {
+        } elseif ($age >= 18 && $age < 60) {
             return 'adult';
         } elseif ($age >= 60) {
             return 'elderly';
-        } else {
-            return 'none';
         }
+
+        return 'none';
     }
 
     public function getAgeCategoryAttribute(): string
@@ -161,6 +161,7 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasRole('admin');
     }
 
+    // === Relationships ===
     public function infants()
     {
         return $this->hasMany(Infant::class);
