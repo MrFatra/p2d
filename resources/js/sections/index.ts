@@ -6,3 +6,4 @@ export { default as Statistic } from "./Statistic";
 export { default as FAQ } from "./FAQ";
 export { default as ListArticle } from "./ListArticle";
 export { default as ArticleDetail } from "./ArticleDetail";
+export { default as CheckHistory } from "./CheckHistory";
