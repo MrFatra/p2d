@@ -16,6 +16,8 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Section;
 use App\Helpers\MonthlyReport;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class ReportResource extends Resource
 {
@@ -29,6 +31,10 @@ class ReportResource extends Resource
     protected static ?string $breadcrumb = 'Data Laporan Posyandu';
 
     protected static ?string $label = 'Data Laporan Posyandu';
+
+    protected static ?string $navigationGroup = 'Master';
+
+    protected static ?int $navigationSort = 10;
 
     public static function form(Form $form): Form
     {
@@ -79,44 +85,40 @@ class ReportResource extends Resource
 
     public static function table(Table $table): Table
     {
-        $report = (new MonthlyReport())->countPerModelByMonth();
         return $table
             ->columns([
-                TextColumn::make('adult_count')
-                    ->label('Dewasa (18–59 Tahun)')
-                    ->state(fn() => $report['Adult'])
-                    ->sortable(),
+                // TextColumn::make('adult_count')
+                //     ->label('Dewasa (18–59 Tahun)')
+                //     ->state(fn() => $report['Adult'])
+                //     ->sortable(),
 
                 TextColumn::make('elderly_count')
                     ->label('Lansia (60 Tahun ke Atas)')
-                    ->state(fn() => $report['Elderly'])
-                    ->sortable(),
+                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['Elderly']),
 
                 TextColumn::make('infant_count')
-                    ->label('Bayi (0–12 Bulan)')
-                    ->state(fn() => $report['Infant'])
-                    ->sortable(),
+                    ->label('Bayi (0-12 Bulan)')
+                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['Infant']),
 
                 TextColumn::make('pregnant_count')
                     ->label('Ibu Hamil')
-                    ->state(fn() => $report['Pregnant'])
-                    ->sortable(),
+                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['Pregnant']),
 
                 TextColumn::make('teenager_count')
-                    ->label('Remaja (13–17 Tahun)')
-                    ->state(fn() => $report['Teenager'])
-                    ->sortable(),
+                    ->label('Remaja (13-17 Tahun)')
+                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['Teenager']),
 
                 TextColumn::make('toddler_count')
-                    ->label('Balita (1–5 Tahun)')
-                    ->state(fn() => $report['Toddler'])
-                    ->sortable(),
+                    ->label('Balita (1-5 Tahun)')
+                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['Toddler']),
+
                 TextColumn::make('month')
                     ->label('Bulan')
-                    ->state(fn() => $report['month']),
+                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['month']),
+
                 TextColumn::make('year')
                     ->label('Tahun')
-                    ->state(fn() => $report['year']),
+                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['year']),
             ])
             ->filters([
                 //
@@ -144,5 +146,24 @@ class ReportResource extends Resource
             'index' => Pages\ListReports::route('/'),
             'view' => Pages\ViewReport::route('/{record}'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return false;
+    }
+
+    protected static function getMonthlyReportByRecord(Model $record): array
+    {
+        $cacheKey = 'monthly-report-' . Carbon::parse($record->uploaded_at)->format('Y-m');
+
+        return Cache::remember($cacheKey, now()->addHours(12), function () use ($record) {
+            return (new MonthlyReport())->countPerModelByDate(Carbon::parse($record->uploaded_at));
+        });
     }
 }

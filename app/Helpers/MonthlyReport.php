@@ -2,39 +2,34 @@
 
 namespace App\Helpers;
 
-use App\Models\Adult;
-use App\Models\Elderly;
-use App\Models\Infant;
-use App\Models\PregnantPostpartumBreastfeending;
-use App\Models\Teenager;
-use App\Models\Toddler;
+use App\Models\User;
 use Carbon\Carbon;
 
 class MonthlyReport
 {
-    public function countPerModelByMonth(?int $month = null, ?int $year = null): array
+    public function countPerModelByDate(Carbon $date): array
     {
-        $month = $month ?? Carbon::now()->month;
-        $year = $year ?? Carbon::now()->year;
+        $year = $date->year;
+        $month = $date->month;
 
         $data = [
-            'month' => Carbon::createFromDate($year, $month)->translatedFormat('F'), // Nama bulan sesuai lokal
+            'month' => $date->translatedFormat('F'),
             'year'  => $year,
         ];
 
         $models = [
-            'Adult' => Adult::class,
-            'Elderly' => Elderly::class,
-            'Infant' => Infant::class,
-            'Pregnant' => PregnantPostpartumBreastfeending::class,
-            'Teenager' => Teenager::class,
-            'Toddler' => Toddler::class,
+            'Elderly' => 'elderlies',
+            'Infant' => 'infants',
+            'Pregnant' => 'pregnantPostpartumBreastfeedings',
+            'Teenager' => 'teenagers',
+            'Toddler' => 'toddlers',
         ];
 
-        foreach ($models as $label => $model) {
-            $data[$label] = $model::whereMonth('created_at', $month)
-                ->whereYear('created_at', $year)
-                ->count();
+        foreach ($models as $label => $relation) {
+            $data[$label] = User::whereHas($relation, function ($query) use ($year, $month) {
+                $query->whereYear('created_at', $year)
+                    ->whereMonth('created_at', $month);
+            })->count();
         }
 
         return $data;

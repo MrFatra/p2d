@@ -19,25 +19,28 @@ class ReportSeeder extends Seeder
                 'user_id' => 2,
                 'file_name' => 'laporan_posyandu_januari_2025.pdf',
                 'file_type' => 'PDF',
-                'description' => 'Laporan kegiatan Posyandu bulan Januari 2025',
-                'uploaded_at' => Carbon::create(2025, 2, 1, 10, 0, 0),
+                'description' => 'Laporan kegiatan Posyandu bulan Agustus 2025',
+                'uploaded_at' => Carbon::now(),
                 'file_path' => 'uploads/laporan_posyandu/2025/januari/laporan_posyandu_januari_2025.pdf',
+                'created_at' => Carbon::now()
             ],
             [
                 'user_id' => 2,
                 'file_name' => 'laporan_posyandu_februari_2025.pdf',
                 'file_type' => 'PDF',
-                'description' => 'Laporan kegiatan Posyandu bulan Februari 2025',
-                'uploaded_at' => Carbon::create(2025, 3, 1, 10, 0, 0),
+                'description' => 'Laporan kegiatan Posyandu bulan September 2025',
+                'uploaded_at' => Carbon::now()->addMonth(),
                 'file_path' => 'uploads/laporan_posyandu/2025/februari/laporan_posyandu_februari_2025.pdf',
+                'created_at' => Carbon::now()->addMonth()
             ],
             [
                 'user_id' => 2,
                 'file_name' => 'laporan_posyandu_maret_2025.pdf',
                 'file_type' => 'PDF',
                 'description' => 'Laporan kegiatan Posyandu bulan Maret 2025',
-                'uploaded_at' => Carbon::create(2025, 4, 1, 10, 0, 0),
+                'uploaded_at' => Carbon::now()->addMonths(2),
                 'file_path' => 'uploads/laporan_posyandu/2025/maret/laporan_posyandu_maret_2025.pdf',
+                'created_at' => Carbon::now()->addMonths(2)
             ],
         ];
 
