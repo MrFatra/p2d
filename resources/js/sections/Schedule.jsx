@@ -84,7 +84,7 @@ export default function ImmunizationSchedule() {
                     {getEvent(date) ? (
                         <div className="relative bg-gradient-to-br from-custom-emerald/90 to-custom-emerald/70 text-white p-8 rounded-2xl shadow-lg transform hover:scale-[1.02] transition duration-300 ease-in-out">
                             {/* Badge jenis kegiatan */}
-                            <span className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full">
+                            <span className="absolute top-4 right-4 bg-shades backdrop-blur-sm text-white font-medium text-xs px-3 py-1 rounded-full">
                                 {typeMapping[getEvent(date).type] ||
                                     getEvent(date).type}
                             </span>

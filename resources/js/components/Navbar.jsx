@@ -49,7 +49,8 @@ const Navbar = () => {
                     {[
                         { name: "Jadwal", href: "#schedule" },
                         { name: "Artikel", href: "#article" },
-                        { name: "Riwayat", href: "/pertumbuhan" }
+                        { name: "Riwayat", href: "#" },
+                        { name: "FAQ", href: "#faq" }
                     ].map((item) => (
                         <li key={item.name}>
                             <Link
@@ -106,8 +107,11 @@ const Navbar = () => {
                         <Link href="#article" className="hover:underline w-full">
                             Artikel
                         </Link>
-                        <Link href="/pertumbuhan" className="hover:underline w-full">
+                        <Link href="#" className="hover:underline w-full">
                             Riwayat
+                        </Link>
+                        <Link href="#faq" className="hover:underline w-full">
+                            FAQ
                         </Link>
                         {auth.user ? (
                             <Link

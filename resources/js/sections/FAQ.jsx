@@ -17,7 +17,7 @@ const FAQ = () => {
         {
             id: "faq2",
             question: "Bagaimana cara bergabung dengan Siposyandu?",
-            answer: "Anda bisa mendaftar melalui website resmi Siposyandu atau datang langsung ke kantor kami untuk informasi lebih lanjut.",
+            answer: "Anda bisa mendaftar dengan cara datang langsung ke kantor kami untuk informasi lebih lanjut.",
         },
         {
             id: "faq3",
@@ -32,7 +32,7 @@ const FAQ = () => {
     ];
 
     return (
-        <section className="py-20 bg-white text-foreground">
+        <section id="faq" className="py-20 bg-white text-foreground">
             <div className="max-w-7xl mx-auto px-4">
                 <div className="flex flex-col lg:flex-row gap-12 items-center">
                     {/* Left Side */}
@@ -43,7 +43,7 @@ const FAQ = () => {
                         </h3>
                         <p className="text-base font-light">
                             Temukan jawaban dari pertanyaan yang sering diajukan
-                            langsung di sini untuk informasi tentang layanan, jadwal, dan fasilitas SIPOSYANDU.
+                            langsung di sini untuk informasi tentang layanan, jadwal, dan fasilitas <span className="font-bold">SIPOSYANDU</span>.
                         </p>
                     </div>
 
