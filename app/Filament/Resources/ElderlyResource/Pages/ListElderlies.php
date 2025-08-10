@@ -19,8 +19,12 @@ class ListElderlies extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Data Lansia')
+                ->icon('heroicon-o-plus')
+                ->visible(fn () => auth()->user()->can('lansia:create')),
             Actions\Action::make('export-excel')
+                ->visible(fn () => auth()->user()->can('lansia:export'))
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->modalSubmitActionLabel('Export')

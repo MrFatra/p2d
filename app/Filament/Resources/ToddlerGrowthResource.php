@@ -31,6 +31,11 @@ class ToddlerGrowthResource extends Resource
 
     protected static ?string $label = 'Pertumbuhan Balita';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('pertumbuhan-balita:view');
+    }
+
     public static function form(Form $form): Form
     {
         return $form

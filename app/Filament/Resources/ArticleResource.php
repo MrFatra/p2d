@@ -34,6 +34,11 @@ class ArticleResource extends Resource
 
     protected static ?int $navigationSort = 101;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('artikel:read');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -142,9 +147,11 @@ class ArticleResource extends Resource
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make()
-                        ->label('Ubah'),
+                        ->label('Ubah')
+                        ->visible(fn () => auth()->user()->can('artikel:update')),
                     Tables\Actions\DeleteAction::make()
-                        ->label('Hapus'),
+                        ->label('Hapus')
+                        ->visible(fn () => auth()->user()->can('artikel:delete')),
                 ]),
             ])
             ->bulkActions([
@@ -168,10 +175,5 @@ class ArticleResource extends Resource
             'create' => Pages\CreateArticle::route('/create'),
             'edit' => Pages\EditArticle::route('/{record}/edit'),
         ];
-    }
-
-    public static function canAccess(): bool
-    {
-        return Auth::filamentUserHasRole('admin');
     }
 }

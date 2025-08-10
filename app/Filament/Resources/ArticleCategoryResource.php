@@ -29,6 +29,11 @@ class ArticleCategoryResource extends Resource
 
     protected static ?int $navigationSort = 100;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('kategori-artikel:read');
+    }
+
 
     public static function form(Form $form): Form
     {
@@ -76,9 +81,11 @@ class ArticleCategoryResource extends Resource
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make()
+                        ->visible(fn () => auth()->user()->can('kategori-artikel:update'))
                         ->label('Ubah'),
                     Tables\Actions\DeleteAction::make()
-                        ->label('Hapus'),
+                        ->label('Hapus')
+                        ->visible(fn () => auth()->user()->can('kategori-artikel:delete')),
                 ]),
             ])
             ->bulkActions([
@@ -102,10 +109,5 @@ class ArticleCategoryResource extends Resource
             'create' => Pages\CreateArticleCategory::route('/create'),
             'edit' => Pages\EditArticleCategory::route('/{record}/edit'),
         ];
-    }
-
-    public static function canAccess(): bool
-    {
-        return Auth::filamentUserHasRole('admin');
     }
 }

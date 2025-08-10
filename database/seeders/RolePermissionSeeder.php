@@ -12,8 +12,16 @@ class RolePermissionSeeder extends Seeder
     {
         // 1. Roles
         $roles = [
-            'admin', 'cadre', 'baby', 'toddler', 'child',
-            'teenager', 'adult', 'elderly', 'pregnant', 'none',
+            'admin',
+            'cadre',
+            'baby',
+            'toddler',
+            'child',
+            'teenager',
+            'adult',
+            'elderly',
+            'pregnant',
+            'none',
         ];
 
         foreach ($roles as $roleName) {
@@ -22,19 +30,19 @@ class RolePermissionSeeder extends Seeder
 
         // 2. Modules in English
         $modules = [
-            'users',
-            'schedules',
-            'pregnant-women',
-            'teenagers',
-            'toddlers',
-            'infants',
-            'elderly',
-            'article-categories',
-            'articles',
-            'roles',
+            'pengguna',
+            'jadwal',
+            'ibu-hamil',
+            'dewasa',
+            'balita',
+            'bayi',
+            'lansia',
+            'kategori-artikel',
+            'artikel',
+            'peran',
         ];
 
-        $actions = ['create', 'read', 'update', 'delete'];
+        $actions = ['create', 'read', 'update', 'delete', 'export'];
 
         foreach ($modules as $module) {
             foreach ($actions as $action) {
@@ -43,6 +51,20 @@ class RolePermissionSeeder extends Seeder
                     'guard_name' => 'web',
                 ]);
             }
+        }
+
+        $modulesPrivate = [
+            'dashboard',
+            'pertumbuhan-bayi',
+            'pertumbuhan-balita',
+            'laporan-data-posyandu',
+        ];
+
+        foreach ($modulesPrivate as $module) {
+            Permission::firstOrCreate([
+                'name' => "{$module}:view",
+                'guard_name' => 'web',
+            ]);
         }
 
         // 3. Assign all permissions to admin

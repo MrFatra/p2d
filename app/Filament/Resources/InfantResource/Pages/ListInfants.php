@@ -14,15 +14,20 @@ class ListInfants extends ListRecords
 {
 
     use ExposesTableToWidgets;
-    
+
     protected static string $resource = InfantResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->visible(fn () => auth()->user()->can('bayi:create'))
+                ->label('Tambah Bayi')
+                ->icon('heroicon-o-plus-circle')
+                ->color('primary'),
             Actions\Action::make('export-excel')
-->label('Export Excel')
+                ->visible(fn () => auth()->user()->can('bayi:export'))
+                ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->modalSubmitActionLabel('Export')
                 ->form([

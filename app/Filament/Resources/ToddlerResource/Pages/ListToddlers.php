@@ -19,8 +19,12 @@ class ListToddlers extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->visible(fn () => auth()->user()->can('balita:create'))
+                ->icon('heroicon-o-plus')
+                ->label('Tambah Balita'),
             Actions\Action::make('export-excel')
+                ->visible(fn () => auth()->user()->can('balita:export'))
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->modalSubmitActionLabel('Export')

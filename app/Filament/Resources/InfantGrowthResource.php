@@ -30,6 +30,11 @@ class InfantGrowthResource extends Resource
 
     protected static ?string $label = 'Pertumbuhan Bayi';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('pertumbuhan-bayi:view');
+    }
+
     public static function form(Form $form): Form
     {
         return $form

@@ -20,8 +20,10 @@ class ListTeenagers extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->visible(fn () => auth()->user()->can('dewasa:create')),
             Actions\Action::make('export-excel')
+                ->visible(fn () => auth()->user()->can('dewasa:export'))
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->modalSubmitActionLabel('Export')

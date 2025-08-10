@@ -26,6 +26,11 @@ class RoleResource extends Resource
     protected static ?string $navigationGroup = 'Pengaturan';
     protected static ?int $navigationSort = 999;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('peran:read');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -99,11 +104,13 @@ class RoleResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn () => auth()->user()->can('peran:update')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(fn () => auth()->user()->can('peran:delete')),
                 ]),
             ]);
     }
