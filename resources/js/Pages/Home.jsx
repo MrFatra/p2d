@@ -1,3 +1,4 @@
+import { Head } from "@inertiajs/react";
 import AppLayout from "../layouts/AppLayouts";
 import {
     About,
@@ -11,6 +12,7 @@ import {
 const Home = () => {
     return (
         <div className="mt-20">
+            <Head title="Home" />
             <Header />
             <About />
             <Schedule />

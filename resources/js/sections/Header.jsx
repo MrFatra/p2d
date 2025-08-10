@@ -15,8 +15,8 @@ const Header = () => {
         >
             <div className="container mx-auto lg:mt-24 mt-36 gap-14 justify-center flex flex-wrap items-center px-10 text-foreground">
                 <div className="w-full self-center lg:w-1/3 text-center lg:text-start">
-                    <h3 className="text-2xl font-bold text-custom-emerald">
-                        Posyandu Peduli Desa
+                    <h3 className="text-2xl font-bold text-custom-emerald underline">
+                        {import.meta.env.VITE_APP_NAME.toUpperCase()}
                     </h3>
                     <h2 className="font-bold text-xl lg:mb-4 mt-2 lg:text-2xl xl:text-4xl">
                         Merangkul Keluarga untuk Masa Depan Sehat Bersama.

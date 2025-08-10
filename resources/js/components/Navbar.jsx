@@ -1,132 +1,135 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import { FiLogIn, FiMenu, FiX } from "react-icons/fi";
 
 const Navbar = () => {
     const { auth } = usePage().props;
     const [isOpen, setIsOpen] = useState(false);
+    const [showNavbar, setShowNavbar] = useState(true);
+    let lastScrollY = window.scrollY;
+
     const toggleMenu = () => setIsOpen(!isOpen);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY > lastScrollY) {
+                setShowNavbar(false); // scroll down
+            } else {
+                setShowNavbar(true); // scroll up
+            }
+
+            lastScrollY = currentScrollY;
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [])
+
     return (
-        <section>
-            <div
-                id="nav"
-                className="w-full bg-gradient-to-l from-emerald-300 via-custom-emerald to-custom-emerald fixed top-0 z-50 py-4 backdrop-blur-lg"
-            >
-                <div className="container mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <img
-                            src="/images/logo.png"
-                            alt="Logo"
-                            className="w-8 rounded-full lg:w-8"
-                        />
-                        <h1 className="font-bold whitespace-nowrap text-white lg:text-2xl text-2xl">
-                            SIPOSYANDU
-                        </h1>
-                    </div>
-                    <div className="items-center hidden lg:flex gap-10 text-white font-medium text-sm">
-                        <Link
-                            href="/"
-                            className="relative pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:rounded-full after:bg-white after:w-0 hover:after:w-full transition-all duration-500"
-                        >
+        <header
+            className={`fixed top-0 left-0 w-full z-50 bg-gradient-to-l from-emerald-300 via-custom-emerald to-custom-emerald backdrop-blur-md shadow-md transition-all duration-500 ease-in-out ${showNavbar ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-5"}`}
+        >
+            <nav className="container mx-auto px-4 sm:px-6 lg:px-10 py-4 flex items-center justify-between">
+                {/* Logo */}
+                <div className="flex items-center gap-3">
+                    <img
+                        src="/images/logo.png"
+                        alt="Logo"
+                        className="w-8 lg:w-8"
+                    />
+                    <h1 className="font-bold text-white text-xl sm:text-2xl">
+                        {import.meta.env.VITE_APP_NAME?.toUpperCase()}
+                    </h1>
+                </div>
+
+                {/* Desktop Navigation */}
+                <ul className="hidden lg:flex items-center gap-10 text-white font-medium text-sm">
+                    {[
+                        { name: "Jadwal", href: "/" },
+                        { name: "Konseling", href: "/konseling" },
+                        { name: "Riwayat", href: "/pertumbuhan" }
+                    ].map((item) => (
+                        <li key={item.name}>
+                            <Link
+                                href={item.href}
+                                className="relative pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-white after:w-0 hover:after:w-full after:transition-all after:duration-300"
+                            >
+                                {item.name}
+                            </Link>
+                        </li>
+                    ))}
+
+                    {auth.user ? (
+                        <li className="flex items-center gap-4">
+                            <span className="text-white">{auth.user.name}</span>
+                            <Link
+                                href="/logout"
+                                method="post"
+                                as="button"
+                                className="bg-shades py-2.5 px-5 rounded-lg font-semibold text-white flex items-center gap-2 text-sm transition hover:opacity-90"
+                            >
+                                Logout
+                            </Link>
+                        </li>
+                    ) : (
+                        <li>
+                            <Link
+                                href={route('login.index')}
+                                className="bg-shades py-2.5 px-5 rounded-lg font-semibold text-white flex items-center gap-2 text-sm transition hover:opacity-90"
+                            >
+                                Masuk <FiLogIn />
+                            </Link>
+                        </li>
+                    )}
+                </ul>
+
+                {/* Mobile Menu Button */}
+                <button
+                    onClick={toggleMenu}
+                    className="lg:hidden text-white focus:outline-none transition-transform duration-300"
+                    aria-label="Toggle Menu"
+                >
+                    {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+                </button>
+
+                {/* Mobile Dropdown Menu */}
+                <div
+                    className={`absolute top-full right-4 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"
+                        }`}
+                >
+                    <div className="flex flex-col items-start py-3 px-5 gap-3 text-shades text-sm">
+                        <Link href="/" className="hover:underline w-full">
                             Jadwal
                         </Link>
-                        <Link
-                            href="/konseling"
-                            className="relative pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:rounded-full after:bg-white after:w-0 hover:after:w-full transition-all duration-500"
-                        >
+                        <Link href="/konseling" className="hover:underline w-full">
                             Konseling
                         </Link>
-                        <Link
-                            href="/pertumbuhan"
-                            className="relative pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:rounded-full after:bg-white after:w-0 hover:after:w-full transition-all duration-500"
-                        >
-                            Cek Pertumbuhan
+                        <Link href="/pertumbuhan" className="hover:underline w-full">
+                            Riwayat
                         </Link>
                         {auth.user ? (
-                            <div className="flex items-center gap-4">
-                                <span className="text-white">{auth.user.name}</span>
-                                <Link
-                                    href="/logout"
-                                    method="post"
-                                    as="button"
-                                    className="lg:flex hidden bg-shades py-2.5 px-5 rounded-lg font-semibold text-white whitespace-nowrap items-center gap-2 text-sm"
-                                >
-                                    Logout
-                                </Link>
-                            </div>
+                            <Link
+                                href="/logout"
+                                method="post"
+                                as="button"
+                                className="bg-shades w-full text-center py-2 px-4 rounded-md text-white font-medium hover:opacity-90 transition"
+                            >
+                                Logout
+                            </Link>
                         ) : (
                             <Link
                                 href={route('login.index')}
-                                className="lg:flex hidden bg-shades py-2.5 px-5 rounded-lg font-semibold text-white whitespace-nowrap items-center gap-2 text-sm"
+                                className="bg-shades w-full text-center py-2 px-4 rounded-md text-white font-medium flex justify-center items-center gap-2 hover:opacity-90 transition"
                             >
                                 Masuk <FiLogIn />
                             </Link>
                         )}
                     </div>
-                    <div className="relative lg:hidden">
-                        <button
-                            onClick={toggleMenu}
-                            className="text-white transition-transform duration-300"
-                        >
-                            <div className={isOpen ? "rotate-180" : "rotate-0"}>
-                                {isOpen ? (
-                                    <FiX size={24} />
-                                ) : (
-                                    <FiMenu size={24} />
-                                )}
-                            </div>
-                        </button>
-
-                        <div
-                            className={`absolute right-0 top-10 bg-white z-20 rounded-lg shadow-lg w-48 transition-all duration-500 overflow-hidden ${
-                                isOpen
-                                    ? "max-h-[200px] opacity-100"
-                                    : "max-h-0 opacity-0"
-                            }`}
-                        >
-                            <div className="flex flex-col justify-center items-center gap-3 py-3 px-5">
-                                <Link
-                                    href="/"
-                                    className="text-shades text-sm hover:underline"
-                                >
-                                    Jadwal
-                                </Link>
-                                <Link
-                                    href="/konseling"
-                                    className="text-shades text-sm hover:underline"
-                                >
-                                    Konseling
-                                </Link>
-                                <Link
-                                    href="/pertumbuhan"
-                                    className="text-shades text-sm hover:underline"
-                                >
-                                    Cek Pertumbuhan
-                                </Link>
-                                {auth.user ? (
-                                    <Link
-                                        href="/logout"
-                                        method="post"
-                                        as="button"
-                                        className="bg-shades py-2 px-5 rounded-lg font-medium text-white flex items-center gap-2 text-sm"
-                                    >
-                                        Logout
-                                    </Link>
-                                ) : (
-                                    <Link
-                                        href="/login"
-                                        className="bg-shades py-2 px-5 rounded-lg font-medium text-white flex items-center gap-2 text-sm"
-                                    >
-                                        Masuk <FiLogIn />
-                                    </Link>
-                                )}
-                            </div>
-                        </div>
-                    </div>
                 </div>
-            </div>
-        </section>
+            </nav>
+        </header>
     );
 };
 

@@ -3,9 +3,39 @@ import { ArticleCard } from "../components";
 import { FiArrowRight } from "react-icons/fi";
 
 const Article = () => {
-    const { articles } = usePage().props;
+    const articles = [
+        {
+            id: 1,
+            title: "Manfaat Konseling Bagi Kesehatan Mental Remaja",
+            slug: "manfaat-konseling-kesehatan-mental-remaja",
+            excerpt: "Konseling adalah salah satu cara penting untuk menjaga kesehatan mental remaja. Yuk pelajari lebih lanjut manfaatnya.",
+            // cover_image: "images/articles/article1.jpg"
+        },
+        {
+            id: 2,
+            title: "5 Tips Menjaga Pola Tidur yang Sehat",
+            slug: "tips-menjaga-pola-tidur",
+            excerpt: "Pola tidur yang baik sangat penting untuk kesehatan fisik dan mental. Berikut 5 tips sederhana untuk tidur lebih nyenyak.",
+            cover_image: "images/articles/article2.jpg"
+        },
+        {
+            id: 3,
+            title: "Kenali Tanda-Tanda Burnout Sejak Dini",
+            slug: "tanda-tanda-burnout",
+            excerpt: "Burnout adalah kondisi serius yang bisa memengaruhi produktivitas dan kesehatan. Yuk kenali gejalanya!",
+            cover_image: "images/articles/article3.jpg"
+        },
+        {
+            id: 4,
+            title: "Pentingnya Nutrisi untuk Kesehatan Otak Anak",
+            slug: "nutrisi-untuk-otak-anak",
+            excerpt: "Nutrisi berperan besar dalam perkembangan otak anak. Cari tahu makanan apa saja yang menunjangnya di artikel ini.",
+            cover_image: "" // coba biarkan kosong untuk tes fallback image
+        }
+    ];
 
-    // Jika tidak ada artikel sama sekali
+
+    // Tampilkan pesan jika tidak ada artikel
     if (!articles || articles.length === 0) {
         return (
             <section className="px-4 py-10">
@@ -21,34 +51,36 @@ const Article = () => {
         );
     }
 
+    const mainArticle = articles[0];
+    const otherArticles = articles.slice(1);
+
     return (
         <section className="px-4 py-10">
             <div className="container mx-auto flex flex-col lg:flex-row justify-between items-start max-w-7xl gap-8">
-
-                {/* Artikel Utama (Artikel Pertama) */}
+                {/* Artikel Utama */}
                 <div className="w-full lg:w-1/2 flex flex-col gap-4">
-                    <h2 className="text-lg font-bold text-custom-emerald">
+                    <h2 className="font-bold text-xl mt-2 lg:text-2xl xl:text-4xl text-custom-emerald">
                         Baca Artikel Terkait Kesehatan
                     </h2>
 
-                    <div className="relative rounded-2xl overflow-hidden aspect-[4/3]">
+                    <div className="relative rounded-2xl overflow-hidden h-full bg-slate-200">
                         <img
-                             src={`/storage/${articles[0].cover_image}`}
-                            alt={articles[0].title}
+                            src={mainArticle.cover_image ? `/storage/${mainArticle.cover_image}` : "https://placehold.co/600x400"}
+                            alt={mainArticle.title || "NO TITLE"}
                             className="w-full h-full object-cover"
                         />
-                        <div className="absolute bottom-4 left-4 text-white z-10">
+                        <div className="absolute bottom-4 left-4 z-10 text-white p-5">
                             <h3 className="text-xl md:text-2xl font-bold leading-snug drop-shadow-lg">
-                                {articles[0].title}
+                                {mainArticle.title || "Tanpa Judul"}
                             </h3>
                             <a
-                                href={`/articles/${articles[0].slug}`}
-                                className="text-sm text-custom-emerald mt-2"
+                                href={mainArticle.slug ? `/articles/${mainArticle.slug}` : "#"}
+                                className="text-sm text-custom-link mt-1 block inline-flex"
                             >
                                 Klik untuk lihat selengkapnya
                             </a>
                         </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-0" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-0" />
                     </div>
                 </div>
 
@@ -64,12 +96,16 @@ const Article = () => {
                         </a>
                     </div>
 
-                    {articles.slice(1).map((article, index) => (
+                    {otherArticles.map((article, index) => (
                         <ArticleCard
                             key={index}
                             title={article.title}
                             description={article.excerpt}
-                            image={article.cover_image || "https://placehold.co/100"}
+                            image={
+                                article.cover_image
+                                    ? `/storage/${article.cover_image}`
+                                    : "https://placehold.co/400x300"
+                            }
                             link={`/articles/${article.slug}`}
                         />
                     ))}

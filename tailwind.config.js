@@ -16,6 +16,7 @@ export default {
         extend: {
             colors: {
                 "custom-emerald": "#008970",
+                "custom-link": "#99EEDF",
                 shades: "#008970",
                 foreground: "#212121",
                 primary: {
