@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('notify:posyandu')->dailyAt('07:00');
         $schedule->command('user:update-roles')->daily();
+        $schedule->command('report:generate-monthly')->monthlyOn(1, '01:00');
     }
 
     /**
@@ -21,6 +22,6 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
     }
 }
