@@ -33,7 +33,7 @@ class UserResource extends Resource
 
     public static function canAccess(): bool
     {
-        return auth()->user()->hasPermissionTo('users:read');
+        return auth()->user()->hasPermissionTo('pengguna:read');
     }
 
     public static function form(Form $form): Form
@@ -202,15 +202,15 @@ class UserResource extends Resource
             ])
             ->actions([
                Tables\Actions\ViewAction::make()
-                    ->visible(fn () => Gate::allows('users:read')),
+                    ->visible(fn () => Gate::allows('pengguna:read')),
 
                 Tables\Actions\EditAction::make()
-                    ->visible(fn () => Gate::allows('users:edit')),
+                    ->visible(fn () => Gate::allows('pengguna:edit')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                 Tables\Actions\DeleteBulkAction::make()
-                    ->visible(fn () => auth()->user()->can('users:delete')),
+                    ->visible(fn () => auth()->user()->can('pengguna:delete')),
             ]),
         ]);
     }

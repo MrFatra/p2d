@@ -36,6 +36,11 @@ class ReportResource extends Resource
 
     protected static ?int $navigationSort = 10;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('laporan-data-posyandu:view');
+    }
+
     public static function form(Form $form): Form
     {
         return $form

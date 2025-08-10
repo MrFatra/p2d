@@ -41,6 +41,11 @@ class PregnantResource extends Resource
 
     protected static ?int $navigationSort = 4;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('ibu-hamil:read');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -216,9 +221,11 @@ class PregnantResource extends Resource
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make()
-                        ->label('Ubah'),
+                        ->label('Ubah')
+                        ->visible(fn () => auth()->user()->can('ibu-hamil:update')),
                     Tables\Actions\DeleteAction::make()
-                        ->label('Hapus'),
+                        ->label('Hapus')
+                        ->visible(fn () => auth()->user()->can('ibu-hamil:delete')),
                 ]),
             ])
             ->bulkActions([

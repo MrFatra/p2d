@@ -31,6 +31,12 @@ class ScheduleResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('jadwal:read');
+    }
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -142,12 +148,21 @@ class ScheduleResource extends Resource
 
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->icon('heroicon-o-eye')
+                    ->label('Lihat Jadwal')
+                    ->visible(fn () => auth()->user()->can('jadwal:read')),
+                Tables\Actions\EditAction::make()
+                    ->icon('heroicon-o-pencil-square')
+                    ->label('Ubah Jadwal')
+                    ->visible(fn () => auth()->user()->can('jadwal:update')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->icon('heroicon-o-trash')
+                        ->label('Hapus Jadwal')
+                        ->visible(fn () => auth()->user()->can('jadwal:delete')),
                 ]),
             ]);
     }

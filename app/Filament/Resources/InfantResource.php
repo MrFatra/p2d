@@ -44,11 +44,15 @@ class InfantResource extends Resource
 
     protected static ?int $navigationSort = 9;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('bayi:read');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-
                 Section::make('Data Bayi')
                     ->icon('heroicon-o-user')
                     ->description('Pilih nama Bayi berdasarkan NIK untuk mulai mengisi data.')
@@ -349,8 +353,12 @@ class InfantResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->label('Lihat')
+                    ->visible(fn () => auth()->user()->can('bayi:read')),
+                Tables\Actions\EditAction::make()
+                    ->label('Ubah')
+                    ->visible(fn () => auth()->user()->can('bayi:update')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
