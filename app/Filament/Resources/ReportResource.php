@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReportResource\Pages;
+use App\Helpers\MonthlyReport;
 use App\Models\Report;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Textarea;
@@ -14,10 +15,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Section;
-use App\Helpers\MonthlyReport;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 
 class ReportResource extends Resource
 {
@@ -99,31 +97,31 @@ class ReportResource extends Resource
 
                 TextColumn::make('elderly_count')
                     ->label('Lansia (60 Tahun ke Atas)')
-                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['Elderly']),
+                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['Elderly']),
 
                 TextColumn::make('infant_count')
                     ->label('Bayi (0-12 Bulan)')
-                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['Infant']),
+                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['Infant']),
 
                 TextColumn::make('pregnant_count')
                     ->label('Ibu Hamil')
-                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['Pregnant']),
+                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['Pregnant']),
 
                 TextColumn::make('teenager_count')
                     ->label('Remaja (13-17 Tahun)')
-                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['Teenager']),
+                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['Teenager']),
 
                 TextColumn::make('toddler_count')
                     ->label('Balita (1-5 Tahun)')
-                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['Toddler']),
+                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['Toddler']),
 
                 TextColumn::make('month')
                     ->label('Bulan')
-                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['month']),
+                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['month']),
 
                 TextColumn::make('year')
                     ->label('Tahun')
-                    ->state(fn($record) => self::getMonthlyReportByRecord($record)['year']),
+                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['year']),
             ])
             ->filters([
                 //
@@ -163,12 +161,4 @@ class ReportResource extends Resource
         return false;
     }
 
-    protected static function getMonthlyReportByRecord(Model $record): array
-    {
-        $cacheKey = 'monthly-report-' . Carbon::parse($record->uploaded_at)->format('Y-m');
-
-        return Cache::remember($cacheKey, now()->addHours(12), function () use ($record) {
-            return (new MonthlyReport())->countPerModelByDate(Carbon::parse($record->uploaded_at));
-        });
-    }
 }
