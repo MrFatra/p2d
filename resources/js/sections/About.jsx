@@ -4,7 +4,7 @@ const CheckIcon = (props) => <FaCheckCircle {...props} />;
 
 const About = () => {
     return (
-        <section className="my-28 lg:py-28 py-20 bg-emerald-50">
+        <section className="my-28 px-16 py-20 bg-emerald-50">
             <div className="container mx-auto px-5 md:px-10 xl:px-28 flex flex-col md:flex-row items-center gap-5">
                 {/* Gambar */}
                 <div className="hidden lg:flex justify-center w-full">

@@ -1,8 +1,13 @@
-import { FaChevronCircleDown } from "react-icons/fa";
-
-const ChevronDownIcon = (props) => <FaChevronCircleDown {...props} />;
+import { useState } from "react";
+import { FaChevronDown } from "react-icons/fa";
 
 const FAQ = () => {
+    const [openFaq, setOpenFaq] = useState(null);
+
+    const toggleFaq = (id) => {
+        setOpenFaq(openFaq === id ? null : id);
+    };
+
     const faqs = [
         {
             id: "faq1",
@@ -27,51 +32,53 @@ const FAQ = () => {
     ];
 
     return (
-        <div className="my-28 lg:py-28">
-            <div className="container mx-auto px-4 lg:flex gap-10 max-w-7xl text-foreground">
-                <div className="flex flex-col self-center flex-1 lg:mb-0 mb-5 lg:text-left text-center">
-                    <p className="text-shades font-bold md:text-2xl text-xl">
-                        FAQ
-                    </p>
-                    <p className="text-xl md:text-3xl font-bold">
-                        Punya Pertanyaan Seputar SIPOSYANDU?
-                    </p>
-                    <p className="font-light mt-2 text-sm md:text-base">
-                        Temukan jawaban dari pertanyaan yang sering diajukan
-                        langsung di sini untuk informasi tentang layanan,
-                        jadwal, dan fasilitas SIPOSYANDU.
-                    </p>
-                </div>
+        <section className="py-20 bg-white text-foreground">
+            <div className="max-w-7xl mx-auto px-4">
+                <div className="flex flex-col lg:flex-row gap-12 items-center">
+                    {/* Left Side */}
+                    <div className="lg:w-1/2 space-y-4 text-center lg:text-left">
+                        <h2 className="text-shades text-2xl font-bold">FAQ</h2>
+                        <h3 className="text-3xl font-bold">
+                            Punya Pertanyaan Seputar SIPOSYANDU?
+                        </h3>
+                        <p className="text-base font-light">
+                            Temukan jawaban dari pertanyaan yang sering diajukan
+                            langsung di sini untuk informasi tentang layanan, jadwal, dan fasilitas SIPOSYANDU.
+                        </p>
+                    </div>
 
-                <div className="border-2 rounded-lg p-5 border-shades flex-1">
-                    <div className="flex flex-col gap-5 w-full">
-                        {faqs.map((faq) => (
-                            <div key={faq.id} className="group">
-                                <label
-                                    htmlFor={faq.id}
-                                    className="flex justify-between items-center cursor-pointer"
+                    {/* Right Side - FAQ List */}
+                    <div className="lg:w-1/2 w-full">
+                        <div className="space-y-4">
+                            {faqs.map((faq) => (
+                                <div
+                                    key={faq.id}
+                                    className="border border-gray-300 rounded-md transition-all duration-100"
                                 >
-                                    <div className="text-shades font-bold text-sm md:text-lg flex-1">
-                                        {faq.question}
+                                    <button
+                                        onClick={() => toggleFaq(faq.id)}
+                                        className="w-full flex justify-between items-center p-4 text-left transition-all duration-300"
+                                    >
+                                        <span className="font-semibold text-shades">{faq.question}</span>
+                                        <FaChevronDown
+                                            className={`transition-all duration-300 text-shades ${openFaq === faq.id ? "rotate-180" : ""}`}
+                                        />
+                                    </button>
+
+                                    {/* Animated answer container */}
+                                    <div className={`overflow-hidden transition-all duration-500 ease-in-out ${openFaq === faq.id ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                                        }`}>
+                                        <div className="px-4 pb-4 text-sm text-gray-600 transform transition-transform duration-300">
+                                            {faq.answer}
+                                        </div>
                                     </div>
-                                    <ChevronDownIcon className="text-shades transform transition-transform duration-200 group-hover:rotate-180" />
-                                </label>
-                                <input
-                                    type="checkbox"
-                                    id={faq.id}
-                                    className="hidden peer"
-                                />
-                                <div className="max-h-0 overflow-hidden transition-all duration-300 peer-checked:max-h-40">
-                                    <p className="font-light pt-2 text-sm md:text-base">
-                                        {faq.answer}
-                                    </p>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+    font-family: "Inter", serif;
+    font-optical-sizing: auto;
+}
+
 @layer base {
 
     body {
@@ -19,4 +24,46 @@
     input[type="number"] {
         @apply appearance-none;
     }
+
+}
+
+
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+    background: #0089709d !important;
+    color: white !important;
+}
+
+.react-calendar__tile--active {
+    background: #0089709d !important;
+    color: white;
+
+}
+
+.react-calendar__navigation button:disabled {
+    background-color: #008970 !important;
+    border-top-left-radius: .7em;
+    border-top-right-radius: .7em;
+    color: white;
+}
+
+.react-calendar__navigation__next2-button {
+    display: none;
+    /* border-top-right-radius: .7em; */
+}
+
+.react-calendar__navigation__prev2-button {
+    display: none;
+    /* border-top-left-radius: .7em; */
+}
+
+.react-calendar__tile--now {
+    background: #008970 !important;
+    color: white !important;
+}
+
+.react-calendar {
+    width: 100% !important;
+    color: #212121;
+    border: 1px solid #008970 !important;
 }

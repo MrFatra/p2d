@@ -47,8 +47,8 @@ const Navbar = () => {
                 {/* Desktop Navigation */}
                 <ul className="hidden lg:flex items-center gap-10 text-white font-medium text-sm">
                     {[
-                        { name: "Jadwal", href: "/" },
-                        { name: "Konseling", href: "/konseling" },
+                        { name: "Jadwal", href: "#schedule" },
+                        { name: "Artikel", href: "#article" },
                         { name: "Riwayat", href: "/pertumbuhan" }
                     ].map((item) => (
                         <li key={item.name}>
@@ -100,11 +100,11 @@ const Navbar = () => {
                         }`}
                 >
                     <div className="flex flex-col items-start py-3 px-5 gap-3 text-shades text-sm">
-                        <Link href="/" className="hover:underline w-full">
+                        <Link href="#schedule" className="hover:underline w-full">
                             Jadwal
                         </Link>
-                        <Link href="/konseling" className="hover:underline w-full">
-                            Konseling
+                        <Link href="#article" className="hover:underline w-full">
+                            Artikel
                         </Link>
                         <Link href="/pertumbuhan" className="hover:underline w-full">
                             Riwayat
