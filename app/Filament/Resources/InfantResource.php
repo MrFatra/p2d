@@ -21,6 +21,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -350,15 +351,51 @@ class InfantResource extends Resource
                     ->date('d M Y'),
             ])
             ->filters([
-                //
+                SelectFilter::make('created_at_month')
+                    ->label('Filter Bulan')
+                    ->options([
+                        '01' => 'Januari',
+                        '02' => 'Februari',
+                        '03' => 'Maret',
+                        '04' => 'April',
+                        '05' => 'Mei',
+                        '06' => 'Juni',
+                        '07' => 'Juli',
+                        '08' => 'Agustus',
+                        '09' => 'September',
+                        '10' => 'Oktober',
+                        '11' => 'November',
+                        '12' => 'Desember',
+                    ])
+                    ->default(now()->format('m'))
+                    ->query(function ($query, array $data) {
+                        return $query->when($data['value'], function ($query, $month) {
+                            $query->whereMonth('created_at', $month);
+                        });
+                    }),
+
+                SelectFilter::make('created_at_year')
+                    ->label('Filter Tahun')
+                    ->options(
+                        collect(range(now()->year, now()->year - 4))
+                            ->mapWithKeys(fn($year) => [$year => (string) $year])
+                            ->sortKeysDesc()
+                            ->toArray()
+                    )
+                    ->default(now()->year)
+                    ->query(function ($query, array $data) {
+                        return $query->when($data['value'], function ($query, $year) {
+                            $query->whereYear('created_at', $year);
+                        });
+                    }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()
                     ->label('Lihat')
-                    ->visible(fn () => auth()->user()->can('bayi:read')),
+                    ->visible(fn() => auth()->user()->can('bayi:read')),
                 Tables\Actions\EditAction::make()
                     ->label('Ubah')
-                    ->visible(fn () => auth()->user()->can('bayi:update')),
+                    ->visible(fn() => auth()->user()->can('bayi:update')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
