@@ -42,7 +42,7 @@ class RolePermissionSeeder extends Seeder
             'peran',
         ];
 
-        $actions = ['create', 'read', 'update', 'delete', 'export'];
+        $actions = ['create', 'read', 'update', 'delete', 'export', 'import'];
 
         foreach ($modules as $module) {
             foreach ($actions as $action) {

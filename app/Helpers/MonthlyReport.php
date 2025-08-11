@@ -39,10 +39,10 @@ class MonthlyReport
 
     public static function getMonthlyReportByRecord(Model $record): array
     {
-        $cacheKey = 'monthly-report-' . Carbon::parse($record->uploaded_at)->format('Y-m');
+        $cacheKey = 'monthly-report-' . Carbon::parse($record->created_at)->format('Y-m');
 
         return Cache::remember($cacheKey, now()->addHours(12), function () use ($record) {
-            return (new MonthlyReport())->countPerModelByDate(Carbon::parse($record->uploaded_at));
+            return (new MonthlyReport())->countPerModelByDate(Carbon::parse($record->created_at));
         });
     }
 }

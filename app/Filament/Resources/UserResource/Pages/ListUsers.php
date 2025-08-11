@@ -3,10 +3,13 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
+use App\Imports\UsersImport;
 use App\Models\User;
 use Filament\Actions;
+use Filament\Forms\Components\FileUpload;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ListUsers extends ListRecords
 {
@@ -16,9 +19,9 @@ class ListUsers extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->visible(fn () => auth()->user()->can('pengguna:create')),
+                ->visible(fn() => auth()->user()->can('pengguna:create')),
             Actions\Action::make('export-excel')
-                ->visible(fn () => auth()->user()->can('pengguna:export'))
+                ->visible(fn() => auth()->user()->can('pengguna:export'))
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->action(function () {
@@ -29,6 +32,27 @@ class ListUsers extends ListRecords
                         fn() => print(\Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\UserExport($data), 'pengguna.xlsx')->getFile()->getContent()),
                         'laporan-list-data-pengguna.xlsx'
                     );
+                }),
+            Actions\Action::make('import-excel')
+                ->label('Import Excel')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->visible(fn() => auth()->user()->can('pengguna:import'))
+                ->form([
+                    FileUpload::make('file')
+                        ->label('File Excel')
+                        ->required()
+                        ->acceptedFileTypes(['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel']),
+                ])
+                ->action(function (array $data): void {
+
+                    $file = public_path('storage/' . $data['file']);
+
+                    Excel::import(new UsersImport, $file);
+
+                    \Filament\Notifications\Notification::make()
+                        ->title('Import berhasil')
+                        ->success()
+                        ->send();
                 }),
 
         ];
