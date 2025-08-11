@@ -78,6 +78,11 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('phone_number')
                             ->tel()
                             ->label('No. HP'),
+                        Forms\Components\TextInput::make('email')
+                            ->label('Email')
+                            ->email()
+                            ->unique(ignoreRecord: true)
+                            ->required(),
                     ]),
 
                 Section::make('Alamat')
@@ -106,6 +111,8 @@ class UserResource extends Resource
                         Forms\Components\Select::make('roles')
                             ->relationship('roles', 'label')
                             ->preload()
+                            ->native(false)
+                            ->position('top')
                             ->label('Peran'),
                         Forms\Components\TextInput::make('password')
                             ->password()
@@ -188,18 +195,18 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-               Tables\Actions\ViewAction::make()
-                    ->visible(fn () => Gate::allows('pengguna:read')),
+                Tables\Actions\ViewAction::make()
+                    ->visible(fn() => Gate::allows('pengguna:read')),
 
                 Tables\Actions\EditAction::make()
-                    ->visible(fn () => Gate::allows('pengguna:edit')),
+                    ->visible(fn() => Gate::allows('pengguna:edit')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make()
-                    ->visible(fn () => auth()->user()->can('pengguna:delete')),
-            ]),
-        ]);
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(fn() => auth()->user()->can('pengguna:delete')),
+                ]),
+            ]);
     }
 
     public static function getRelations(): array
