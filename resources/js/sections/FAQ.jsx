@@ -12,7 +12,7 @@ const FAQ = () => {
         {
             id: "faq1",
             question: "Apa itu Siposyandu?",
-            answer: "Siposyandu adalah singkatan dari Pusat Pengembangan Diri yang merupakan tempat untuk mengembangkan diri melalui berbagai kegiatan positif.",
+            answer: "Siposyandu adalah singkatan dari Sistem Informasi Posyandu, yang merupakan tempat untuk mengembangkan diri melalui berbagai kegiatan positif.",
         },
         {
             id: "faq2",
@@ -27,7 +27,7 @@ const FAQ = () => {
         {
             id: "faq4",
             question: "Apakah ada biaya untuk bergabung?",
-            answer: "Tidak ada biaya untuk bergabung dengan layanan Siposyandu, beberapa kegiatan di Siposyandu juga bersifat gratis. Silakan cek informasi lengkapnya di website kami.",
+            answer: "Tidak ada biaya untuk bergabung dengan layanan Siposyandu, beberapa kegiatan di Siposyandu juga bersifat gratis.",
         },
     ];
 

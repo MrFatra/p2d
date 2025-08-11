@@ -42,10 +42,10 @@ class LandingPageController extends Controller
             ->take(3)
             ->get();
 
-        $babyCount = User::getUsers('baby')->count();
-        $toddlerCount = User::getUsers('toddler')->count();
-        $teenagerCount = User::getUsers('teenager')->count();
-        $elderlyCount = User::getUsers('elderly')->count();
+        $babyCount = User::role('baby')->count();
+        $toddlerCount = User::role('toddler')->count();
+        $teenagerCount = User::role('teenager')->count();
+        $elderlyCount = User::role('elderly')->count();
 
         $nineMonthsAgo = $now->copy()->subMonths(9);
 
