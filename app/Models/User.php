@@ -50,7 +50,7 @@ class User extends Authenticatable implements FilamentUser
         parent::boot();
 
         static::creating(function ($user) {
-            if (!$user->hasRole(['admin', 'cadre'])) {
+            if (!$user->hasRole(['admin', 'cadre', 'resident'])) {
                 $user->syncRoles(self::determineTypeOfUser($user->birth_date));
             }
         });
@@ -60,7 +60,7 @@ class User extends Authenticatable implements FilamentUser
                 unset($user->password);
             }
 
-            if ($user->isDirty('birth_date') && !$user->hasRole(['admin', 'cadre'])) {
+            if ($user->isDirty('birth_date') && !$user->hasRole(['admin', 'cadre', 'resident'])) {
                 $user->syncRoles(self::determineTypeOfUser($user->birth_date));
             }
         });
