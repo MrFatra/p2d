@@ -21,6 +21,7 @@ class User extends Authenticatable implements FilamentUser
         'password',
         'birth_date',
         'gender',
+        'email',
         'phone_number',
         'rt',
         'rw',
@@ -62,6 +63,10 @@ class User extends Authenticatable implements FilamentUser
             if ($user->isDirty('birth_date') && !$user->hasRole(['admin', 'cadre'])) {
                 $user->syncRoles(self::determineTypeOfUser($user->birth_date));
             }
+        });
+
+        static::deleting(function ($user) {
+            $user->syncRoles([]);
         });
     }
 

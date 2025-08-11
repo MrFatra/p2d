@@ -36,6 +36,11 @@ class TeenagerResource extends Resource
 
     protected static ?int $navigationSort = 5;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('dewasa:read');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -255,12 +260,18 @@ class TeenagerResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn () => auth()->user()->can('dewasa:update'))
+                    ->icon('heroicon-o-pencil-square')
+                    ->label('Ubah Data'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                ])
+                ->visible(fn () => auth()->user()->can('dewasa:delete'))
+                ->icon('heroicon-o-trash')
+                ->label('Hapus Data'),
             ]);
     }
 

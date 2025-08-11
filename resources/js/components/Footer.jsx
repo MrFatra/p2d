@@ -30,14 +30,14 @@ const Footer = () => {
                             <p className="text-2xl font-bold mb-5">Menu</p>
                             <ul className="flex flex-col gap-2 md:items-start items-center">
                                 <li className="font-medium underline hover:text-gray-200 transition-colors">
-                                    <a href="#jadwal">Jadwal</a>
+                                    <a href="#schedule">Jadwal</a>
                                 </li>
                                 <li className="font-medium underline hover:text-gray-200 transition-colors">
-                                    <a href="#konseling">Konseling</a>
+                                    <a href="#article">Artikel</a>
                                 </li>
                                 <li className="font-medium underline hover:text-gray-200 transition-colors">
-                                    <a href="#cek-pertumbuhan">
-                                        Cek Pertumbuhan
+                                    <a href="#">
+                                        Riwayat
                                     </a>
                                 </li>
                                 <li className="font-medium underline hover:text-gray-200 transition-colors">
@@ -54,10 +54,10 @@ const Footer = () => {
                             untuk solusi terbaik. Kami siap mendampingi
                             kesehatan Anda dan buah hati."
                         </p>
-                        <div className="flex gap-3 rounded-lg border py-2 px-3 mt-5 hover:bg-white/10 transition-colors cursor-pointer lg:text-base text-sm">
+                        <a href="mailto:contact@siposyandu.com" className="flex gap-3 rounded-lg border py-2 px-3 mt-5 hover:bg-white/10 transition-colors cursor-pointer lg:text-base text-sm">
                             <FiPhone size={20} />
                             <p>Hubungi Kami</p>
-                        </div>
+                        </a>
                     </div>
                 </div>
 

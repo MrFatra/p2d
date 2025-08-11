@@ -8,6 +8,12 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class TotalStat extends BaseWidget
 {
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('dashboard:stats');
+    }
+
     public function getStats(): array
     {
         $totalUsers = User::count();

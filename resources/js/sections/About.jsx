@@ -4,7 +4,7 @@ const CheckIcon = (props) => <FaCheckCircle {...props} />;
 
 const About = () => {
     return (
-        <section className="my-28 lg:py-28 py-20 bg-emerald-50">
+        <section className="my-28 px-16 py-20 bg-emerald-50">
             <div className="container mx-auto px-5 md:px-10 xl:px-28 flex flex-col md:flex-row items-center gap-5">
                 {/* Gambar */}
                 <div className="hidden lg:flex justify-center w-full">
@@ -20,7 +20,7 @@ const About = () => {
                 {/* Konten */}
                 <div className="flex flex-col w-full gap-5 text-foreground lg:text-start text-center items-center lg:items-start">
                     <div>
-                        <h2 className="text-custom-emerald text-2xl md:text-3xl font-bold mb-2">
+                        <h2 className="text-custom-emerald font-bold text-xl lg:mb-4 mt-2 lg:text-2xl xl:text-4xl mb-3">
                             Tentang Kami
                         </h2>
                         <p className="font-light text-sm md:text-base max-w-lg">
@@ -32,28 +32,28 @@ const About = () => {
                         </p>
                     </div>
 
-                    <h3 className="text-custom-emerald font-semibold mt-4 mb-2 text-center lg:text-start text-sm md:text-base">
+                    <h3 className="text-custom-emerald font-semibold  mb-2 text-center lg:text-start text-sm md:text-base">
                         Layanan, Fasilitas, dan Kelebihan Posyandu Peduli Desa
                         Muncangela:
                     </h3>
 
                     <div className="space-y-5 font-medium text-sm md:text-base text-foreground w-full flex flex-col items-center lg:items-start">
                         <div className="flex items-center gap-2">
-                            <CheckIcon className="text-green-400" />
+                            <CheckIcon className="text-green-500" size={20} />
                             <p>Fasilitas yang lengkap dan terawat.</p>
                         </div>
                         <div className="flex items-center gap-2">
-                            <CheckIcon className="text-green-400" />
+                            <CheckIcon className="text-green-500" size={20} />
                             <p>
                                 Tenaga kesehatan yang profesional dan responsif.
                             </p>
                         </div>
                         <div className="flex items-center gap-2">
-                            <CheckIcon className="text-green-400" />
+                            <CheckIcon className="text-green-500" size={20} />
                             <p>Pelayanan yang cepat dan bersahabat.</p>
                         </div>
                         <div className="flex items-center gap-2">
-                            <CheckIcon className="text-green-400" />
+                            <CheckIcon className="text-green-500" size={20} />
                             <p>Akses mudah dan terjangkau untuk semua.</p>
                         </div>
                     </div>

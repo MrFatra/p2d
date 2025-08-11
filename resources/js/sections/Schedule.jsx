@@ -39,10 +39,16 @@ export default function ImmunizationSchedule() {
     };
 
     return (
-        <div className="container mx-auto my-28 px-8 max-w-7xl text-foreground">
-            <h2 className="text-custom-emerald text-2xl md:text-3xl font-bold mb-2 text-center">
-                Jadwal Kegiatan Posyandu
-            </h2>
+        <div id="schedule" className="container mx-auto py-20 max-w-7xl text-foreground">
+
+            <div className="text-center">
+                <h2 className="text-2xl md:text-3xl font-bold text-custom-emerald mb-2">
+                    Jadwal Kegiatan Posyandu
+                </h2>
+                <p className="text-gray-500 max-w-xl mx-auto">
+                    Dapatkan informasi terkini mengenai jadwal kegiatan Posyandu. Jangan lewatkan pelayanan kesehatan yang rutin dilaksanakan setiap bulannya.
+                </p>
+            </div>
 
             <div className="flex flex-col md:flex-row gap-8 bg-white p-8 rounded-lg shadow-lg">
                 <div className="w-full lg:w-1/2">
@@ -58,7 +64,7 @@ export default function ImmunizationSchedule() {
                         }
                         tileClassName={({ date, view }) =>
                             view === "month" &&
-                            date.toDateString() === today.toDateString()
+                                date.toDateString() === today.toDateString()
                                 ? "bg-custom-emerald text-white"
                                 : null
                         }
@@ -78,7 +84,7 @@ export default function ImmunizationSchedule() {
                     {getEvent(date) ? (
                         <div className="relative bg-gradient-to-br from-custom-emerald/90 to-custom-emerald/70 text-white p-8 rounded-2xl shadow-lg transform hover:scale-[1.02] transition duration-300 ease-in-out">
                             {/* Badge jenis kegiatan */}
-                            <span className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full">
+                            <span className="absolute top-4 right-4 bg-shades backdrop-blur-sm text-white font-medium text-xs px-3 py-1 rounded-full">
                                 {typeMapping[getEvent(date).type] ||
                                     getEvent(date).type}
                             </span>

@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Helpers\MonthlyReport;
 use Illuminate\Contracts\View\View;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;

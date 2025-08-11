@@ -37,6 +37,11 @@ class ToddlerResource extends Resource
 
     protected static ?int $navigationSort = 7;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('balita:read');
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -283,11 +288,17 @@ class ToddlerResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn () => auth()->user()->can('balita:update'))
+                    ->icon('heroicon-o-pencil-square')
+                    ->label('Ubah Data'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(fn () => auth()->user()->can('balita:delete'))
+                        ->icon('heroicon-o-trash')
+                        ->label('Hapus Data'),
                 ]),
             ]);
     }

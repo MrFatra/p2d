@@ -26,7 +26,7 @@ class ElderlyResource extends Resource
     protected static ?string $model = Elderly::class;
 
     protected static ?string $navigationIcon = 'icon-person-cane-solid-full';
-    
+
     protected static ?string $activeNavigationIcon = 'icon-person-cane-solid-active';
 
     protected static ?string $navigationGroup = 'Posyandu';
@@ -38,6 +38,11 @@ class ElderlyResource extends Resource
     protected static ?string $label = 'Data Lansia';
 
     protected static ?int $navigationSort = 10;
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('lansia:read');
+    }
 
 
     public static function form(Form $form): Form
@@ -228,12 +233,21 @@ class ElderlyResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->icon('heroicon-o-eye')
+                    ->label('Lihat Data Lansia')
+                    ->visible(fn () => auth()->user()->can('lansia:read')),
+                Tables\Actions\EditAction::make()
+                    ->icon('heroicon-o-pencil-square')
+                    ->label('Edit Data Lansia')
+                    ->visible(fn () => auth()->user()->can('lansia:update')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->icon('heroicon-o-trash')
+                        ->label('Hapus Data Lansia')
+                        ->visible(fn () => auth()->user()->can('lansia:delete')),
                 ]),
             ]);
     }

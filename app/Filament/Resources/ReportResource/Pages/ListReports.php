@@ -1,30 +1,21 @@
 <?php
 
-namespace App\Filament\Resources\ElderlyResource\Pages;
+namespace App\Filament\Resources\ReportResource\Pages;
 
-use App\Filament\Resources\ElderlyResource;
-use App\Filament\Resources\ElderlyResource\Widgets\ElderlyVisitsChart;
-use App\Filament\Resources\ElderlyResource\Widgets\StatsOverview;
+use App\Filament\Resources\ReportResource;
 use Filament\Actions;
 use Filament\Forms\Components\TextInput;
-use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Pages\ListRecords;
 
-class ListElderlies extends ListRecords
+class ListReports extends ListRecords
 {
-    use ExposesTableToWidgets;
-
-    protected static string $resource = ElderlyResource::class;
+    protected static string $resource = ReportResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
-                ->label('Tambah Data Lansia')
-                ->icon('heroicon-o-plus')
-                ->visible(fn () => auth()->user()->can('lansia:create')),
+            Actions\CreateAction::make(),
             Actions\Action::make('export-excel')
-                ->visible(fn () => auth()->user()->can('lansia:export'))
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->modalSubmitActionLabel('Export')
@@ -49,27 +40,19 @@ class ListElderlies extends ListRecords
                     if (!empty($data['month'])) {
                         $month = \Carbon\Carbon::parse($data['month']);
                         $query->whereMonth('created_at', $month->month)
-                            ->whereYear('created_at', $month->year);
+                        ->whereYear('created_at', $month->year);
                     }
-
+                    
                     $filteredData = $query->get();
 
                     return response()->streamDownload(
                         fn() => print(\Maatwebsite\Excel\Facades\Excel::download(
-                            new \App\Exports\ElderlyExport($filteredData),
-                            'lansia.xlsx'
+                            new \App\Exports\ReportExport($filteredData),
+                            'laporan-posyandu.xlsx'
                         )->getFile()->getContent()),
-                        'laporan-list-data-lansia.xlsx'
+                        'laporan-list-data-posyandu.xlsx'
                     );
                 }),
-        ];
-    }
-
-    protected function getHeaderWidgets(): array
-    {
-        return [
-            ElderlyVisitsChart::class,
-            StatsOverview::class
         ];
     }
 }

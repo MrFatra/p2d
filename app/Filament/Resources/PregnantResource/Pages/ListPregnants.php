@@ -19,8 +19,13 @@ class ListPregnants extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->visible(fn () => auth()->user()->can('ibu-hamil:create'))
+                ->label('Tambah Ibu Hamil')
+                ->icon('heroicon-o-plus-circle')
+                ->color('primary'),
             Actions\Action::make('export-excel')
+                ->visible(fn () => auth()->user()->can('ibu-hamil:export'))
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->modalSubmitActionLabel('Export')
