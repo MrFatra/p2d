@@ -104,7 +104,7 @@ class UserResource extends Resource
                     ->columns(2)
                     ->schema([
                         Forms\Components\Select::make('roles')
-                            ->relationship('roles', 'name')
+                            ->relationship('roles', 'label')
                             ->preload()
                             ->label('Peran'),
                         Forms\Components\TextInput::make('password')
@@ -166,33 +166,20 @@ class UserResource extends Resource
                     ->sortable()
                     ->searchable(),
 
-                TextColumn::make('roles.name')
+                TextColumn::make('roles.label')
                     ->label('Peran')
                     ->badge()
-                    ->formatStateUsing(fn($state) => match ($state) {
-                        'admin' => 'Admin',
-                        'cadre' => 'Kader',
-                        'baby' => 'Bayi',
-                        'toddler' => 'Balita',
-                        'child' => 'Anak',
-                        'teenager' => 'Remaja',
-                        'adult' => 'Dewasa',
-                        'elderly' => 'Lansia',
-                        'pregnant' => 'Ibu Hamil',
-                        'none' => 'Tidak Ada',
-                        default => ucfirst($state),
-                    })
                     ->color(fn($state) => match ($state) {
-                        'admin' => 'warning',
-                        'cadre' => 'warning',
-                        'baby' => 'info',
-                        'toddler' => 'info',
-                        'child' => 'cyan',
-                        'teenager' => 'purple',
-                        'adult' => 'emerald',
-                        'elderly' => 'indigo',
-                        'pregnant' => 'pink',
-                        'none' => 'neutral',
+                        'Admin' => 'warning',
+                        'Kader' => 'warning',
+                        'Bayi' => 'info',
+                        'Balita' => 'info',
+                        'Apras' => 'cyan',
+                        'Remaja' => 'purple',
+                        'Dewasa' => 'emerald',
+                        'Lansia' => 'indigo',
+                        'Ibu Hamil' => 'pink',
+                        'Tidak ada' => 'neutral',
                         default => 'gray',
                     })
 

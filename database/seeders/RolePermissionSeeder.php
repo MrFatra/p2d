@@ -12,20 +12,54 @@ class RolePermissionSeeder extends Seeder
     {
         // 1. Roles
         $roles = [
-            'admin',
-            'cadre',
-            'baby',
-            'toddler',
-            'child',
-            'teenager',
-            'adult',
-            'elderly',
-            'pregnant',
-            'none',
+            [
+                'label' => 'Desa',
+                'name' => 'resident',
+            ],
+            [
+                'label' => 'Admin',
+                'name' => 'admin',
+            ],
+            [
+                'label' => 'Kader',
+                'name' => 'cadre',
+            ],
+            [
+                'label' => 'Bayi',
+                'name' => 'baby',
+            ],
+            [
+                'label' => 'Balita',
+                'name' => 'toddler',
+            ],
+            [
+                'label' => 'Apras',
+                'name' => 'child',
+            ],
+            [
+                'label' => 'Remaja',
+                'name' => 'teenager',
+            ],
+            [
+                'label' => 'Dewasa',
+                'name' => 'adult',
+            ],
+            [
+                'label' => 'Lansia',
+                'name' => 'elderly',
+            ],
+            [
+                'label' => 'Ibu Hamil',
+                'name' => 'pregnant',
+            ],
+            [
+                'label' => 'Tidak ada',
+                'name' => 'none',
+            ],
         ];
 
-        foreach ($roles as $roleName) {
-            Role::firstOrCreate(['name' => $roleName]);
+        foreach ($roles as $role) {
+            Role::firstOrCreate($role);
         }
 
         // 2. Modules in English

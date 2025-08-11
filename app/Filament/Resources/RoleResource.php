@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -42,6 +43,9 @@ class RoleResource extends Resource
                     ->collapsible()
                     ->columns(2)
                     ->schema([
+                        TextInput::make('label')
+                            ->label('Nama Peran')
+                            ->required(),
                         TextInput::make('name')
                             ->label('Peran')
                             ->required()
@@ -92,7 +96,7 @@ class RoleResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                TextColumn::make('label')
                     ->label('Peran')
                     ->searchable(),
 
@@ -105,13 +109,13 @@ class RoleResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->visible(fn () => auth()->user()->can('peran:update')),
+                    ->visible(fn() => auth()->user()->can('peran:update')),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->visible(fn () => auth()->user()->can('peran:delete')),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make()
+                //         ->visible(fn() => auth()->user()->can('peran:delete')),
+                // ]),
             ]);
     }
 
@@ -127,5 +131,15 @@ class RoleResource extends Resource
             'create' => Pages\CreateRole::route('/create'),
             'edit' => Pages\EditRole::route('/{record}/edit'),
         ];
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
     }
 }
