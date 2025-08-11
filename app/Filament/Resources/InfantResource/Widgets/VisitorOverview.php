@@ -60,7 +60,14 @@ class VisitorOverview extends BaseWidget
             ->groupBy('user_id')
             ->count();
 
-
+        $malnutritionUsers = Infant::query()->whereIn('nutrition_status', ['Gizi Kurang', 'Gizi Buruk'])
+            ->get()
+            ->filter(function ($infant) use ($now) {
+                $ageInMonths = Carbon::parse($infant->birth_date)->diffInMonths($now);
+                return $ageInMonths <= 60;
+            })
+            ->groupBy('user_id')
+            ->count();
 
         return [
             Stat::make('Kunjungan Bulan Ini', $thisMonthVisits . ' Bayi')
@@ -76,6 +83,10 @@ class VisitorOverview extends BaseWidget
                 ->color($color),
 
             Stat::make('Total Bayi dengan Stunting', $stuntingUsers . ' Bayi')
+                ->description('Hanya yang masih kategori bayi/balita')
+                ->color('danger'),
+
+            Stat::make('Total Bayi dengan Gizi Kurang & Buruk', $malnutritionUsers . ' Bayi')
                 ->description('Hanya yang masih kategori bayi/balita')
                 ->color('danger'),
 
