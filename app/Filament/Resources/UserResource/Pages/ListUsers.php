@@ -40,6 +40,9 @@ class ListUsers extends ListRecords
                 ->form([
                     FileUpload::make('file')
                         ->label('File Excel')
+                        ->disk('public')
+                        ->visibility("public")
+                        ->directory('imports/users')
                         ->required()
                         ->acceptedFileTypes(['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel']),
                 ])

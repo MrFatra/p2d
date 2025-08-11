@@ -91,6 +91,8 @@ class ArticleResource extends Resource
                     FileUpload::make('cover_image')
                         ->label('Cover Gambar')
                         ->image()
+                        ->disk('public')
+                        ->visibility("public")
                         ->directory('articles/covers')
                         ->maxSize(1024),
 
