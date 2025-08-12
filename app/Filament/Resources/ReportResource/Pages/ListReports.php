@@ -15,6 +15,8 @@ class ListReports extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+
+            // Export Bulanan
             Actions\Action::make('export-excel')
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
@@ -40,9 +42,9 @@ class ListReports extends ListRecords
                     if (!empty($data['month'])) {
                         $month = \Carbon\Carbon::parse($data['month']);
                         $query->whereMonth('created_at', $month->month)
-                        ->whereYear('created_at', $month->year);
+                            ->whereYear('created_at', $month->year);
                     }
-                    
+
                     $filteredData = $query->get();
 
                     return response()->streamDownload(
@@ -51,6 +53,38 @@ class ListReports extends ListRecords
                             'laporan-posyandu.xlsx'
                         )->getFile()->getContent()),
                         'laporan-list-data-posyandu.xlsx'
+                    );
+                }),
+
+            // Export Tahunan
+            Actions\Action::make('export-yearly')
+                ->label('Export Tahunan')
+                ->icon('heroicon-o-arrow-up-tray')
+                ->modalSubmitActionLabel('Export')
+                ->form([
+                    TextInput::make('year')
+                        ->numeric()
+                        ->minValue(2000)
+                        ->maxValue(now()->year)
+                        ->default(now()->year)
+                        ->label('Pilih Tahun')
+                        ->required(),
+                ])
+                ->action(function (array $data) {
+                    $query = $this->getFilteredTableQuery();
+
+                    if (!empty($data['year'])) {
+                        $query->whereYear('created_at', $data['year']);
+                    }
+
+                    $filteredData = $query->get();
+
+                    return response()->streamDownload(
+                        fn() => print(\Maatwebsite\Excel\Facades\Excel::download(
+                            new \App\Exports\ReportExport($filteredData, 'yearly'),
+                            'laporan-tahunan-posyandu.xlsx'
+                        )->getFile()->getContent()),
+                        'laporan-tahunan-posyandu.xlsx'
                     );
                 }),
         ];
