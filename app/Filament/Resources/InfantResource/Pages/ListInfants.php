@@ -5,10 +5,12 @@ namespace App\Filament\Resources\InfantResource\Pages;
 use App\Filament\Resources\InfantResource;
 use App\Filament\Resources\InfantResource\Widgets\InfantVisitsChart;
 use App\Filament\Resources\InfantResource\Widgets\VisitorOverview;
+use App\Helpers\Auth;
 use Filament\Actions;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListInfants extends ListRecords
 {
@@ -21,12 +23,12 @@ class ListInfants extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->visible(fn () => auth()->user()->can('bayi:create'))
+                ->visible(fn() => auth()->user()->can('bayi:create'))
                 ->label('Tambah Bayi')
                 ->icon('heroicon-o-plus-circle')
                 ->color('primary'),
             Actions\Action::make('export-excel')
-                ->visible(fn () => auth()->user()->can('bayi:export'))
+                ->visible(fn() => auth()->user()->can('bayi:export'))
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->modalSubmitActionLabel('Export')
@@ -73,5 +75,13 @@ class ListInfants extends ListRecords
             InfantVisitsChart::class,
             VisitorOverview::class,
         ];
+    }
+
+    protected function getTableQuery(): ?Builder
+    {
+        return parent::getTableQuery()
+            ->whereHas('user', function ($query) {
+                $query->where('hamlet', Auth::user()->hamlet);
+            });
     }
 }

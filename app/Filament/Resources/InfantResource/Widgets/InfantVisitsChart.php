@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\InfantResource\Widgets;
 
+use App\Helpers\Auth;
 use Filament\Widgets\ChartWidget;
 
 class InfantVisitsChart extends ChartWidget
@@ -22,6 +23,7 @@ class InfantVisitsChart extends ChartWidget
             $date = $now->copy()->subMonths($i);
             $monthLabel = $date->translatedFormat('M Y');
             $count = \App\Models\Infant::whereYear('created_at', $date->year)
+                ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
                 ->whereMonth('created_at', $date->month)
                 ->count();
 

@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\InfantResource\Widgets;
 
 use App\Filament\Resources\InfantResource\Pages\ListInfants;
+use App\Helpers\Auth;
 use App\Models\Infant;
+use App\Models\User;
 use Carbon\Carbon;
 use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -23,14 +25,18 @@ class VisitorOverview extends BaseWidget
         $now = Carbon::now();
 
         $thisMonthVisits = Infant::whereMonth('created_at', $now->month)
+            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
             ->whereYear('created_at', $now->year)
             ->count();
 
         $lastMonth = $now->copy()->subMonth();
 
         $lastMonthVisits = Infant::whereMonth('created_at', $lastMonth->month)
+            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
             ->whereYear('created_at', $lastMonth->year)
             ->count();
+
+        $babyTotal = User::role('baby')->where('hamlet', Auth::user()->hamlet)->count();
 
         $diff = $thisMonthVisits - $lastMonthVisits;
 
@@ -50,6 +56,7 @@ class VisitorOverview extends BaseWidget
         }
 
         $stuntingUsers = Infant::query()
+            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
             ->whereIn('stunting_status', ['Stunting', 'Kemungkinan Stunting'])
             ->get()
             ->filter(function ($infant) use ($now) {
@@ -60,7 +67,9 @@ class VisitorOverview extends BaseWidget
             ->groupBy('user_id')
             ->count();
 
-        $malnutritionUsers = Infant::query()->whereIn('nutrition_status', ['Gizi Kurang', 'Gizi Buruk'])
+        $malnutritionUsers = Infant::query()
+            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
+            ->whereIn('nutrition_status', ['Gizi Kurang', 'Gizi Buruk'])
             ->get()
             ->filter(function ($infant) use ($now) {
                 $ageInMonths = Carbon::parse($infant->birth_date)->diffInMonths($now);
@@ -90,7 +99,7 @@ class VisitorOverview extends BaseWidget
                 ->description('Hanya yang masih kategori bayi/balita')
                 ->color('danger'),
 
-            Stat::make('Total Bayi', '1 Orang')
+            Stat::make('Total Bayi', $babyTotal, ' Orang')
                 ->description('Terdata sebagai Bayi saat ini')
                 ->color($color),
         ];

@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\InfantResource\Pages;
 use App\Filament\Resources\InfantResource\RelationManagers;
+use App\Helpers\Auth;
 use App\Models\Infant;
 use App\Helpers\Family;
 use App\Models\User;
@@ -61,7 +62,7 @@ class InfantResource extends Resource
                         Select::make('user_id')
                             ->label('Nama - NIK')
                             ->options(function () {
-                                return User::getUsers('baby')->mapWithKeys(fn($user) => [
+                                return User::getUsers('baby', Auth::user()->hamlet)->mapWithKeys(fn($user) => [
                                     $user->id => "{$user->name} - {$user->national_id}"
                                 ])->toArray();
                             })
