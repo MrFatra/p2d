@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ElderlyResource\Pages;
 use App\Filament\Resources\ElderlyResource\RelationManagers;
+use App\Helpers\Auth;
 use App\Models\Elderly;
 use App\Models\User;
 use Filament\Forms;
@@ -56,7 +57,7 @@ class ElderlyResource extends Resource
                         Select::make('user_id')
                             ->label('Nama - NIK')
                             ->options(function () {
-                                return User::getUsers('elderly')
+                                return User::getUsers('elderly', Auth::user()->hamlet)
                                     ->mapWithKeys(function ($user) {
                                         return [$user->id => "{$user->name} - {$user->national_id}"];
                                     })->toArray();

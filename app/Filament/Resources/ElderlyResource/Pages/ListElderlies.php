@@ -5,10 +5,12 @@ namespace App\Filament\Resources\ElderlyResource\Pages;
 use App\Filament\Resources\ElderlyResource;
 use App\Filament\Resources\ElderlyResource\Widgets\ElderlyVisitsChart;
 use App\Filament\Resources\ElderlyResource\Widgets\StatsOverview;
+use App\Helpers\Auth;
 use Filament\Actions;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListElderlies extends ListRecords
 {
@@ -71,5 +73,13 @@ class ListElderlies extends ListRecords
             ElderlyVisitsChart::class,
             StatsOverview::class
         ];
+    }
+
+    protected function getTableQuery(): ?Builder
+    {
+        return parent::getTableQuery()
+            ->whereHas('user', function ($query) {
+                $query->where('hamlet', Auth::user()->hamlet);
+            });
     }
 }

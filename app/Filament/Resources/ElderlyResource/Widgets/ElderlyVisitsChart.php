@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ElderlyResource\Widgets;
 
+use App\Helpers\Auth;
 use Filament\Widgets\ChartWidget;
 
 class ElderlyVisitsChart extends ChartWidget
@@ -22,6 +23,7 @@ class ElderlyVisitsChart extends ChartWidget
             $date = $now->copy()->subMonths($i);
             $monthLabel = $date->translatedFormat('M Y');
             $count = \App\Models\Elderly::whereYear('created_at', $date->year)
+                ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
                 ->whereMonth('created_at', $date->month)
                 ->count();
 

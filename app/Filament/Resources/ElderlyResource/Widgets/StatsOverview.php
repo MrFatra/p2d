@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\ElderlyResource\Widgets;
 
 use App\Filament\Resources\ElderlyResource\Pages\ListElderlies;
+use App\Helpers\Auth;
 use App\Models\Elderly;
+use App\Models\User;
 use Carbon\Carbon;
 use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -23,14 +25,18 @@ class StatsOverview extends BaseWidget
         $now = Carbon::now();
 
         $thisMonthVisits = Elderly::whereYear('created_at', $now->year)
+            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
             ->whereMonth('created_at', $now->month)
             ->count();
 
         $lastMonth = $now->copy()->subMonth();
 
         $lastMonthVisits = Elderly::whereYear('created_at', $lastMonth->year)
+            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
             ->whereMonth('created_at', $lastMonth->month)
             ->count();
+
+        $elderlyTotal = User::role('elderly')->where('hamlet', Auth::user()->hamlet)->count();
 
         $diff = $thisMonthVisits - $lastMonthVisits;
 
@@ -61,7 +67,7 @@ class StatsOverview extends BaseWidget
             Stat::make('Perubahan Kunjungan', $percentage . '%')
                 ->description($description)
                 ->color($color),
-            Stat::make('Total Lansia', '1 Orang')
+            Stat::make('Total Lansia', $elderlyTotal . ' Orang')
                 ->description('Terdata sebagai Lamsia saat ini')
                 ->color($color),
         ];
