@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\ToddlerResource\Widgets;
 
 use App\Filament\Resources\ToddlerResource\Pages\ListToddlers;
+use App\Helpers\Auth;
 use App\Models\Toddler;
+use App\Models\User;
 use Carbon\Carbon;
 use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -23,14 +25,18 @@ class VisitorOverview extends BaseWidget
         $now = Carbon::now();
 
         $thisMonthVisits = Toddler::whereMonth('created_at', $now->month)
+            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
             ->whereYear('created_at', $now->year)
             ->count();
 
         $lastMonth = $now->copy()->subMonth();
 
         $lastMonthVisits = Toddler::whereYear('created_at', $lastMonth->year)
+            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
             ->whereMonth('created_at', $lastMonth->month)
             ->count();
+
+        $toddlerTotal = User::role('toddler')->where('hamlet', Auth::user()->hamlet)->count();
 
         $diff = $thisMonthVisits - $lastMonthVisits;
 
@@ -48,7 +54,7 @@ class VisitorOverview extends BaseWidget
             $description = 'Turun dibanding bulan lalu';
             $color = 'danger';
         } else {
-            $description = 'Tidak ada kunjungan.';
+            $description = 'Tidak ada perubahan kunjungan.';
             $color = 'gray';
         }
 
@@ -64,7 +70,7 @@ class VisitorOverview extends BaseWidget
             Stat::make('Perubahan Kunjungan', $percentage . '%')
                 ->description($description)
                 ->color($color),
-            Stat::make('Total Balita', '1 Orang')
+            Stat::make('Total Balita', $toddlerTotal . ' Orang')
                 ->description('Terdata sebagai Balita saat ini')
                 ->color($color),
         ];

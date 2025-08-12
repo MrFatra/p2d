@@ -5,10 +5,12 @@ namespace App\Filament\Resources\ToddlerResource\Pages;
 use App\Filament\Resources\ToddlerResource;
 use App\Filament\Resources\ToddlerResource\Widgets\ToddlerVisitsChart;
 use App\Filament\Resources\ToddlerResource\Widgets\VisitorOverview;
+use App\Helpers\Auth;
 use Filament\Actions;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListToddlers extends ListRecords
 {
@@ -20,11 +22,11 @@ class ListToddlers extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->visible(fn () => auth()->user()->can('balita:create'))
+                ->visible(fn() => auth()->user()->can('balita:create'))
                 ->icon('heroicon-o-plus')
                 ->label('Tambah Balita'),
             Actions\Action::make('export-excel')
-                ->visible(fn () => auth()->user()->can('balita:export'))
+                ->visible(fn() => auth()->user()->can('balita:export'))
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->modalSubmitActionLabel('Export')
@@ -71,5 +73,13 @@ class ListToddlers extends ListRecords
             ToddlerVisitsChart::class,
             VisitorOverview::class
         ];
+    }
+
+    protected function getTableQuery(): ?Builder
+    {
+        return parent::getTableQuery()
+            ->whereHas('user', function ($query) {
+                $query->where('hamlet', Auth::user()->hamlet);
+            });
     }
 }

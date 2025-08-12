@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ToddlerResource\Pages;
+use App\Helpers\Auth;
 use App\Models\Toddler;
 use App\Models\User;
 use Filament\Forms;
@@ -53,7 +54,7 @@ class ToddlerResource extends Resource
                     Select::make('user_id')
                         ->label('Nama - NIK')
                         ->options(function () {
-                            return User::getUsers('toddler')
+                            return User::getUsers('toddler', Auth::user()->hamlet)
                                 ->mapWithKeys(fn($user) => [
                                     $user->id => "{$user->name} - {$user->national_id}"
                                 ])->toArray();
@@ -289,14 +290,14 @@ class ToddlerResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->visible(fn () => auth()->user()->can('balita:update'))
+                    ->visible(fn() => auth()->user()->can('balita:update'))
                     ->icon('heroicon-o-pencil-square')
                     ->label('Ubah Data'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->visible(fn () => auth()->user()->can('balita:delete'))
+                        ->visible(fn() => auth()->user()->can('balita:delete'))
                         ->icon('heroicon-o-trash')
                         ->label('Hapus Data'),
                 ]),
