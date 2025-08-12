@@ -5,10 +5,12 @@ namespace App\Filament\Resources\PregnantResource\Pages;
 use App\Filament\Resources\PregnantResource;
 use App\Filament\Resources\PregnantResource\Widgets\PregnantVisitsChart;
 use App\Filament\Resources\PregnantResource\Widgets\VisitorOverview;
+use App\Helpers\Auth;
 use Filament\Actions;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListPregnants extends ListRecords
 {
@@ -20,12 +22,12 @@ class ListPregnants extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->visible(fn () => auth()->user()->can('ibu-hamil:create'))
+                ->visible(fn() => auth()->user()->can('ibu-hamil:create'))
                 ->label('Tambah Ibu Hamil')
                 ->icon('heroicon-o-plus-circle')
                 ->color('primary'),
             Actions\Action::make('export-excel')
-                ->visible(fn () => auth()->user()->can('ibu-hamil:export'))
+                ->visible(fn() => auth()->user()->can('ibu-hamil:export'))
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->modalSubmitActionLabel('Export')
@@ -73,5 +75,13 @@ class ListPregnants extends ListRecords
             PregnantVisitsChart::class,
             VisitorOverview::class,
         ];
+    }
+
+    protected function getTableQuery(): ?Builder
+    {
+        return parent::getTableQuery()
+            ->whereHas('user', function ($query) {
+                $query->where('hamlet', Auth::user()->hamlet);
+            });
     }
 }

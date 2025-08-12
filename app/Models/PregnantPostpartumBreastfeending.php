@@ -20,6 +20,19 @@ class PregnantPostpartumBreastfeending extends Model
         'anc_schedule',
     ];
 
+    protected static function booted()
+    {
+        static::created(function ($record) {
+            $record->user->syncRoles('pregnant');
+        });
+
+        static::deleted(function ($record) {
+            if (!$record->user->pregnantPostpartumBreastfeedings()->exists()) {
+                $record->user->removeRole('pregnant');
+            }
+        });
+    }
+
     // Relasi ke User
     public function user()
     {

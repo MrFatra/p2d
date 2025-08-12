@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PregnantResource\Pages;
 use App\Filament\Resources\PregnantResource\RelationManagers;
+use App\Helpers\Auth;
 use App\Models\Pregnant;
 use App\Models\PregnantPostpartumBreastfeending;
 use App\Models\User;
@@ -55,7 +56,7 @@ class PregnantResource extends Resource
                 Select::make('user_id')
                 ->label('Nama - NIK')
                 ->options(function () {
-                    return User::getUsers('mother')
+                    return User::getUsers('mother', Auth::user()->hamlet)
                         ->mapWithKeys(function ($user) {
                             return [$user->id => "{$user->name} - {$user->national_id}"];
                         })->toArray();
