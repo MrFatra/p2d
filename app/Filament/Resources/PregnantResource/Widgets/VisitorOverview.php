@@ -51,7 +51,7 @@ class VisitorOverview extends BaseWidget
             $description = 'Turun dibanding bulan lalu';
             $color = 'danger';
         } else {
-            $description = 'Tidak ada kunjungan.';
+            $description = 'Tidak ada perubahan kunjungan.';
             $color = 'gray';
         }
 
