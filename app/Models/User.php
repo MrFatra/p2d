@@ -70,7 +70,7 @@ class User extends Authenticatable implements FilamentUser
         });
     }
 
-    public static function getUsers($category = null)
+    public static function getUsers($category = null, $hamlet)
     {
         $now = Carbon::now();
 
@@ -126,6 +126,8 @@ class User extends Authenticatable implements FilamentUser
             $q->whereYear('created_at', $now->year)
                 ->whereMonth('created_at', $now->month);
         });
+
+        $query->where('hamlet', $hamlet);
 
         return $query->get();
     }
