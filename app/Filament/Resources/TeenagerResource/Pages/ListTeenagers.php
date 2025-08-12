@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TeenagerResource\Pages;
 use App\Filament\Resources\TeenagerResource;
 use App\Filament\Resources\TeenagerResource\Widgets\TeenagerVisitsChart;
 use App\Filament\Resources\TeenagerResource\Widgets\VisitorOverview;
+use App\Helpers\Auth;
 use Filament\Actions;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
@@ -21,9 +22,9 @@ class ListTeenagers extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->visible(fn () => auth()->user()->can('dewasa:create')),
+                ->visible(fn() => auth()->user()->can('dewasa:create')),
             Actions\Action::make('export-excel')
-                ->visible(fn () => auth()->user()->can('dewasa:export'))
+                ->visible(fn() => auth()->user()->can('dewasa:export'))
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->modalSubmitActionLabel('Export')
@@ -70,5 +71,13 @@ class ListTeenagers extends ListRecords
             TeenagerVisitsChart::class,
             VisitorOverview::class
         ];
+    }
+
+    protected function getTableQuery(): ?Builder
+    {
+        return parent::getTableQuery()
+            ->whereHas('user', function ($query) {
+                $query->where('hamlet', Auth::user()->hamlet);
+            });
     }
 }

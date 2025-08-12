@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TeenagerResource\Pages;
+use App\Helpers\Auth;
 use App\Helpers\Health;
 use App\Models\Teenager;
 use App\Models\User;
@@ -16,6 +17,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\HtmlString;
 
 class TeenagerResource extends Resource
@@ -52,7 +54,7 @@ class TeenagerResource extends Resource
                         Select::make('user_id')
                             ->label('Nama - NIK')
                             ->options(function () {
-                                return User::getUsers('teenager')
+                                return User::getUsers('teenager', Auth::user()->hamlet)
                                     ->mapWithKeys(function ($user) {
                                         return [$user->id => "{$user->name} - {$user->national_id}"];
                                     })->toArray();
