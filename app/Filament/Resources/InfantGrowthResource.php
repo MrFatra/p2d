@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\InfantGrowthResource\Pages;
 use App\Filament\Resources\InfantGrowthResource\RelationManagers;
+use App\Helpers\Auth;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -61,6 +62,10 @@ class InfantGrowthResource extends Resource
                     ->label('Jenis Kelamin')
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('hamlet')
+                    ->label('Dusun')
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('address')
                     ->label('Alamat')
                     ->limit(30)
@@ -112,6 +117,7 @@ class InfantGrowthResource extends Resource
         $now = \Carbon\Carbon::now();
 
         return parent::getEloquentQuery()
-            ->whereDate('birth_date', '>', $now->copy()->subYears(1));
+            ->whereDate('birth_date', '>', $now->copy()->subYears(1))
+            ->where('hamlet', Auth::user()->hamlet);
     }
 }

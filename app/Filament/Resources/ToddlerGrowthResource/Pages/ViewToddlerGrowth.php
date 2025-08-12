@@ -62,6 +62,10 @@ class ViewToddlerGrowth extends ViewRecord
                                 ->label('No. Telepon')
                                 ->getStateUsing(fn() => $user?->phone_number ?? '-'),
 
+                            TextEntry::make('hamlet')
+                                ->label('Dusun')
+                                ->getStateUsing(fn() => $user?->hamlet ?? '-'),
+
                             TextEntry::make('address')
                                 ->label('Alamat')
                                 ->getStateUsing(fn() => $user?->address ?? '-'),

@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ToddlerGrowthResource\Pages;
 use App\Filament\Resources\ToddlerGrowthResource\RelationManagers;
+use App\Helpers\Auth;
 use App\Models\ToddlerGrowth;
 use App\Models\User;
 use Filament\Forms;
@@ -113,6 +114,7 @@ class ToddlerGrowthResource extends Resource
         $now = \Carbon\Carbon::now();
 
         return parent::getEloquentQuery()
+            ->where('hamlet', Auth::user()->hamlet)
             ->whereDate('birth_date', '>', $now->copy()->subYears(5))
             ->whereDate('birth_date', '<=', $now->copy()->subYears(1));
     }
