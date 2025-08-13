@@ -184,6 +184,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Teenager::class);
     }
 
+    public function adults()
+    {
+        return $this->hasMany(Adult::class);
+    }
+
     public function pregnantPostpartumBreastfeedings()
     {
         return $this->hasMany(PregnantPostpartumBreastfeending::class);
