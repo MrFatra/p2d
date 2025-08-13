@@ -16,29 +16,20 @@ class ListReports extends ListRecords
         return [
             Actions\CreateAction::make(),
 
-            // Export Bulanan
             Actions\Action::make('export-excel')
-                ->label('Export Excel')
+                ->label('Export Bulanan')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->modalSubmitActionLabel('Export')
                 ->form([
                     TextInput::make('month')
-                        ->type('month') // HTML5 input type
+                        ->type('month')
                         ->label('Pilih Bulan')
-                        ->default(now()->format('Y-m')) // Default format yang valid: '2025-08'
+                        ->default(now()->format('Y-m'))
                         ->required()
-                    // \Filament\Forms\Components\DatePicker::make('month')
-                    //     ->label('Pilih Bulan')
-                    //     ->native(false)
-                    //     ->extraInputAttributes(['type' => 'month'])
-                    //     ->format('m/Y')
-                    //     ->displayFormat('F Y') // Format bulan & tahun
-                    //     ->required(),
                 ])
                 ->action(function (array $data) {
                     $query = $this->getFilteredTableQuery();
                     
-                    // Filter berdasarkan bulan terpilih
                     if (!empty($data['month'])) {
                         $month = \Carbon\Carbon::parse($data['month']);
                         $query->whereMonth('created_at', $month->month)
@@ -56,7 +47,6 @@ class ListReports extends ListRecords
                     );
                 }),
 
-            // Export Tahunan
             Actions\Action::make('export-yearly')
                 ->label('Export Tahunan')
                 ->icon('heroicon-o-arrow-up-tray')
