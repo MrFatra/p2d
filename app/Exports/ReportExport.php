@@ -2,15 +2,13 @@
 
 namespace App\Exports;
 
-use App\Helpers\MonthlyReport;
-use App\Models\Report;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class ReportExport implements
@@ -21,39 +19,67 @@ class ReportExport implements
     WithColumnFormatting
 {
     protected $reports;
+    protected $mode; // 'monthly' atau 'yearly'
 
-    public function __construct($reports)
+    public function __construct($reports, string $mode = 'monthly')
     {
         $this->reports = $reports;
+        $this->mode = $mode;
     }
 
-    /**
-     * Return the collection to be exported
-     */
     public function view(): View
     {
-        return view('exports.list-reports', [
-            'reports' => $this->reports
+        if ($this->mode === 'yearly') {
+            return view('exports.list-reports-yearly', [
+                'reports' => $this->reports,
+            ]);
+        }
+
+        return view('exports.list-reports-monthly', [
+            'reports' => $this->reports,
         ]);
     }
+
     public function map($record): array
     {
-        // Ambil data dari helper sama seperti di Filament table
-        $data = MonthlyReport::getMonthlyReportByRecord($record);
+        if ($this->mode === 'yearly') {
+            return [
+                $record->elderlies,
+                $record->babies,
+                $record->pregnants,
+                $record->teenagers,
+                $record->toddlers,
+                $record->hamlet,
+                $record->year,
+            ];
+        }
 
         return [
-            $data['Elderly'],
-            $data['Infant'],
-            $data['Pregnant'],
-            $data['Teenager'],
-            $data['Toddler'],
-            $data['month'],
-            $data['year'],
+            $record->elderlies,
+            $record->babies,
+            $record->pregnants,
+            $record->teenagers,
+            $record->toddlers,
+            $record->hamlet,
+            \Carbon\Carbon::create()->month($record->month)->translatedFormat('F'),
+            $record->year,
         ];
     }
 
+
     public function headings(): array
     {
+        if ($this->mode === 'yearly') {
+            return [
+                'Lansia (60 Tahun ke Atas)',
+                'Bayi (0-12 Bulan)',
+                'Ibu Hamil',
+                'Remaja (13-17 Tahun)',
+                'Balita (1-5 Tahun)',
+                'Tahun',
+            ];
+        }
+
         return [
             'Lansia (60 Tahun ke Atas)',
             'Bayi (0-12 Bulan)',
@@ -67,9 +93,15 @@ class ReportExport implements
 
     public function columnFormats(): array
     {
+        if ($this->mode === 'yearly') {
+            return [
+                'F' => NumberFormat::FORMAT_TEXT, // Tahun
+            ];
+        }
+
         return [
-            'F' => NumberFormat::FORMAT_TEXT, // Kolom Bulan
-            'G' => NumberFormat::FORMAT_TEXT, // Kolom Tahun
+            'F' => NumberFormat::FORMAT_TEXT, // Bulan
+            'G' => NumberFormat::FORMAT_TEXT, // Tahun
         ];
     }
 }

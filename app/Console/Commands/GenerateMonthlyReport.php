@@ -4,47 +4,49 @@ namespace App\Console\Commands;
 
 use App\Helpers\MonthlyReport;
 use App\Models\Report;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 
 class GenerateMonthlyReport extends Command
 {
     protected $signature = 'report:generate-monthly';
-    protected $description = 'Generate laporan bulanan secara otomatis setiap awal bulan';
+    protected $description = 'Generate laporan bulanan secara otomatis untuk setiap dusun (hamlet)';
 
     public function handle()
     {
         $now = Carbon::now()->startOfMonth();
+        $month = $now->month;
+        $year = $now->year;
 
-        // Cek apakah laporan bulan ini sudah ada
-        $existing = Report::whereYear('uploaded_at', $now->year)
-            ->whereMonth('uploaded_at', $now->month)
-            ->first();
+        $hamlets = User::distinct()->pluck('hamlet')->filter();
 
-        if ($existing) {
-            $this->info('Laporan bulan ini sudah ada.');
-            return;
+        foreach ($hamlets as $hamlet) {
+            $exists = Report::where('hamlet', $hamlet)
+                ->where('month', $month)
+                ->where('year', $year)
+                ->exists();
+
+            if ($exists) {
+                $this->info("Laporan untuk dusun '{$hamlet}' bulan {$month}/{$year} sudah ada.");
+                continue;
+            }
+
+            $reportData = (new MonthlyReport())->countPerModelByDate($now, $hamlet);
+
+            Report::create([
+                'babies'     => $reportData['Infant'] ?? 0,
+                'toddlers'   => $reportData['Toddler'] ?? 0,
+                'children'   => $reportData['Children'] ?? 0,
+                'teenagers'  => $reportData['Teenager'] ?? 0,
+                'pregnants'  => $reportData['Pregnant'] ?? 0,
+                'elderlies'  => $reportData['Elderly'] ?? 0,
+                'hamlet'     => $hamlet,
+                'month'      => $month,
+                'year'       => $year,
+            ]);
+
+            $this->info("Laporan berhasil dibuat untuk dusun '{$hamlet}' bulan {$month}/{$year}.");
         }
-
-        // Ambil data laporan bulanan
-        $reportData = (new MonthlyReport())->countPerModelByDate($now);
-
-        // Simulasi simpan sebagai file (jika perlu PDF/CSV bisa dikembangkan)
-        $fileName = 'laporan-' . $reportData['year'] . '-' . strtolower($reportData['month']) . '.json';
-        $filePath = 'reports/' . $fileName;
-        Storage::put($filePath, json_encode($reportData, JSON_PRETTY_PRINT));
-
-        // Simpan record ke DB
-        Report::create([
-            'user_id'     => null, // Jika perlu isi user tertentu
-            'file_name'   => $fileName,
-            'file_type'   => 'json',
-            'description' => 'Laporan bulanan Posyandu bulan ' . $reportData['month'] . ' ' . $reportData['year'],
-            'uploaded_at' => $now,
-            'file_path'   => $filePath,
-        ]);
-
-        $this->info('Laporan berhasil dibuat untuk bulan ' . $reportData['month'] . ' ' . $reportData['year']);
     }
 }

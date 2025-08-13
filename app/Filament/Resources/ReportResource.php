@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReportResource\Pages;
+use App\Helpers\Auth;
 use App\Helpers\MonthlyReport;
 use App\Models\Report;
 use Filament\Forms\Components\DateTimePicker;
@@ -15,6 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Section;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class ReportResource extends Resource
@@ -42,48 +44,7 @@ class ReportResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Section::make('Informasi File')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('file_name')
-                            ->label('Nama File')
-                            ->disabled(),
-
-                        TextInput::make('file_type')
-                            ->label('Tipe File')
-                            ->disabled(),
-
-                        Textarea::make('description')
-                            ->label('Deskripsi')
-                            ->disabled(),
-                    ]),
-
-                Section::make('Tanggal & Waktu')
-                    ->columns(2)
-                    ->schema([
-                        DateTimePicker::make('uploaded_at')
-                            ->label('Tanggal Unggah')
-                            ->disabled(),
-
-                        DateTimePicker::make('created_at')
-                            ->label('Tanggal Dibuat')
-                            ->disabled(),
-                    ]),
-
-                Section::make('Akses File')
-                    ->schema([
-                        TextInput::make('file_path')
-                            ->label('Lokasi File')
-                            ->disabled()
-                            ->suffixAction(
-                                Action::make('Buka')
-                                    ->icon('heroicon-o-arrow-top-right-on-square')
-                                    ->url(fn($record) => asset('storage/' . $record->file_path), true)
-                                    ->openUrlInNewTab()
-                            ),
-                    ]),
-            ]);
+            ->schema([]);
     }
 
     public static function table(Table $table): Table
@@ -95,33 +56,31 @@ class ReportResource extends Resource
                 //     ->state(fn() => $report['Adult'])
                 //     ->sortable(),
 
-                TextColumn::make('elderly_count')
-                    ->label('Lansia (60 Tahun ke Atas)')
-                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['Elderly']),
+                TextColumn::make('elderlies')
+                    ->label('Lansia (60 Tahun ke Atas)'),
 
-                TextColumn::make('infant_count')
-                    ->label('Bayi (0-12 Bulan)')
-                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['Infant']),
+                TextColumn::make('babies')
+                    ->label('Bayi (0-12 Bulan)'),
 
-                TextColumn::make('pregnant_count')
-                    ->label('Ibu Hamil')
-                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['Pregnant']),
+                TextColumn::make('pregnants')
+                    ->label('Ibu Hamil'),
 
-                TextColumn::make('teenager_count')
-                    ->label('Remaja (13-17 Tahun)')
-                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['Teenager']),
+                TextColumn::make('teenagers')
+                    ->label('Remaja (13-17 Tahun)'),
 
-                TextColumn::make('toddler_count')
-                    ->label('Balita (1-5 Tahun)')
-                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['Toddler']),
+                TextColumn::make('toddlers')
+                    ->label('Balita (1-5 Tahun)'),
+
+                TextColumn::make('hamlet')
+                    ->label('Dusun')
+                    ->visible(fn() => Auth::user()->hasRole(['admin', 'resident'])),
 
                 TextColumn::make('month')
-                    ->label('Bulan')
-                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['month']),
+                    ->formatStateUsing(fn($state) => \Carbon\Carbon::create()->month($state)->translatedFormat('F'))
+                    ->label('Bulan'),
 
                 TextColumn::make('year')
-                    ->label('Tahun')
-                    ->state(fn($record) => MonthlyReport::getMonthlyReportByRecord($record)['year']),
+                    ->label('Tahun'),
             ])
             ->filters([
                 //
@@ -129,11 +88,7 @@ class ReportResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array
@@ -161,4 +116,23 @@ class ReportResource extends Resource
         return false;
     }
 
+    public static function canDelete(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canView(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        if (Auth::user()->hasRole('cadre')) {
+            return parent::getEloquentQuery()
+                ->where('hamlet', Auth::user()->hamlet);
+        } else {
+            return parent::getEloquentQuery();
+        }
+    }
 }
