@@ -34,7 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->profile(EditProfile::class)
             ->colors([
                 'primary' => Color::Teal,
-            ])->brandName(fn() => Auth::user()?->hamlet ? "Siposyandu - " . Auth::user()->hamlet : null)
+            ])->brandName(fn() => Auth::user()?->hamlet && !Auth::user()->hasRole(['admin', 'resident']) ? "Siposyandu - " . Auth::user()->hamlet : null)
             ->darkMode(false)
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
