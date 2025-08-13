@@ -32,8 +32,14 @@ class UpdateUserRoles extends Command
             foreach ($users as $user) {
                 $newRole = User::determineTypeOfUser($user->birth_date);
 
+                $pregnant = $user->pregnantPostpartumBreastfeedings()->exists();
+
                 if (!$user->hasRole($newRole)) {
                     $user->syncRoles($newRole);
+                }
+
+                if ($pregnant && !$user->hasRole('pregnant')) {
+                    $user->syncRoles('pregnant');
                 }
             }
         });
