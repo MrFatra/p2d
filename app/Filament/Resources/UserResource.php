@@ -116,8 +116,8 @@ class UserResource extends Resource
                             ->label('Peran'),
                         Forms\Components\TextInput::make('password')
                             ->password()
-                            ->label('Password')
-                            ->hiddenOn('view'),
+                            ->required()
+                            ->visibleOn('create'),
                     ]),
             ]);
     }
@@ -199,7 +199,7 @@ class UserResource extends Resource
                     ->visible(fn() => Gate::allows('pengguna:read')),
 
                 Tables\Actions\EditAction::make()
-                    ->visible(fn() => Gate::allows('pengguna:edit')),
+                    ->visible(fn() => Gate::allows('pengguna:update')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
