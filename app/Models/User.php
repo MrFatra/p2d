@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Auth;
 use Carbon\Carbon;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -127,7 +128,9 @@ class User extends Authenticatable implements FilamentUser
                 ->whereMonth('created_at', $now->month);
         });
 
-        $query->where('hamlet', $hamlet);
+        if (Auth::user()->hasRole('cadre')) {
+            $query->where('hamlet', $hamlet);
+        }
 
         return $query->get();
     }
