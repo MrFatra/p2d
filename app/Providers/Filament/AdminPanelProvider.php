@@ -44,7 +44,7 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
+                \App\Filament\Widgets\CustomAccountWidget::class,
                 \App\Filament\Widgets\TotalStat::class,
                 \App\Filament\Widgets\TotalChart::class,
             ])
