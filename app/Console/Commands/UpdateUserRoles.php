@@ -30,6 +30,11 @@ class UpdateUserRoles extends Command
 
         User::chunk(100, function ($users) {
             foreach ($users as $user) {
+                
+                if ($user->hasRole(['admin', 'cadre', 'resident'])) {
+                    continue;
+                }
+
                 $newRole = User::determineTypeOfUser($user->birth_date);
 
                 $pregnant = $user->pregnantPostpartumBreastfeedings()->exists();
