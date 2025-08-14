@@ -114,10 +114,17 @@ class InfantGrowthResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
+        $query = parent::getEloquentQuery();
         $now = \Carbon\Carbon::now();
+        $user = Auth::user();
+        
+        $query->whereDate('birth_date', '>', $now->copy()->subYears(1));
 
-        return parent::getEloquentQuery()
-            ->whereDate('birth_date', '>', $now->copy()->subYears(1))
-            ->where('hamlet', Auth::user()->hamlet);
+        if ($user->hasRole('cadre')) {
+            $query->where('hamlet', Auth::user()->hamlet);
+        }
+
+        return $query;
+
     }
 }

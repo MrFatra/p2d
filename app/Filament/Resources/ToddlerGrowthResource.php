@@ -63,6 +63,10 @@ class ToddlerGrowthResource extends Resource
                     ->label('Jenis Kelamin')
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('hamlet')
+                    ->label('Dusun')
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('address')
                     ->label('Alamat')
                     ->limit(30)
@@ -111,11 +115,17 @@ class ToddlerGrowthResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
+        $query = parent::getEloquentQuery();
         $now = \Carbon\Carbon::now();
+        $user = Auth::user();
 
-        return parent::getEloquentQuery()
-            ->where('hamlet', Auth::user()->hamlet)
-            ->whereDate('birth_date', '>', $now->copy()->subYears(5))
-            ->whereDate('birth_date', '<=', $now->copy()->subYears(1));
+        $query->whereDate('birth_date', '>', $now->copy()->subYears(5));
+        $query->whereDate('birth_date', '<=', $now->copy()->subYears(1));
+
+        if ($user->hasRole('cadre')) {
+            $query->where('hamlet', Auth::user()->hamlet);
+        }
+
+        return $query;
     }
 }
