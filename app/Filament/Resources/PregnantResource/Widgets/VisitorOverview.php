@@ -23,21 +23,41 @@ class VisitorOverview extends BaseWidget
     protected function getStats(): array
     {
         $now = Carbon::now();
+        $user = Auth::user();
+        $isCadre = $user->hasRole('cadre');
 
-        $thisMonthVisits = PregnantPostpartumBreastfeending::whereMonth('created_at', $now->month)
-            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
-            ->whereYear('created_at', $now->year)
-            ->count();
+        // --- Kunjungan Bulan Ini ---
+        $thisMonthQuery = PregnantPostpartumBreastfeending::whereMonth('created_at', $now->month)
+            ->whereYear('created_at', $now->year);
 
+        if ($isCadre) {
+            $thisMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+        }
+
+        $thisMonthVisits = $thisMonthQuery->count();
+
+        // --- Kunjungan Bulan Lalu ---
         $lastMonth = $now->copy()->subMonth();
 
-        $lastMonthVisits = PregnantPostpartumBreastfeending::whereMonth('created_at', $lastMonth->month)
-            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
-            ->whereYear('created_at', $lastMonth->year)
-            ->count();
+        $lastMonthQuery = PregnantPostpartumBreastfeending::whereMonth('created_at', $lastMonth->month)
+            ->whereYear('created_at', $lastMonth->year);
 
-        $pregnantTotal = User::role('pregnant')->where('hamlet', Auth::user()->hamlet)->count();
+        if ($isCadre) {
+            $lastMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+        }
 
+        $lastMonthVisits = $lastMonthQuery->count();
+
+        // --- Total Ibu Hamil ---
+        $pregnantQuery = User::role('pregnant');
+
+        if ($isCadre) {
+            $pregnantQuery->where('hamlet', $user->hamlet);
+        }
+        
+        $pregnantTotal = $pregnantQuery->count();
+
+        // --- Hitung Perubahan ---
         $diff = $thisMonthVisits - $lastMonthVisits;
 
         $percentage = $lastMonthVisits > 0
@@ -70,7 +90,7 @@ class VisitorOverview extends BaseWidget
 
             Stat::make('Total Ibu Hamil', $pregnantTotal . ' Orang')
                 ->description('Terdata sebagai ibu hamil saat ini')
-                ->color($color),
+                ->color('primary'),
         ];
     }
 }

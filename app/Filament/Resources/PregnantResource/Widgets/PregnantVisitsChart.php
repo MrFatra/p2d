@@ -18,18 +18,24 @@ class PregnantVisitsChart extends ChartWidget
         $months = collect();
         $now = \Carbon\Carbon::now();
 
+        $user = Auth::user();
+
         // for loop 6 bulan terakhir
         for ($i = 5; $i >= 0; $i--) {
             $date = $now->copy()->subMonths($i);
             $monthLabel = $date->translatedFormat('M Y');
             $count = \App\Models\PregnantPostpartumBreastfeending::whereYear('created_at', $date->year)
-                ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
-                ->whereMonth('created_at', $date->month)
-                ->count();
+                ->whereMonth('created_at', $date->month);
+
+            if ($user->hasRole('cadre')) {
+                $count->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+            }
+
+            $total = $count->count();
 
             $months->push([
                 'label' => $monthLabel,
-                'value' => $count,
+                'value' => $total,
             ]);
         }
 

@@ -24,9 +24,9 @@ class ListElderlies extends ListRecords
             Actions\CreateAction::make()
                 ->label('Tambah Data Lansia')
                 ->icon('heroicon-o-plus')
-                ->visible(fn () => auth()->user()->can('lansia:create')),
+                ->visible(fn() => auth()->user()->can('lansia:create')),
             Actions\Action::make('export-excel')
-                ->visible(fn () => auth()->user()->can('lansia:export'))
+                ->visible(fn() => auth()->user()->can('lansia:export'))
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->modalSubmitActionLabel('Export')
@@ -77,9 +77,16 @@ class ListElderlies extends ListRecords
 
     protected function getTableQuery(): ?Builder
     {
-        return parent::getTableQuery()
-            ->whereHas('user', function ($query) {
-                $query->where('hamlet', Auth::user()->hamlet);
+        $query = parent::getTableQuery();
+
+        $user = Auth::user();
+
+        if ($user->hasRole('cadre')) {
+            $query->whereHas('user', function ($q) use ($user) {
+                $q->where('hamlet', $user->hamlet);
             });
+        }
+
+        return $query;
     }
 }

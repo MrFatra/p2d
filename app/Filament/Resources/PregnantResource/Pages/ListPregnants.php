@@ -79,9 +79,16 @@ class ListPregnants extends ListRecords
 
     protected function getTableQuery(): ?Builder
     {
-        return parent::getTableQuery()
-            ->whereHas('user', function ($query) {
-                $query->where('hamlet', Auth::user()->hamlet);
+        $query = parent::getTableQuery();
+
+        $user = Auth::user();
+
+        if ($user->hasRole('cadre')) {
+            $query->whereHas('user', function ($q) use ($user) {
+                $q->where('hamlet', $user->hamlet);
             });
+        }
+
+        return $query;
     }
 }

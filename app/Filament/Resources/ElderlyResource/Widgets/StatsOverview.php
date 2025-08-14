@@ -24,19 +24,39 @@ class StatsOverview extends BaseWidget
     {
         $now = Carbon::now();
 
-        $thisMonthVisits = Elderly::whereYear('created_at', $now->year)
-            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
-            ->whereMonth('created_at', $now->month)
-            ->count();
+        $user = Auth::user();
+        $isCadre = $user->hasRole('cadre');
 
+        // --- Kunjungan Bulan Ini ---
+        $thisMonthQuery = Elderly::whereMonth('created_at', $now->month)
+            ->whereYear('created_at', $now->year);
+
+        if ($isCadre) {
+            $thisMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+        }
+
+        $thisMonthVisits = $thisMonthQuery->count();
+
+        // --- Kunjungan Bulan Lalu ---
         $lastMonth = $now->copy()->subMonth();
 
-        $lastMonthVisits = Elderly::whereYear('created_at', $lastMonth->year)
-            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
-            ->whereMonth('created_at', $lastMonth->month)
-            ->count();
+        $lastMonthQuery = Elderly::whereMonth('created_at', $lastMonth->month)
+            ->whereYear('created_at', $lastMonth->year);
 
-        $elderlyTotal = User::role('elderly')->where('hamlet', Auth::user()->hamlet)->count();
+        if ($isCadre) {
+            $lastMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+        }
+
+        $lastMonthVisits = $lastMonthQuery->count();
+
+        // --- Total Ibu Hamil ---
+        $elderlyQuery = User::role('elderly');
+
+        if ($isCadre) {
+            $elderlyQuery->where('hamlet', $user->hamlet);
+        }
+
+        $elderlyTotal = $elderlyQuery->count();
 
         $diff = $thisMonthVisits - $lastMonthVisits;
 

@@ -23,21 +23,41 @@ class VisitorOverview extends BaseWidget
     protected function getStats(): array
     {
         $now = Carbon::now();
+        $user = Auth::user();
+        $isCadre = $user->hasRole('cadre');
 
-        $thisMonthVisits = Teenager::whereMonth('created_at', $now->month)
-            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
-            ->whereYear('created_at', $now->year)
-            ->count();
+        // --- Kunjungan Bulan Ini ---
+        $thisMonthQuery = Teenager::whereMonth('created_at', $now->month)
+            ->whereYear('created_at', $now->year);
 
+        if ($isCadre) {
+            $thisMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+        }
+
+        $thisMonthVisits = $thisMonthQuery->count();
+
+        // --- Kunjungan Bulan Lalu ---
         $lastMonth = $now->copy()->subMonth();
 
-        $lastMonthVisits = Teenager::whereMonth('created_at', $lastMonth->month)
-            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
-            ->whereYear('created_at', $lastMonth->year)
-            ->count();
+        $lastMonthQuery = Teenager::whereMonth('created_at', $lastMonth->month)
+            ->whereYear('created_at', $lastMonth->year);
 
-        $teenagerTotal = User::role('teenager')->where('hamlet', Auth::user()->hamlet)->count();
+        if ($isCadre) {
+            $lastMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+        }
 
+        $lastMonthVisits = $lastMonthQuery->count();
+
+        // --- Total Remaja ---
+        $teenagerCount = User::role('teenager');
+
+        if ($isCadre) {
+            $teenagerCount->where('hamlet', $user->hamlet);
+        }
+
+        $teenagerTotal = $teenagerCount->count();
+
+        // --- Hitung Perubahan ---
         $diff = $thisMonthVisits - $lastMonthVisits;
 
         $percentage = $lastMonthVisits > 0

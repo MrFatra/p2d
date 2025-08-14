@@ -23,21 +23,41 @@ class VisitorOverview extends BaseWidget
     protected function getStats(): array
     {
         $now = Carbon::now();
+        $user = Auth::user();
+        $isCadre = $user->hasRole('cadre');
 
-        $thisMonthVisits = Infant::whereMonth('created_at', $now->month)
-            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
-            ->whereYear('created_at', $now->year)
-            ->count();
+        // --- Kunjungan Bulan Ini ---
+        $thisMonthQuery = Infant::whereMonth('created_at', $now->month)
+            ->whereYear('created_at', $now->year);
 
+        if ($isCadre) {
+            $thisMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+        }
+
+        $thisMonthVisits = $thisMonthQuery->count();
+
+        // --- Kunjungan Bulan Lalu ---
         $lastMonth = $now->copy()->subMonth();
 
-        $lastMonthVisits = Infant::whereMonth('created_at', $lastMonth->month)
-            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
-            ->whereYear('created_at', $lastMonth->year)
-            ->count();
+        $lastMonthQuery = Infant::whereMonth('created_at', $lastMonth->month)
+            ->whereYear('created_at', $lastMonth->year);
 
-        $babyTotal = User::role('baby')->where('hamlet', Auth::user()->hamlet)->count();
+        if ($isCadre) {
+            $lastMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+        }
 
+        $lastMonthVisits = $lastMonthQuery->count();
+
+        // --- Total Bayi ---
+        $infantQuery = User::role('baby');
+
+        if ($isCadre) {
+            $infantQuery->where('hamlet', $user->hamlet);
+        }
+
+        $babyTotal = $infantQuery->count();
+
+        // --- Perubahan ---
         $diff = $thisMonthVisits - $lastMonthVisits;
 
         $percentage = $lastMonthVisits > 0
@@ -55,26 +75,27 @@ class VisitorOverview extends BaseWidget
             $color = 'gray';
         }
 
-        $stuntingUsers = Infant::query()
-            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
-            ->whereIn('stunting_status', ['Stunting', 'Kemungkinan Stunting'])
-            ->get()
-            ->filter(function ($infant) use ($now) {
-                // Hitung usia dalam bulan
-                $ageInMonths = Carbon::parse($infant->birth_date)->diffInMonths($now);
-                return $ageInMonths <= 60;
-            })
+        // --- Stunting ---
+        $stuntingQuery = Infant::whereIn('stunting_status', ['Stunting', 'Kemungkinan Stunting']);
+
+        if ($isCadre) {
+            $stuntingQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+        }
+
+        $stuntingUsers = $stuntingQuery->get()
+            ->filter(fn($infant) => Carbon::parse($infant->birth_date)->diffInMonths($now) <= 60)
             ->groupBy('user_id')
             ->count();
 
-        $malnutritionUsers = Infant::query()
-            ->whereHas('user', fn($query) => $query->where('hamlet', Auth::user()->hamlet))
-            ->whereIn('nutrition_status', ['Gizi Kurang', 'Gizi Buruk'])
-            ->get()
-            ->filter(function ($infant) use ($now) {
-                $ageInMonths = Carbon::parse($infant->birth_date)->diffInMonths($now);
-                return $ageInMonths <= 60;
-            })
+        // --- Malnutrisi ---
+        $malnutritionQuery = Infant::whereIn('nutrition_status', ['Gizi Kurang', 'Gizi Buruk']);
+
+        if ($isCadre) {
+            $malnutritionQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+        }
+
+        $malnutritionUsers = $malnutritionQuery->get()
+            ->filter(fn($infant) => Carbon::parse($infant->birth_date)->diffInMonths($now) <= 60)
             ->groupBy('user_id')
             ->count();
 
@@ -99,9 +120,9 @@ class VisitorOverview extends BaseWidget
                 ->description('Hanya yang masih kategori bayi/balita')
                 ->color('danger'),
 
-            Stat::make('Total Bayi', $babyTotal, ' Orang')
+            Stat::make('Total Bayi', $babyTotal . ' Orang')
                 ->description('Terdata sebagai Bayi saat ini')
-                ->color($color),
+                ->color('primary'),
         ];
     }
 }
