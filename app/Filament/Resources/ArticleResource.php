@@ -9,6 +9,7 @@ use App\Models\Article;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -44,85 +45,105 @@ class ArticleResource extends Resource
         return $form
             ->schema([
                 Section::make('Informasi Utama')
-                ->icon('heroicon-o-information-circle')
-                ->columns(1)
-                ->schema([
-                    TextInput::make('title')
-                        ->label('Judul')
-                        ->required()
-                        ->maxLength(255),
+                    ->icon('heroicon-o-information-circle')
+                    ->columns(2)
+                    ->schema([
+                        Hidden::make('user_id')
+                            ->default(Auth::user()->id),
 
-                    Textarea::make('excerpt')
-                        ->label('Ringkasan Singkat')
-                        ->rows(3)
-                        ->columnSpan(2),
-                ]),
+                        TextInput::make('user_name')
+                            ->label('Penulis')
+                            ->readOnly()
+                            ->formatStateUsing(fn($record) => $record?->user?->name ?? Auth::user()->name),
 
-            Section::make('Tipe & Konten')
-                ->description('Konten manual atau dari embed link.')
-                ->icon('heroicon-o-code-bracket')
-                ->columns(1)
-                ->collapsible()
-                ->schema([
-                    Select::make('source_type')
-                        ->label('Tipe Konten')
-                        ->options([
-                            'manual' => 'Manual (Tulis Sendiri)',
-                            'embed' => 'Embed (Dari Link)',
-                        ])
-                        ->reactive()
-                        ->required(),
+                        TextInput::make('title')
+                            ->label('Judul')
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (callable $set, $state) {
+                                $set('slug', \Illuminate\Support\Str::slug($state));
+                            })
+                            ->required()
+                            ->maxLength(255),
 
-                    RichEditor::make('content')
-                        ->label('Konten Artikel')
-                        ->hidden(fn ($get) => $get('source_type') !== 'manual'),
+                        TextInput::make('slug')
+                            ->label('Slug')
+                            ->readOnly()
+                            ->helperText('Slug akan terisi otomatis jika Anda telah selesai mengedit form "Judul".')
+                            ->required()
+                            ->maxLength(255)
+                            ->unique(\App\Models\Article::class, 'slug', ignoreRecord: true),
 
-                    TextInput::make('embed_url')
-                        ->label('Embed URL')
-                        ->placeholder('https://...')
-                        ->hidden(fn ($get) => $get('source_type') !== 'embed'),
-                ]),
+                        Textarea::make('excerpt')
+                            ->label('Ringkasan Singkat')
+                            ->rows(4)
+                            ->columnSpanFull(),
+                    ]),
 
-            Section::make('Media & Kategori')
-                ->icon('heroicon-o-photo')
-                ->columns(2)
-                ->collapsible()
-                ->schema([
-                    FileUpload::make('cover_image')
-                        ->label('Cover Gambar')
-                        ->image()
-                        ->disk('public')
-                        ->visibility("public")
-                        ->directory('articles/covers')
-                        ->maxSize(1024),
+                Section::make('Tipe & Konten')
+                    ->description('Konten manual atau dari embed link.')
+                    ->icon('heroicon-o-code-bracket')
+                    ->columns(1)
+                    ->collapsible()
+                    ->schema([
+                        Select::make('source_type')
+                            ->label('Tipe Konten')
+                            ->options([
+                                'manual' => 'Manual (Tulis Sendiri)',
+                                'embed' => 'Embed (Dari Link)',
+                            ])
+                            ->reactive()
+                            ->required(),
 
-                    Select::make('article_categories_id')
-                        ->label('Kategori')
-                        ->options(
-                            \App\Models\ArticleCategory::pluck('name', 'id')
-                        )
-                        ->searchable()
-                        ->required(),
-                ]),
+                        RichEditor::make('content')
+                            ->label('Konten Artikel')
+                            ->hidden(fn($get) => $get('source_type') !== 'manual'),
 
-            Section::make('Status')
-                ->icon('heroicon-o-user-circle')
-                ->columns(2)
-                ->collapsible()
-                ->schema([
-                    TextInput::make('user_id')
-                        ->hidden()
-                        ->default(fn () => Auth::user()->id)
-                        ->required(),
+                        TextInput::make('embed_url')
+                            ->label('Embed URL')
+                            ->placeholder('https://...')
+                            ->hidden(fn($get) => $get('source_type') !== 'embed'),
+                    ]),
 
-                    Select::make('status')
-                        ->label('Status')
-                        ->options([
-                            'published' => 'Published',
-                            'archived' => 'Archived',
-                        ])
-                        ->required(),
-                ]),
+                Section::make('Media & Kategori')
+                    ->icon('heroicon-o-photo')
+                    ->columns(2)
+                    ->collapsible()
+                    ->schema([
+                        FileUpload::make('cover_image')
+                            ->label('Cover Gambar')
+                            ->image()
+                            ->disk('public')
+                            ->visibility("public")
+                            ->directory('articles/covers')
+                            ->maxSize(1024),
+
+                        Select::make('article_categories_id')
+                            ->label('Kategori')
+                            ->options(
+                                \App\Models\ArticleCategory::pluck('name', 'id')
+                            )
+                            ->searchable()
+                            ->required(),
+                    ]),
+
+                Section::make('Status')
+                    ->icon('heroicon-o-user-circle')
+                    ->columns(2)
+                    ->collapsible()
+                    ->schema([
+                        TextInput::make('user_id')
+                            ->hidden()
+                            ->default(fn() => Auth::user()->id)
+                            ->required(),
+
+                        Select::make('status')
+                            ->label('Status')
+                            ->options([
+                                'published' => 'Published',
+                                'archived' => 'Archived',
+                            ])
+                            ->required(),
+                    ]),
             ]);
     }
 
@@ -150,10 +171,10 @@ class ArticleResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make()
                         ->label('Ubah')
-                        ->visible(fn () => auth()->user()->can('artikel:update')),
+                        ->visible(fn() => auth()->user()->can('artikel:update')),
                     Tables\Actions\DeleteAction::make()
                         ->label('Hapus')
-                        ->visible(fn () => auth()->user()->can('artikel:delete')),
+                        ->visible(fn() => auth()->user()->can('artikel:delete')),
                 ]),
             ])
             ->bulkActions([

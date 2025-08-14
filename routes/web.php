@@ -24,7 +24,8 @@ Route::post('/change-password', [ChangePassword::class, 'changePassword'])->name
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing.page');
 
-Route::get('/articles', [ArticleController::class, 'show'])->name('articles.show');
+Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
+Route::get('/articles/{slug}', [ArticleController::class, 'show'])->name('articles.show');
 
 Route::prefix('/otp')->group(function () {
     Route::get('/', [OTPController::class, 'index'])->name('otp.index');

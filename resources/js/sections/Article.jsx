@@ -1,37 +1,9 @@
 import { FiArrowRight } from "react-icons/fi";
 import { ArticleCard } from "../components";
+import { Link, usePage } from "@inertiajs/react";
 
 const Article = () => {
-    const articles = [
-        {
-            id: 1,
-            title: "Manfaat Konseling Bagi Kesehatan Mental Remaja",
-            slug: "manfaat-konseling-kesehatan-mental-remaja",
-            excerpt: "Konseling adalah salah satu cara penting untuk menjaga kesehatan mental remaja. Yuk pelajari lebih lanjut manfaatnya.",
-            // cover_image: "images/articles/article1.jpg"
-        },
-        {
-            id: 2,
-            title: "5 Tips Menjaga Pola Tidur yang Sehat",
-            slug: "tips-menjaga-pola-tidur",
-            excerpt: "Pola tidur yang baik sangat penting untuk kesehatan fisik dan mental. Berikut 5 tips sederhana untuk tidur lebih nyenyak.",
-            cover_image: "images/articles/article2.jpg"
-        },
-        {
-            id: 3,
-            title: "Kenali Tanda-Tanda Burnout Sejak Dini",
-            slug: "tanda-tanda-burnout",
-            excerpt: "Burnout adalah kondisi serius yang bisa memengaruhi produktivitas dan kesehatan. Yuk kenali gejalanya!",
-            cover_image: "images/articles/article3.jpg"
-        },
-        {
-            id: 4,
-            title: "Pentingnya Nutrisi untuk Kesehatan Otak Anak",
-            slug: "nutrisi-untuk-otak-anak",
-            excerpt: "Nutrisi berperan besar dalam perkembangan otak anak. Cari tahu makanan apa saja yang menunjangnya di artikel ini.",
-            cover_image: "" // empty image
-        }
-    ];
+    const { articles } = usePage().props;
 
     if (!articles || articles.length === 0) {
         return (
@@ -69,49 +41,59 @@ const Article = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                         {/* Artikel Utama */}
                         <div className="relative rounded-2xl overflow-hidden shadow-lg group transition-all duration-300 bg-white">
-                            <img
-                                src={mainArticle.cover_image ? `/storage/${mainArticle.cover_image}` : "https://placehold.co/600x400/000000/FFF?text=No+Image"}
-                                alt={mainArticle.title}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            />
+                            <div className="aspect-square w-full h-full overflow-hidden">
+                                <img
+                                    src={mainArticle.cover_image ? `/storage/${mainArticle.cover_image}` : "https://placehold.co/600x400/000000/FFF?text=No+Image"}
+                                    alt={mainArticle.title}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                            </div>
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
                             <div className="absolute bottom-0 p-8 z-20 text-white">
                                 <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">{mainArticle.title}</h3>
-                                <p className="text-sm mb-3 drop-shadow">{mainArticle.excerpt}</p>
-                                <a
+                                <div className="w-full"> {/* atau w-full, max-w-sm, dsb */}
+                                    <p className="text-sm mb-3 drop-shadow line-clamp-2">
+                                        {mainArticle.excerpt}
+                                    </p>
+                                </div>
+                                <Link
                                     href={`/articles/${mainArticle.slug}`}
                                     className="inline-flex items-center gap-2 text-sm font-medium text-custom-link hover:underline"
                                 >
                                     Klik untuk lihat selengkapnya <FiArrowRight />
-                                </a>
+                                </Link>
                             </div>
                         </div>
 
                         <div className="w-full flex flex-col gap-6">
-                            <div className="flex items-center justify-center lg:justify-end">
-                                <a
+                            <div className="order-2 lg:order-1 flex items-center justify-center lg:justify-end">
+                                <Link
                                     href="/articles"
-                                    className="flex items-center gap-2 bg-custom-emerald hover:bg-emerald-800 text-white font-medium px-4 py-2 rounded-full text-sm transition"
+                                    className="flex items-center gap-2 bg-custom-emerald hover:bg-emerald-800 text-white font-medium px-4 py-2 rounded-full text-sm transition hover:underline"
                                 >
                                     Lihat Artikel Lainnya
                                     <FiArrowRight className="text-base" />
-                                </a>
+                                </Link>
                             </div>
 
-                            {otherArticles.map((article, index) => (
-                                <ArticleCard
-                                    key={index}
-                                    title={article.title}
-                                    description={article.excerpt}
-                                    image={
-                                        article.cover_image
-                                            ? `/storage/${article.cover_image}`
-                                            : "https://placehold.co/400x300"
-                                    }
-                                    link={`/articles/${article.slug}`}
-                                />
-                            ))}
+                            <div className="order-1 lg:order-2 flex flex-col gap-6">
+                                {otherArticles.map((article, index) => (
+                                    <ArticleCard
+                                        key={index}
+                                        title={article.title}
+                                        description={article.excerpt}
+                                        imageLeft={false}
+                                        image={
+                                            article.cover_image
+                                                ? `/storage/${article.cover_image}`
+                                                : "https://placehold.co/400x300"
+                                        }
+                                        link={`/articles/${article.slug}`}
+                                    />
+                                ))}
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>

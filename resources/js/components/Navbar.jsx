@@ -33,7 +33,7 @@ const Navbar = () => {
         >
             <nav className="container mx-auto px-4 sm:px-6 lg:px-10 py-4 flex items-center justify-between">
                 {/* Logo */}
-                <div className="flex items-center gap-3">
+                <Link href={route('landing.page')} className="flex items-center gap-3">
                     <img
                         src="/images/logo.png"
                         alt="Logo"
@@ -42,7 +42,7 @@ const Navbar = () => {
                     <h1 className="font-bold text-white text-xl sm:text-2xl">
                         {import.meta.env.VITE_APP_NAME?.toUpperCase()}
                     </h1>
-                </div>
+                </Link>
 
                 {/* Desktop Navigation */}
                 <ul className="hidden lg:flex items-center gap-10 text-white font-medium text-sm">

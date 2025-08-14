@@ -39,7 +39,7 @@ class LandingPageController extends Controller
 
         $latestArticles = Article::where('status', 'published')
             ->orderBy('published_at', 'desc')
-            ->take(3)
+            ->take(4)
             ->get();
 
         $babyCount = User::role('baby')->count();
