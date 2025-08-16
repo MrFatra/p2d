@@ -32,6 +32,27 @@ class ListAdults extends ListRecords
                         ->default(now()->format('Y-m')) // Default format yang valid: '2025-08'
                         ->required(),
                 ])
+                ->action(function (array $data) {
+                    $query = $this->getFilteredTableQuery();
+
+                    // dd($data, $query);
+
+                    if (!empty($data['month'])) {
+                        $month = \Carbon\Carbon::parse($data['month']);
+                        $query->whereMonth('created_at', $month->month)
+                            ->whereYear('created_at', $month->year);
+                    }
+
+                    $filteredData = $query->get();
+
+                    return response()->streamDownload(
+                        fn() => print(\Maatwebsite\Excel\Facades\Excel::download(
+                            new \App\Exports\AdultExport($filteredData),
+                            'dewasa.xlsx'
+                        )->getFile()->getContent()),
+                        'laporan-list-data-dewasa.xlsx'
+                    );
+                }),
         ];
     }
 

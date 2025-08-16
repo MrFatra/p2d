@@ -13,7 +13,9 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class AdultVisitor extends BaseWidget
 {
-    use InteractsWithPageTable;
+    // use InteractsWithPageTable;
+
+    // protected array $tableColumnSearches = [];
 
     protected function getTablePage(): string
     {
