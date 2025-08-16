@@ -91,6 +91,11 @@ class User extends Authenticatable implements FilamentUser
                 'max' => 18,
                 'relation' => 'teenagers',
             ],
+            'adult' => [
+                'min' => 18,
+                'max' => 60,
+                'relation' => 'adults',
+            ],
             'elderly' => [
                 'min' => 60,
                 'max' => null,

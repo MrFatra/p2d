@@ -67,6 +67,7 @@ class RolePermissionSeeder extends Seeder
             'pengguna',
             'jadwal',
             'ibu-hamil',
+            'remaja',
             'dewasa',
             'balita',
             'bayi',

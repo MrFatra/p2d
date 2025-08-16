@@ -22,9 +22,9 @@ class ListTeenagers extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->visible(fn() => auth()->user()->can('dewasa:create')),
+                ->visible(fn() => auth()->user()->can('remaja:create')),
             Actions\Action::make('export-excel')
-                ->visible(fn() => auth()->user()->can('dewasa:export'))
+                ->visible(fn() => auth()->user()->can('remaja:export'))
                 ->label('Export Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->modalSubmitActionLabel('Export')

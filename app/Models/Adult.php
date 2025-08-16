@@ -15,4 +15,9 @@ class Adult extends Model
         'cholesterol',
         'bmi'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
