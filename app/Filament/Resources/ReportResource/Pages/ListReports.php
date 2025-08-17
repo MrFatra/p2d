@@ -28,7 +28,7 @@ class ListReports extends ListRecords
                         ->required()
                 ])
                 ->action(function (array $data) {
-                    $query = \App\Models\Report::query();
+                    $query = $this->getFilteredTableQuery();
                     
                     if (!empty($data['month'])) {
                         $month = \Carbon\Carbon::parse($data['month']);
@@ -61,7 +61,7 @@ class ListReports extends ListRecords
                         ->required(),
                 ])
                 ->action(function (array $data) {
-                    $query = \App\Models\Report::query();
+                    $query = $this->getFilteredTableQuery();
 
                     if (!empty($data['year'])) {
                         $query->whereYear('created_at', $data['year']);
