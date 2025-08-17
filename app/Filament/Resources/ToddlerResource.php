@@ -36,7 +36,7 @@ class ToddlerResource extends Resource
 
     protected static ?string $label = 'Data Balita';
 
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 2;
 
     public static function canAccess(): bool
     {
@@ -59,7 +59,10 @@ class ToddlerResource extends Resource
                                     $user->id => "{$user->name} - {$user->national_id}"
                                 ])->toArray();
                         })
-                        ->getOptionLabelUsing(fn($value) => User::find($value)?->name ?? $value)
+                        ->getOptionLabelUsing(function ($value) {
+                            $user = User::find($value);
+                            return $user ? "{$user->name} - {$user->national_id}" : $value;
+                        })
                         ->searchable()
                         ->helperText(new HtmlString('<span><strong>Catatan: </strong> Anda bisa mencari data berdasarkan Nama/NIK. </span>'))
                         ->required()

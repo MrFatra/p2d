@@ -40,7 +40,7 @@ class PregnantResource extends Resource
 
     protected static ?string $label = 'Ibu Hamil';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 6;
 
     public static function canAccess(): bool
     {
@@ -61,7 +61,10 @@ class PregnantResource extends Resource
                             return [$user->id => "{$user->name} - {$user->national_id}"];
                         })->toArray();
                 })
-                ->getOptionLabelUsing(fn($value) => User::find($value)?->name ?? $value)
+                ->getOptionLabelUsing(function ($value) {
+                    $user = User::find($value);
+                    return $user ? "{$user->name} - {$user->national_id}" : $value;
+                })
                 ->searchable()
                 ->helperText(fn() => new HtmlString('<span><strong>Catatan: </strong> Anda bisa mencari data berdasarkan Nama/NIK. </span>'))
                 ->required()

@@ -44,7 +44,7 @@ class InfantResource extends Resource
 
     protected static ?string $label = 'Data Bayi';
 
-    protected static ?int $navigationSort = 9;
+    protected static ?int $navigationSort = 1;
 
     public static function canAccess(): bool
     {
@@ -66,7 +66,10 @@ class InfantResource extends Resource
                                     $user->id => "{$user->name} - {$user->national_id}"
                                 ])->toArray();
                             })
-                            ->getOptionLabelUsing(fn($value) => User::find($value)?->name ?? $value)
+                            ->getOptionLabelUsing(function ($value) {
+                                $user = User::find($value);
+                                return $user ? "{$user->name} - {$user->national_id}" : $value;
+                            })
                             ->searchable()
                             ->required()
                             ->placeholder('Contoh: Siti Aminah - 1234567890')

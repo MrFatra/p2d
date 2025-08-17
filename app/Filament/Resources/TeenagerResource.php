@@ -36,7 +36,7 @@ class TeenagerResource extends Resource
 
     protected static ?string $label = 'Data Remaja';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 4;
 
     public static function canAccess(): bool
     {
@@ -59,7 +59,10 @@ class TeenagerResource extends Resource
                                         return [$user->id => "{$user->name} - {$user->national_id}"];
                                     })->toArray();
                             })
-                            ->getOptionLabelUsing(fn($value) => User::find($value)?->name ?? $value)
+                            ->getOptionLabelUsing(function ($value) {
+                                $user = User::find($value);
+                                return $user ? "{$user->name} - {$user->national_id}" : $value;
+                            })
                             ->searchable()
                             ->helperText(fn() => new HtmlString('<span><strong>Catatan: </strong> Anda bisa mencari data berdasarkan Nama/NIK. </span>'))
                             ->required()
@@ -263,7 +266,7 @@ class TeenagerResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->visible(fn () => auth()->user()->can('remaja:update'))
+                    ->visible(fn() => auth()->user()->can('remaja:update'))
                     ->icon('heroicon-o-pencil-square')
                     ->label('Ubah Data'),
             ])
@@ -271,9 +274,9 @@ class TeenagerResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ])
-                ->visible(fn () => auth()->user()->can('remaja:delete'))
-                ->icon('heroicon-o-trash')
-                ->label('Hapus Data'),
+                    ->visible(fn() => auth()->user()->can('remaja:delete'))
+                    ->icon('heroicon-o-trash')
+                    ->label('Hapus Data'),
             ]);
     }
 

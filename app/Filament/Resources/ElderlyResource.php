@@ -38,7 +38,7 @@ class ElderlyResource extends Resource
 
     protected static ?string $label = 'Data Lansia';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 7;
 
     public static function canAccess(): bool
     {
@@ -62,7 +62,10 @@ class ElderlyResource extends Resource
                                         return [$user->id => "{$user->name} - {$user->national_id}"];
                                     })->toArray();
                             })
-                            ->getOptionLabelUsing(fn($value) => User::find($value)?->name ?? $value)
+                            ->getOptionLabelUsing(function ($value) {
+                                $user = User::find($value);
+                                return $user ? "{$user->name} - {$user->national_id}" : $value;
+                            })
                             ->searchable()
                             ->helperText(fn() => new HtmlString('<span><strong>Catatan: </strong> Anda bisa mencari data berdasarkan Nama/NIK. </span>'))
                             ->required()
@@ -237,18 +240,18 @@ class ElderlyResource extends Resource
                 Tables\Actions\ViewAction::make()
                     ->icon('heroicon-o-eye')
                     ->label('Lihat Data Lansia')
-                    ->visible(fn () => auth()->user()->can('lansia:read')),
+                    ->visible(fn() => auth()->user()->can('lansia:read')),
                 Tables\Actions\EditAction::make()
                     ->icon('heroicon-o-pencil-square')
                     ->label('Edit Data Lansia')
-                    ->visible(fn () => auth()->user()->can('lansia:update')),
+                    ->visible(fn() => auth()->user()->can('lansia:update')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
                         ->icon('heroicon-o-trash')
                         ->label('Hapus Data Lansia')
-                        ->visible(fn () => auth()->user()->can('lansia:delete')),
+                        ->visible(fn() => auth()->user()->can('lansia:delete')),
                 ]),
             ]);
     }

@@ -21,9 +21,9 @@ class AdultResource extends Resource
 {
     protected static ?string $model = Adult::class;
 
-    protected static ?string $navigationIcon = 'icon-children-solid-full';
+    protected static ?string $navigationIcon = 'icon-person-solid-full';
 
-    protected static ?string $activeNavigationIcon = 'icon-children-solid-full-active';
+    protected static ?string $activeNavigationIcon = 'icon-person-solid-full-active';
 
     protected static ?string $navigationGroup = 'Posyandu';
 
@@ -33,7 +33,7 @@ class AdultResource extends Resource
 
     protected static ?string $label = 'Data Dewasa';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 5;
 
     public static function canAccess(): bool
     {
@@ -56,7 +56,10 @@ class AdultResource extends Resource
                                         return [$user->id => "{$user->name} - {$user->national_id}"];
                                     })->toArray();
                             })
-                            ->getOptionLabelUsing(fn($value) => User::find($value)?->name ?? $value)
+                            ->getOptionLabelUsing(function ($value) {
+                                $user = User::find($value);
+                                return $user ? "{$user->name} - {$user->national_id}" : $value;
+                            })
                             ->searchable()
                             ->helperText(fn() => new HtmlString('<span><strong>Catatan: </strong> Anda bisa mencari data berdasarkan Nama/NIK. </span>'))
                             ->required()
@@ -165,7 +168,7 @@ class AdultResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->visible(fn () => auth()->user()->can('dewasa:update'))
+                    ->visible(fn() => auth()->user()->can('dewasa:update'))
                     ->icon('heroicon-o-pencil-square')
                     ->label('Ubah Data'),
             ])
@@ -173,9 +176,9 @@ class AdultResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ])
-                ->visible(fn () => auth()->user()->can('dewasa:delete'))
-                ->icon('heroicon-o-trash')
-                ->label('Hapus Data'),
+                    ->visible(fn() => auth()->user()->can('dewasa:delete'))
+                    ->icon('heroicon-o-trash')
+                    ->label('Hapus Data'),
             ]);
     }
 
