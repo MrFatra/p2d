@@ -41,7 +41,7 @@
                     <td style="text-align: center;">{{ $report->hamlet }}</td>
                 @endif
                 <td style="text-align: center;">
-                    {{ \Carbon\Carbon::create()->month($report->month)->translatedFormat('F') }}
+                    {{ \Carbon\Carbon::create()->month((int) $report->month)->translatedFormat('F') }}
                 </td>
                 <td style="text-align: center;">{{ $report->year }}</td>
             </tr>

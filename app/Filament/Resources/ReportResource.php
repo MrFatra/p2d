@@ -76,7 +76,7 @@ class ReportResource extends Resource
                     ->visible(fn() => Auth::user()->hasRole(['admin', 'resident'])),
 
                 TextColumn::make('month')
-                    ->formatStateUsing(fn($state) => \Carbon\Carbon::create()->month($state)->translatedFormat('F'))
+                    ->formatStateUsing(fn($state) => \Carbon\Carbon::create()->month((int) $state)->translatedFormat('F'))
                     ->label('Bulan'),
 
                 TextColumn::make('year')
