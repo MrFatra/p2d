@@ -23,8 +23,9 @@ class ListToddlers extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->visible(fn() => auth()->user()->can('balita:create'))
-                ->icon('heroicon-o-plus')
+                ->icon('heroicon-o-plus-circle')
                 ->label('Tambah Balita'),
+
             Actions\Action::make('export-excel')
                 ->visible(fn() => auth()->user()->can('balita:export'))
                 ->label('Export Excel')
@@ -45,7 +46,7 @@ class ListToddlers extends ListRecords
                     //     ->required(),
                 ])
                 ->action(function (array $data) {
-                    $query = $this->getFilteredTableQuery();
+                    $query = \App\Models\Toddler::query();
 
                     // Filter berdasarkan bulan terpilih
                     if (!empty($data['month'])) {

@@ -22,7 +22,11 @@ class ListTeenagers extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->visible(fn() => auth()->user()->can('remaja:create')),
+                ->visible(fn() => auth()->user()->can('remaja:create'))
+                ->label('Tambah Remaja')
+                ->icon('heroicon-o-plus-circle')
+                ->color('primary'),
+
             Actions\Action::make('export-excel')
                 ->visible(fn() => auth()->user()->can('remaja:export'))
                 ->label('Export Excel')
@@ -43,7 +47,7 @@ class ListTeenagers extends ListRecords
                     //     ->required(),
                 ])
                 ->action(function (array $data) {
-                    $query = $this->getFilteredTableQuery();
+                    $query = \App\Models\Teenager::query();
 
                     // Filter berdasarkan bulan terpilih
                     if (!empty($data['month'])) {

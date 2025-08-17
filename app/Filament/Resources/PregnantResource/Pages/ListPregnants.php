@@ -46,7 +46,7 @@ class ListPregnants extends ListRecords
                     //     ->required(),
                 ])
                 ->action(function (array $data) {
-                    $query = $this->getFilteredTableQuery();
+                    $query = \App\Models\PregnantPostpartumBreastfeending::query();
 
                     // Filter berdasarkan bulan terpilih
                     if (!empty($data['month'])) {

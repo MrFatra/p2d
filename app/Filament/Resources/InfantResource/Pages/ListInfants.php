@@ -47,7 +47,7 @@ class ListInfants extends ListRecords
                     //     ->required(),
                 ])
                 ->action(function (array $data) {
-                    $query = $this->getFilteredTableQuery();
+                    $query = \App\Models\Infant::query();
 
                     // Filter berdasarkan bulan terpilih
                     if (!empty($data['month'])) {

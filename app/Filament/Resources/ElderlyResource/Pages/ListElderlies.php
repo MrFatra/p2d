@@ -45,7 +45,7 @@ class ListElderlies extends ListRecords
                     //     ->required(),
                 ])
                 ->action(function (array $data) {
-                    $query = $this->getFilteredTableQuery();
+                    $query = \App\Models\Elderly::query();
 
                     // Filter berdasarkan bulan terpilih
                     if (!empty($data['month'])) {

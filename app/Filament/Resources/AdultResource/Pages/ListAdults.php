@@ -18,8 +18,12 @@ class ListAdults extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-             Actions\CreateAction::make()
-                ->visible(fn() => auth()->user()->can('dewasa:create')),
+            Actions\CreateAction::make()
+                ->visible(fn() => auth()->user()->can('dewasa:create'))
+                ->label('Tambah Dewasa')
+                ->icon('heroicon-o-plus-circle')
+                ->color('primary'),
+
             Actions\Action::make('export-excel')
                 ->visible(fn() => auth()->user()->can('dewasa:export'))
                 ->label('Export Excel')
@@ -33,7 +37,7 @@ class ListAdults extends ListRecords
                         ->required(),
                 ])
                 ->action(function (array $data) {
-                    $query = $this->getFilteredTableQuery();
+                    $query = \App\Models\Adult::query();
 
                     // dd($data, $query);
 
