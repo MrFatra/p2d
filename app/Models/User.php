@@ -96,6 +96,11 @@ class User extends Authenticatable implements FilamentUser
                 'max' => 60,
                 'relation' => 'adults',
             ],
+            'child' => [
+                'min' => 6,
+                'max' => 12,
+                'relation' => 'preschoolers',
+            ],
             'elderly' => [
                 'min' => 60,
                 'max' => null,
@@ -215,5 +220,10 @@ class User extends Authenticatable implements FilamentUser
     public function articles()
     {
         return $this->hasMany(Article::class);
+    }
+
+    public function preschoolers()
+    {
+        return $this->hasMany(Preschooler::class);
     }
 }

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             PregnantPostpartumBreastfeendingSeeder::class,
             ElderlySeeder::class,
             ToddlerSeeder::class,
+            PreschoolerSeeder::class,
             ReportSeeder::class,
         ]);
     }

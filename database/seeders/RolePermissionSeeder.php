@@ -71,6 +71,7 @@ class RolePermissionSeeder extends Seeder
             'dewasa',
             'balita',
             'bayi',
+            'anak_prasekolah',
             'lansia',
             'kategori-artikel',
             'artikel',
