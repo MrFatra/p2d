@@ -17,11 +17,14 @@ const Footer = () => {
                             </p>
                         </div>
                         <p className="text-xs md:text-sm font-light max-w-md">
-                            "Posyandu Peduli Desa berkomitmen memberikan layanan
-                            kesehatan terbaik untuk ibu hamil, balita, dan
-                            masyarakat. Bersama, kita bangun masa depan yang
-                            lebih sehat, cerdas, dan berkualitas demi
-                            kesejahteraan generasi mendatang."
+                            "Sistem Informasi Posyandu Desa Muncangela Merupakan
+                            luaran dari Program Pengabdian kepada Masyarakat
+                            (PKM) Kemendikbudristek Tahun 2025 yang bertujuan
+                            mendukung digitalisasi layanan Posyandu. Aplikasi
+                            ini membantu pencatatan data kesehatan ibu, bayi,
+                            dan balita secara cepat, akurat, dan terintegrasi
+                            demi meningkatkan pelayanan kesehatan masyarakat
+                            Desa Muncangela."
                         </p>
                     </div>
 
@@ -36,9 +39,7 @@ const Footer = () => {
                                     <a href="#article">Artikel</a>
                                 </li>
                                 <li className="font-medium underline hover:text-gray-200 transition-colors">
-                                    <a href="#">
-                                        Riwayat
-                                    </a>
+                                    <a href="#">Riwayat</a>
                                 </li>
                                 <li className="font-medium underline hover:text-gray-200 transition-colors">
                                     <a href="#faq">FAQ</a>
@@ -54,7 +55,10 @@ const Footer = () => {
                             untuk solusi terbaik. Kami siap mendampingi
                             kesehatan Anda dan buah hati."
                         </p>
-                        <a href="mailto:contact@siposyandu.com" className="flex gap-3 rounded-lg border py-2 px-3 mt-5 hover:bg-white/10 transition-colors cursor-pointer lg:text-base text-sm">
+                        <a
+                            href="mailto:contact@siposyandu.com"
+                            className="flex gap-3 rounded-lg border py-2 px-3 mt-5 hover:bg-white/10 transition-colors cursor-pointer lg:text-base text-sm"
+                        >
                             <FiPhone size={20} />
                             <p>Hubungi Kami</p>
                         </a>

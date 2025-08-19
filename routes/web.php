@@ -6,6 +6,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Auth\OTPController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CheckHistoryController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -40,3 +41,8 @@ Route::prefix('/otp')->group(function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware('auth')->name('resident.dashboard');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/check-history', [CheckHistoryController::class, 'index'])
+        ->name('check-history');
+});

@@ -25,11 +25,15 @@ const Navbar = () => {
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [])
+    }, []);
 
     return (
         <header
-            className={`fixed top-0 left-0 w-full z-50 bg-gradient-to-l from-emerald-300 via-custom-emerald to-custom-emerald backdrop-blur-md shadow-md transition-all duration-500 ease-in-out ${showNavbar ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-5"}`}
+            className={`fixed top-0 left-0 w-full z-50 bg-gradient-to-l from-emerald-300 via-custom-emerald to-custom-emerald backdrop-blur-md shadow-md transition-all duration-500 ease-in-out ${
+                showNavbar
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 -translate-y-5"
+            }`}
         >
             <nav className="container mx-auto px-4 sm:px-6 lg:px-10 py-4 flex items-center justify-between">
                 {/* Logo */}
@@ -49,8 +53,8 @@ const Navbar = () => {
                     {[
                         { name: "Jadwal", href: "#schedule" },
                         { name: "Artikel", href: "#article" },
-                        { name: "Riwayat", href: "#" },
-                        { name: "FAQ", href: "#faq" }
+                        { name: "Riwayat", href: route("check-history") },
+                        { name: "FAQ", href: "#faq" },
                     ].map((item) => (
                         <li key={item.name}>
                             <Link
@@ -77,7 +81,7 @@ const Navbar = () => {
                     ) : (
                         <li>
                             <Link
-                                href={route('login.index')}
+                                href={route("login.index")}
                                 className="bg-shades py-2.5 px-5 rounded-lg font-semibold text-white flex items-center gap-2 text-sm transition hover:opacity-90"
                             >
                                 Masuk <FiLogIn />
@@ -97,14 +101,23 @@ const Navbar = () => {
 
                 {/* Mobile Dropdown Menu */}
                 <div
-                    className={`absolute top-full right-4 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"
-                        }`}
+                    className={`absolute top-full right-4 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 ease-in-out ${
+                        isOpen
+                            ? "max-h-[300px] opacity-100"
+                            : "max-h-0 opacity-0"
+                    }`}
                 >
                     <div className="flex flex-col items-start py-3 px-5 gap-3 text-shades text-sm">
-                        <Link href="#schedule" className="hover:underline w-full">
+                        <Link
+                            href="#schedule"
+                            className="hover:underline w-full"
+                        >
                             Jadwal
                         </Link>
-                        <Link href="#article" className="hover:underline w-full">
+                        <Link
+                            href="#article"
+                            className="hover:underline w-full"
+                        >
                             Artikel
                         </Link>
                         <Link href="#" className="hover:underline w-full">
@@ -124,7 +137,7 @@ const Navbar = () => {
                             </Link>
                         ) : (
                             <Link
-                                href={route('login.index')}
+                                href={route("login.index")}
                                 className="bg-shades w-full text-center py-2 px-4 rounded-md text-white font-medium flex justify-center items-center gap-2 hover:opacity-90 transition"
                             >
                                 Masuk <FiLogIn />

@@ -1,106 +1,238 @@
+import { useState } from "react";
 import { FaUser } from "react-icons/fa";
+import { IoClose } from "react-icons/io5"; // icon X
 
 const HistoryCard = ({
+    type,
     name,
     nik,
     birthDate,
-    age,
-    weight,
-    height,
+    examDate,
     badgeText,
     badgeColor,
+    weight,
+    height,
+    headCircumference,
+    birthWeight,
+    birthHeight,
+    checkupDate,
     nutritionStatus,
-    stuntingStatus,
+    completeImmunization,
     vitaminA,
+    stuntingStatus,
+    exclusiveBreastfeeding,
+    complementaryFeeding,
+    motorDevelopment,
+    bloodPressure,
+    bloodGlucose,
+    cholesterol,
+    bmi,
+    age,
+    gender,
+    upperArmCircumference,
+    immunizationFollowup,
+    foodSupplement,
+    parentingEducation,
+    category,
+    functionalAbility,
+    chronicDiseaseHistory,
 }) => {
-    return (
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div
-                className="
-                    bg-white shadow rounded-lg p-4
-                    flex flex-col space-y-6
-                    lg:flex-row lg:space-y-0 lg:space-x-6
-                    items-center lg:items-start
-                    border border-custom-emerald
-                "
-            >
-                {/* KIRI */}
-                <div className="w-full lg:w-2/5 flex flex-col items-center lg:items-start space-y-4 lg:space-y-0 lg:flex-row lg:gap-6">
-                    <div className="flex flex-col items-center min-w-[100px]">
-                        <span className="text-xs font-semibold text-custom-emerald mb-1 text-center">
-                            Kategori Pemeriksaan: Bayi
-                        </span>
-                        <div className="bg-gray-100 p-4 rounded-full">
-                            <FaUser className="text-gray-600 text-4xl" />
-                        </div>
-                        <div className="mt-2 text-center w-full">
-                            <p className="font-semibold">{name}</p>
-                            <div className="flex items-center gap-2 text-xs text-gray-500 mt-1 justify-center lg:justify-start">
-                                <span>Tanggal Periksa:</span>
-                                <span className="font-medium text-gray-700 whitespace-nowrap">
-                                    22 Januari 2025
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex flex-col justify-center gap-2 flex-grow text-sm items-center lg:items-start lg:pt-8">
-                        <div className="flex items-center gap-1">
-                            <span className="text-gray-500">NIK:</span>
-                            <span className="font-medium break-words">
-                                {nik}
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                            <span className="text-gray-500">
-                                Tanggal Lahir:
-                            </span>
-                            <span className="font-medium whitespace-nowrap">
-                                {birthDate}
-                            </span>
-                        </div>
-                    </div>
-                </div>
+    const [isOpen, setIsOpen] = useState(false);
 
-                <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-start justify-between text-sm lg:pt-6 h-full">
-                    <div className="space-y-1 w-full">
-                        <div className="flex items-center gap-1 justify-center lg:justify-start w-full">
-                            <p className="text-gray-500">Usia:</p>
-                            <p className="font-medium">{age}</p>
-                        </div>
-                        <div className="flex items-center gap-1 justify-center lg:justify-start w-full">
-                            <p className="text-gray-500">Berat Badan:</p>
-                            <p className="font-medium">{weight}</p>
-                        </div>
-                        <div className="flex items-center gap-1 justify-center lg:justify-start w-full">
-                            <p className="text-gray-500">Tinggi Badan:</p>
-                            <p className="font-medium">{height}</p>
-                        </div>
+    return (
+        <>
+            <div className="bg-white shadow-lg rounded-3xl flex flex-col border border-gray-200 w-full overflow-hidden">
+                {/* Konten utama card */}
+                <div className="flex-1 flex flex-col items-center space-y-4 p-6">
+                    <div className="bg-gray-100 p-4 rounded-full">
+                        <FaUser className="text-gray-600 text-4xl" />
+                    </div>
+
+                    <p className="font-semibold text-lg text-center">{name}</p>
+
+                    <div className="text-center text-gray-500 text-sm space-y-1">
+                        <p>{nik}</p>
+                        <p>{gender ?? "-"}</p>
+                        <p>{birthDate}</p>
                     </div>
 
                     <span
-                        className={`inline-block px-3 py-1 mt-2 text-xs font-semibold rounded-full max-w-max ${badgeColor}`}
+                        className={`inline-block px-6 py-2 text-sm font-semibold rounded-full ${badgeColor}`}
                     >
                         {badgeText}
                     </span>
+
+                    <div className="text-center font-bold text-sm space-y-1">
+                        <p>
+                            Kategori Pemeriksaan:{" "}
+                            <span className="text-custom-emerald">{type}</span>
+                        </p>
+                        <p>
+                            Tanggal Pemeriksaan:{" "}
+                            <span className="text-custom-emerald">
+                                {examDate}
+                            </span>
+                        </p>
+                    </div>
                 </div>
 
-                {/* KANAN */}
-                <div className="w-full lg:w-1/3 flex flex-col justify-center space-y-1.5 text-sm items-center lg:items-start lg:pt-8">
-                    <div className="flex items-center gap-1">
-                        <span className="text-gray-500">Status Gizi:</span>
-                        <span className="font-medium">{nutritionStatus}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <span className="text-gray-500">Stunting Status:</span>
-                        <span className="font-medium">{stuntingStatus}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <span className="text-gray-500">Vitamin A:</span>
-                        <span className="font-medium">{vitaminA}</span>
+                {/* Tombol full width dan bottom rounded */}
+                <button
+                    onClick={() => setIsOpen(true)}
+                    className="bg-custom-emerald text-white w-full py-3 font-medium hover:bg-green-900 rounded-b-xl"
+                >
+                    Lihat Selengkapnya
+                </button>
+            </div>
+
+            {/* Modal */}
+            {isOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-xl p-6 w-full max-w-lg relative">
+                        {/* Tombol tutup */}
+                        <button
+                            onClick={() => setIsOpen(false)}
+                            className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+                        >
+                            <IoClose size={24} />
+                        </button>
+
+                        <h2 className="text-xl font-bold mb-4">{name}</h2>
+
+                        {/* Section Data Pribadi */}
+                        <section className="mb-4">
+                            <h3 className="font-semibold mb-2">Data Pribadi</h3>
+                            <p>NIK: {nik}</p>
+                            <p>Umur: {age ?? "-"}</p>
+                            <p>Tanggal Lahir: {birthDate}</p>
+                        </section>
+
+                        <hr className="border-t-2 border-emerald-500 my-4" />
+
+                        {/* Section Pemeriksaan */}
+                        <section className="mb-4">
+                            <h3 className="font-semibold mb-2">Pemeriksaan</h3>
+                            <p>Kategori Pemeriksaan: {type}</p>
+                            <p>Tanggal Pemeriksaan: {examDate}</p>
+                            <p>Status: {badgeText}</p>
+                            <p>Berat: {weight}</p>
+                            <p>Tinggi: {height}</p>
+                        </section>
+
+                        <hr className="border-t-2 border-emerald-500 my-4" />
+
+                        {/* Section Hasil Pemeriksaan / Status Gizi */}
+                        <section className="mb-4">
+                            {category === "Infant" && (
+                                <>
+                                    <h3 className="font-semibold mb-2">
+                                        Hasil Pemeriksaan
+                                    </h3>
+                                    <p>
+                                        Lingkar Kepala:{" "}
+                                        {headCircumference ?? "-"}
+                                    </p>
+                                    <p>Berat Lahir: {birthWeight ?? "-"}</p>
+                                    <p>Tinggi Lahir: {birthHeight ?? "-"}</p>
+                                    <p>Status Gizi: {nutritionStatus ?? "-"}</p>
+                                    <p>
+                                        Status Stunting: {stuntingStatus ?? "-"}
+                                    </p>
+                                    <p>
+                                        Imunisasi Lengkap:{" "}
+                                        {completeImmunization ?? "-"}
+                                    </p>
+                                    <p>Vitamin A: {vitaminA ?? "-"}</p>
+                                    <p>
+                                        ASI Eksklusif:{" "}
+                                        {exclusiveBreastfeeding ?? "-"}
+                                    </p>
+                                    <p>
+                                        Makanan Pendamping ASI:{" "}
+                                        {complementaryFeeding ?? "-"}
+                                    </p>
+                                    <p>
+                                        Perkembangan Motorik:{" "}
+                                        {motorDevelopment ?? "-"}
+                                    </p>
+                                </>
+                            )}
+
+                            {category === "Adult" && (
+                                <>
+                                    <h3 className="font-semibold mb-2">
+                                        Hasil Pemeriksaan
+                                    </h3>
+                                    <p>Tekanan Darah: {bloodPressure ?? "-"}</p>
+                                    <p>Gula Darah: {bloodGlucose ?? "-"}</p>
+                                    <p>Kolesterol: {cholesterol ?? "-"}</p>
+                                    <p>BMI: {bmi ?? "-"}</p>
+                                </>
+                            )}
+
+                            {category === "Toddler" && (
+                                <>
+                                    <h3 className="font-semibold mb-2">
+                                        Hasil Pemeriksaan
+                                    </h3>
+                                    <p>
+                                        Lingkar Lengan Atas:{" "}
+                                        {upperArmCircumference ?? "-"}
+                                    </p>
+                                    <p>Status Gizi: {nutritionStatus ?? "-"}</p>
+                                    <p>
+                                        Status Stunting: {stuntingStatus ?? "-"}
+                                    </p>
+                                    <p>
+                                        Vitamin A: {vitaminA ? "Ya" : "Tidak"}
+                                    </p>
+                                    <p>
+                                        Follow-up Imunisasi:{" "}
+                                        {immunizationFollowup ? "Ya" : "Tidak"}
+                                    </p>
+                                    <p>
+                                        Suplementasi Makanan:{" "}
+                                        {foodSupplement ? "Ya" : "Tidak"}
+                                    </p>
+                                    <p>
+                                        Pendidikan Parenting:{" "}
+                                        {parentingEducation ? "Ya" : "Tidak"}
+                                    </p>
+                                    <p>
+                                        Perkembangan Motorik:{" "}
+                                        {motorDevelopment ?? "-"}
+                                    </p>
+                                    <p>
+                                        Tanggal Pemeriksaan:{" "}
+                                        {checkupDate ?? "-"}
+                                    </p>
+                                </>
+                            )}
+
+                            {category === "Elderly" && (
+                                <>
+                                    <h3 className="font-semibold mb-2">
+                                        Hasil Pemeriksaan
+                                    </h3>
+                                    <p>Tekanan Darah: {bloodPressure}</p>
+                                    <p>Gula Darah: {bloodGlucose}</p>
+                                    <p>Kolesterol: {cholesterol}</p>
+                                    <p>Status Gizi: {nutritionStatus}</p>
+                                    <p>
+                                        Kemampuan Fungsional:{" "}
+                                        {functionalAbility}
+                                    </p>
+                                    <p>
+                                        Riwayat Penyakit Kronis:{" "}
+                                        {chronicDiseaseHistory}
+                                    </p>
+                                </>
+                            )}
+                        </section>
                     </div>
                 </div>
-            </div>
-        </div>
+            )}
+        </>
     );
 };
 
