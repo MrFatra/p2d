@@ -81,8 +81,7 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('email')
                             ->label('Email')
                             ->email()
-                            ->unique(ignoreRecord: true)
-                            ->required(),
+                            ->unique(ignoreRecord: true),
                     ]),
 
                 Section::make('Alamat')

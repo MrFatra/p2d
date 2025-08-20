@@ -41,7 +41,7 @@ class UsersImport implements ToModel, WithHeadingRow
             'nik' => ['required', 'string', 'unique:users,national_id'],
             'nama' => ['required', 'string'],
             'kata_sandi' => ['required', 'string', 'min:6'],
-            'email' => ['required', 'email', 'unique:users,email'],
+            'email' => ['email', 'unique:users,email'],
             'tanggal_lahir' => ['nullable', 'date'],
             'jenis_kelamin' => ['nullable', Rule::in(['L', 'P'])],
             'no_hp' => ['nullable', 'string'],
