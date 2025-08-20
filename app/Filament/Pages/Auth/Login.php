@@ -46,7 +46,7 @@ class Login extends BaseLogin
                             ->view('forms.components.auth.footer')
                             ->childComponents([
                                 $this->getRememberFormComponent()->key('remember'),
-                                self::getForgotPasswordComponent()->key('forgot'),
+                                // self::getForgotPasswordComponent()->key('forgot'),
                             ])
 
                     ])

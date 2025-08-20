@@ -30,9 +30,9 @@ class EditProfile extends BaseEditProfile implements HasForms
     protected static ?string $navigationLabel = 'Profil Saya';
 
     public ?array $profileData = [];
-    public ?array $passwordData = [];
-    public ?array $otpData = [];
-    public bool $isOtpStep = false;
+    // public ?array $passwordData = [];
+    // public ?array $otpData = [];
+    // public bool $isOtpStep = false;
 
     public function mount(): void
     {
@@ -41,7 +41,11 @@ class EditProfile extends BaseEditProfile implements HasForms
 
     protected function getForms(): array
     {
-        return ['editProfileForm', 'editPasswordForm', 'otpForm'];
+        return [
+            'editProfileForm',
+            // 'editPasswordForm',
+            // 'otpForm',
+        ];
     }
 
     public static function isSimple(): bool
@@ -109,34 +113,34 @@ class EditProfile extends BaseEditProfile implements HasForms
             ->inlineLabel(!static::isSimple());
     }
 
-    public function editPasswordForm(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Section::make('Privasi & Keamanan Akun')
-                    ->schema([
-                        $this->getPasswordFormComponent(),
-                        $this->getPasswordConfirmationFormComponent(),
-                    ])
-            ])
-            ->statePath('passwordData');
-    }
+    // public function editPasswordForm(Form $form): Form
+    // {
+    //     return $form
+    //         ->schema([
+    //             Section::make('Privasi & Keamanan Akun')
+    //                 ->schema([
+    //                     $this->getPasswordFormComponent(),
+    //                     $this->getPasswordConfirmationFormComponent(),
+    //                 ])
+    //         ])
+    //         ->statePath('passwordData');
+    // }
 
-    public function otpForm(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Section::make('Verifikasi OTP')
-                    ->schema([
-                        TextInput::make('otp')
-                            ->label('Kode OTP')
-                            ->numeric()
-                            ->length(6)
-                            ->required(),
-                    ])
-            ])
-            ->statePath('otpData');
-    }
+    // public function otpForm(Form $form): Form
+    // {
+    //     return $form
+    //         ->schema([
+    //             Section::make('Verifikasi OTP')
+    //                 ->schema([
+    //                     TextInput::make('otp')
+    //                         ->label('Kode OTP')
+    //                         ->numeric()
+    //                         ->length(6)
+    //                         ->required(),
+    //                 ])
+    //         ])
+    //         ->statePath('otpData');
+    // }
 
     public function updateProfile(): void
     {
@@ -147,77 +151,77 @@ class EditProfile extends BaseEditProfile implements HasForms
             ->send();
     }
 
-    public function updatePassword(): void
-    {
-        if ($this->passwordData['password'] !== $this->passwordData['passwordConfirmation']) {
-            $this->addError('passwordData.passwordConfirmation', 'Konfirmasi password tidak cocok.');
-            return;
-        } else {
-            $this->resetErrorBag('passwordData.passwordConfirmation');
-        }
+    // public function updatePassword(): void
+    // {
+    //     if ($this->passwordData['password'] !== $this->passwordData['passwordConfirmation']) {
+    //         $this->addError('passwordData.passwordConfirmation', 'Konfirmasi password tidak cocok.');
+    //         return;
+    //     } else {
+    //         $this->resetErrorBag('passwordData.passwordConfirmation');
+    //     }
 
-        session([
-            'otp_user_id' => $this->getUser()->id,
-            'otp_new_password' => Hash::make($this->passwordData['password']),
-        ]);
+    //     session([
+    //         'otp_user_id' => $this->getUser()->id,
+    //         'otp_new_password' => Hash::make($this->passwordData['password']),
+    //     ]);
 
-        $this->passwordData = [];
+    //     $this->passwordData = [];
 
-        $otp = rand(100000, 999999);
+    //     $otp = rand(100000, 999999);
 
-        $this->getUser()->update([
-            'otp' => $otp,
-            'otp_expires_at' => now()->addMinutes(10),
-        ]);
+    //     $this->getUser()->update([
+    //         'otp' => $otp,
+    //         'otp_expires_at' => now()->addMinutes(10),
+    //     ]);
 
-        try {
-            Mail::to($this->getUser()->email)->send(new OtpMail($otp, $this->getUser()->name));
-        } catch (\Exception $e) {
-            Notification::make()
-                ->title('Gagal mengirimkan OTP ke email yang bersangkutan.')
-                ->danger()
-                ->send();
-            return;
-        }
+    //     try {
+    //         Mail::to($this->getUser()->email)->send(new OtpMail($otp, $this->getUser()->name));
+    //     } catch (\Exception $e) {
+    //         Notification::make()
+    //             ->title('Gagal mengirimkan OTP ke email yang bersangkutan.')
+    //             ->danger()
+    //             ->send();
+    //         return;
+    //     }
 
-        $this->isOtpStep = true;
+    //     $this->isOtpStep = true;
 
-        Notification::make()
-            ->title('Kode OTP telah dikirim ke email Anda.')
-            ->success()
-            ->send();
-    }
+    //     Notification::make()
+    //         ->title('Kode OTP telah dikirim ke email Anda.')
+    //         ->success()
+    //         ->send();
+    // }
 
-    public function verifyOtp(): void
-    {
-        $user = $this->getUser();
-        $otpInput = $this->otpData['otp'] ?? null;
+    // public function verifyOtp(): void
+    // {
+    //     $user = $this->getUser();
+    //     $otpInput = $this->otpData['otp'] ?? null;
 
-        if (
-            $user->otp !== $otpInput ||
-            $user->otp_expires_at->isPast()
-        ) {
-            $this->addError('otpData.otp', 'OTP tidak valid atau telah kedaluwarsa.');
-            return;
-        }
+    //     if (
+    //         $user->otp !== $otpInput ||
+    //         $user->otp_expires_at->isPast()
+    //     ) {
+    //         $this->addError('otpData.otp', 'OTP tidak valid atau telah kedaluwarsa.');
+    //         return;
+    //     }
 
-        $user->update([
-            'otp' => null,
-            'otp_expires_at' => null,
-        ]);
+    //     $user->update([
+    //         'otp' => null,
+    //         'otp_expires_at' => null,
+    //     ]);
 
-        $user->password = session('otp_new_password');
-        $user->save();
+    //     $user->password = session('otp_new_password');
+    //     $user->save();
 
-        session()->forget(['otp_user_id', 'otp_new_password']);
-        $this->otpData = [];
-        $this->isOtpStep = false;
+    //     session()->forget(['otp_user_id', 'otp_new_password']);
+    //     $this->otpData = [];
+    //     $this->isOtpStep = false;
 
-        Notification::make()
-            ->title('Password berhasil diubah.')
-            ->success()
-            ->send();
-    }
+    //     Notification::make()
+    //         ->title('Password berhasil diubah.')
+    //         ->success()
+    //         ->send();
+    // }
 
 
     protected function getUpdateProfileFormActions(): array
@@ -227,20 +231,20 @@ class EditProfile extends BaseEditProfile implements HasForms
         ];
     }
 
-    protected function getOtpFormActions(): array
-    {
-        return [
-            Action::make('verify')->label('Verifikasi OTP')->submit('verifyOtp'),
-        ];
-    }
+    // protected function getOtpFormActions(): array
+    // {
+    //     return [
+    //         Action::make('verify')->label('Verifikasi OTP')->submit('verifyOtp'),
+    //     ];
+    // }
 
 
-    protected function getUpdatePasswordFormActions(): array
-    {
-        return [
-            Action::make('change')->label('Ganti Password')->submit('updatePassword')
-        ];
-    }
+    // protected function getUpdatePasswordFormActions(): array
+    // {
+    //     return [
+    //         Action::make('change')->label('Ganti Password')->submit('updatePassword')
+    //     ];
+    // }
 
     public function getUser(): Authenticatable & Model
     {
