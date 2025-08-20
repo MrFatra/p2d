@@ -140,12 +140,12 @@ const Login = () => {
                                     Lihat Password
                                 </label>
                             </div>
-                            <a
+                            {/* <a
                                 className="inline-block align-baseline font-bold md:text-sm text-xs text-shades hover:underline"
                                 href={route('password.index')}
                             >
                                 Lupa Password?
-                            </a>
+                            </a> */}
                         </div>
 
                         <button
