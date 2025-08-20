@@ -65,7 +65,7 @@ class EditProfile extends BaseEditProfile implements HasForms
                         ->minLength(16)
                         ->maxLength(16),
                     $this->getNameFormComponent()->autofocus(false),
-                    $this->getEmailFormComponent()->autofocus(false),
+                    $this->getEmailFormComponent()->autofocus(false)->nullable(),
                     DatePicker::make('birth_date')
                         ->native(false)
                         ->required()
