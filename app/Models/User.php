@@ -9,6 +9,7 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser
@@ -75,74 +76,49 @@ class User extends Authenticatable implements FilamentUser
     {
         $now = Carbon::now();
 
-        $categories = [
-            'baby' => [
-                'min' => 0,
-                'max' => 1,
-                'relation' => 'infants',
-            ],
-            'toddler' => [
-                'min' => 1,
-                'max' => 5,
-                'relation' => 'toddlers',
-            ],
-            'teenager' => [
-                'min' => 12,
-                'max' => 18,
-                'relation' => 'teenagers',
-            ],
-            'adult' => [
-                'min' => 18,
-                'max' => 60,
-                'relation' => 'adults',
-            ],
-            'child' => [
-                'min' => 6,
-                'max' => 12,
-                'relation' => 'preschoolers',
-            ],
-            'elderly' => [
-                'min' => 60,
-                'max' => null,
-                'relation' => 'elderlies',
-            ],
-            'mother' => [
-                'min' => 12,
-                'max' => 60,
-                'relation' => 'pregnantPostpartumBreastfeedings',
-                'gender' => 'P',
-            ],
-        ];
+        $key = "users_{$category}_{$hamlet}_month_{$now->format('Ym')}";
 
-        if (!$category || !array_key_exists($category, $categories)) {
-            return User::all();
-        }
+        return Cache::remember($key, 90, function () use ($category, $hamlet, $now) {
+            $categories = [
+                'baby' => ['min' => 0, 'max' => 1, 'relation' => 'infants'],
+                'toddler' => ['min' => 1, 'max' => 5, 'relation' => 'toddlers'],
+                'teenager' => ['min' => 12, 'max' => 18, 'relation' => 'teenagers'],
+                'adult' => ['min' => 18, 'max' => 60, 'relation' => 'adults'],
+                'child' => ['min' => 6, 'max' => 12, 'relation' => 'preschoolers'],
+                'elderly' => ['min' => 60, 'max' => null, 'relation' => 'elderlies'],
+                'mother' => ['min' => 12, 'max' => 60, 'relation' => 'pregnantPostpartumBreastfeedings', 'gender' => 'P'],
+            ];
 
-        $config = $categories[$category];
-        $query = User::query();
+            if (!$category || !array_key_exists($category, $categories)) {
+                return User::all();
+            }
 
-        if (!empty($config['max'])) {
-            $query->whereDate('birth_date', '>', $now->copy()->subYears($config['max']));
-        }
+            $config = $categories[$category];
+            $query = User::query();
 
-        if (!empty($config['min'])) {
-            $query->whereDate('birth_date', '<=', $now->copy()->subYears($config['min']));
-        }
+            if (!empty($config['max'])) {
+                $query->whereDate('birth_date', '>', $now->copy()->subYears($config['max']));
+            }
 
-        if (isset($config['gender'])) {
-            $query->where('gender', $config['gender']);
-        }
+            if (!empty($config['min'])) {
+                $query->whereDate('birth_date', '<=', $now->copy()->subYears($config['min']));
+            }
 
-        $query->whereDoesntHave($config['relation'], function ($q) use ($now) {
-            $q->whereYear('created_at', $now->year)
-                ->whereMonth('created_at', $now->month);
+            if (isset($config['gender'])) {
+                $query->where('gender', $config['gender']);
+            }
+
+            $query->whereDoesntHave($config['relation'], function ($q) use ($now) {
+                $q->whereYear('created_at', $now->year)
+                    ->whereMonth('created_at', $now->month);
+            });
+
+            if (Auth::user()->hasRole('cadre')) {
+                $query->where('hamlet', $hamlet);
+            }
+
+            return $query->get();
         });
-
-        if (Auth::user()->hasRole('cadre')) {
-            $query->where('hamlet', $hamlet);
-        }
-
-        return $query->get();
     }
 
     public static function determineTypeOfUser($userBirthDate): string
