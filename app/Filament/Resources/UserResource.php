@@ -7,9 +7,11 @@ use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -150,9 +152,9 @@ class UserResource extends Resource
                     ->searchable(),
 
                 TextColumn::make('place_of_birth')
-                     ->label('Tempat Lahir')
-                     ->sortable()
-                     ->searchable(),
+                    ->label('Tempat Lahir')
+                    ->sortable()
+                    ->searchable(),
 
                 TextColumn::make('gender')
                     ->label('Jenis Kelamin')
@@ -210,6 +212,30 @@ class UserResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    BulkAction::make('changeRole')
+                        ->label('Ubah Role')
+                        ->modalHeading('Konfirmasi Perubahan Role')
+                        ->requiresConfirmation()
+                        ->modalDescription('Tindakan ini akan mengganti role pengguna yang dipilih dengan role baru. Pastikan Anda memilih role yang sesuai.')
+                        ->form([
+                            Select::make('roles')
+                                ->relationship('roles', 'label')
+                                ->preload()
+                                ->native(false)
+                                ->label('Peran')
+                                ->required(),
+                        ])
+                        ->action(function ($records, array $data) {
+                            $role = Role::find($data['roles']);
+
+                            foreach ($records as $record) {
+                                $record->syncRoles([$role->name]);
+                            }
+                        })
+                        ->deselectRecordsAfterCompletion()
+                        ->color('primary')
+                        ->icon('heroicon-o-user-group'),
+
                     Tables\Actions\DeleteBulkAction::make()
                         ->visible(fn() => auth()->user()->can('pengguna:delete')),
                 ]),
