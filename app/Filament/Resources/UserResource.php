@@ -63,6 +63,9 @@ class UserResource extends Resource
                             ->displayFormat('Y-m-d')
                             ->required()
                             ->label('Tanggal Lahir'),
+                        Forms\Components\TextInput::make('place_of_birth')
+                            ->required()
+                            ->label('Tempat Lahir'),
                         Forms\Components\TextInput::make('gender')
                             ->required()
                             ->label('Jenis Kelamin')
@@ -145,6 +148,11 @@ class UserResource extends Resource
                     ->date('Y-m-d')
                     ->sortable()
                     ->searchable(),
+
+                TextColumn::make('place_of_birth')
+                     ->label('Tempat Lahir')
+                     ->sortable()
+                     ->searchable(),
 
                 TextColumn::make('gender')
                     ->label('Jenis Kelamin')

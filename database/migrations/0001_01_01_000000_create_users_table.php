@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('email')->unique();
             $table->date('birth_date')->nullable();
+            $table->string('place_of_birth')->nullable();
             $table->enum('gender', ['L', 'P'])->nullable();
             $table->string('phone_number')->nullable();
             $table->text('address')->nullable();
