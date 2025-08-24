@@ -22,14 +22,15 @@ class ReportSeeder extends Seeder
 
         foreach ($hamlets as $hamlet) {
             $reportData = (new MonthlyReport())->countPerModelByDate($date, $hamlet);
-            
+
             Report::create([
-                'babies' => $reportData['Infant'] ?? 0,
-                'toddlers' => $reportData['Toddler'] ?? 0,
-                'children' => $reportData['Children'] ?? 0,
+                'babies'    => $reportData['Infant'] ?? 0,
+                'toddlers'  => $reportData['Toddler'] ?? 0,
+                'children'  => $reportData['Children'] ?? 0,
                 'teenagers' => $reportData['Teenager'] ?? 0,
-                'pregnants' => $reportData['Pregnant'] ?? 0,
+                'adults'    => $reportData['Adult'] ?? 0,
                 'elderlies' => $reportData['Elderly'] ?? 0,
+                'pregnants' => $reportData['Pregnant'] ?? 0,
                 'hamlet' => $hamlet,
                 'month' => $date->month,
                 'year' => $date->year,

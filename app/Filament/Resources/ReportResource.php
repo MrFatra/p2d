@@ -51,25 +51,26 @@ class ReportResource extends Resource
     {
         return $table
             ->columns([
-                // TextColumn::make('adult_count')
-                //     ->label('Dewasa (18–59 Tahun)')
-                //     ->state(fn() => $report['Adult'])
-                //     ->sortable(),
-
-                TextColumn::make('elderlies')
-                    ->label('Lansia (60 Tahun ke Atas)'),
-
                 TextColumn::make('babies')
                     ->label('Bayi (0-12 Bulan)'),
 
-                TextColumn::make('pregnants')
-                    ->label('Ibu Hamil'),
+                TextColumn::make('toddlers')
+                    ->label('Balita (1-5 Tahun)'),
+
+                TextColumn::make('children')
+                    ->label('Anak Pra Sekolah (6-12 Tahun)'),
 
                 TextColumn::make('teenagers')
                     ->label('Remaja (13-17 Tahun)'),
 
-                TextColumn::make('toddlers')
-                    ->label('Balita (1-5 Tahun)'),
+                TextColumn::make('adults')
+                    ->label('Dewasa (18-59 Tahun)'),
+
+                TextColumn::make('elderlies')
+                    ->label('Lansia (60 Tahun ke Atas)'),
+
+                TextColumn::make('pregnants')
+                    ->label('Ibu Hamil'),
 
                 TextColumn::make('hamlet')
                     ->label('Dusun')

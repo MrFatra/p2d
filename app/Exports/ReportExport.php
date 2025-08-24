@@ -44,22 +44,26 @@ class ReportExport implements
     {
         if ($this->mode === 'yearly') {
             return [
-                $record->elderlies,
                 $record->babies,
-                $record->pregnants,
-                $record->teenagers,
                 $record->toddlers,
+                $record->children,
+                $record->teenagers,
+                $record->adults,
+                $record->elderlies,
+                $record->pregnants,
                 $record->hamlet,
                 $record->year,
             ];
         }
 
         return [
-            $record->elderlies,
             $record->babies,
-            $record->pregnants,
-            $record->teenagers,
             $record->toddlers,
+            $record->children,
+            $record->teenagers,
+            $record->adults,
+            $record->elderlies,
+            $record->pregnants,
             $record->hamlet,
             \Carbon\Carbon::create()->month($record->month)->translatedFormat('F'),
             $record->year,
@@ -71,21 +75,25 @@ class ReportExport implements
     {
         if ($this->mode === 'yearly') {
             return [
-                'Lansia (60 Tahun ke Atas)',
                 'Bayi (0-12 Bulan)',
-                'Ibu Hamil',
-                'Remaja (13-17 Tahun)',
                 'Balita (1-5 Tahun)',
+                'Anak Pra Sekolah (6-12 Tahun)',
+                'Remaja (13-17 Tahun)',
+                'Dewasa (18-59 Tahun)',
+                'Lansia (60 Tahun ke Atas)',
+                'Ibu Hamil',
                 'Tahun',
             ];
         }
 
         return [
-            'Lansia (60 Tahun ke Atas)',
             'Bayi (0-12 Bulan)',
-            'Ibu Hamil',
-            'Remaja (13-17 Tahun)',
             'Balita (1-5 Tahun)',
+            'Anak Pra Sekolah (6-12 Tahun)',
+            'Remaja (13-17 Tahun)',
+            'Dewasa (18-59 Tahun)',
+            'Lansia (60 Tahun ke Atas)',
+            'Ibu Hamil',
             'Bulan',
             'Tahun',
         ];

@@ -22,7 +22,7 @@ class MonthlyReport
         $models = [
             'Elderly' => 'elderlies',
             'Adult' => 'adults',
-            // TODO: belum ada children
+            'Children' => 'preschoolers',
             'Infant' => 'infants',
             'Pregnant' => 'pregnantPostpartumBreastfeedings',
             'Teenager' => 'teenagers',

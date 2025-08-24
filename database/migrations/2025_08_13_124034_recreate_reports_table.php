@@ -15,12 +15,13 @@ return new class extends Migration
 
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->integer('babies');
-            $table->integer('toddlers');
-            $table->integer('children');
-            $table->integer('teenagers');
-            $table->integer('pregnants');
-            $table->integer('elderlies');
+            $table->integer('babies');       // 0-12 bulan
+            $table->integer('toddlers');     // 1-5 tahun
+            $table->integer('children');     // 6-12 tahun
+            $table->integer('teenagers');    // 13-17 tahun
+            $table->integer('adults');       // 18-59 tahun
+            $table->integer('elderlies');    // 60+ tahun
+            $table->integer('pregnants');    // ibu hamil (khusus)
             $table->string('hamlet');
             $table->integer('month');
             $table->integer('year');

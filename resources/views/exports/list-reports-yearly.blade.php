@@ -3,11 +3,13 @@
     $hasHamlet = $reports->contains(fn($report) => !is_null($report->hamlet));
 
     $headers = [
-        'Lansia (60 Tahun ke Atas)',
         'Bayi (0-12 Bulan)',
-        'Ibu Hamil',
-        'Remaja (13-17 Tahun)',
         'Balita (1-5 Tahun)',
+        'Anak Pra Sekolah (6-12 Tahun)',
+        'Remaja (13-17 Tahun)',
+        'Dewasa (18-59 Tahun)',
+        'Lansia (60 Tahun ke Atas)',
+        'Ibu Hamil',
     ];
 
     if ($hasHamlet) {
@@ -31,11 +33,13 @@
     <tbody>
         @foreach ($reports as $report)
             <tr>
-                <td style="text-align: center;">{{ $report->elderlies }}</td>
                 <td style="text-align: center;">{{ $report->babies }}</td>
-                <td style="text-align: center;">{{ $report->pregnants }}</td>
-                <td style="text-align: center;">{{ $report->teenagers }}</td>
                 <td style="text-align: center;">{{ $report->toddlers }}</td>
+                <td style="text-align: center;">{{ $report->children }}</td>
+                <td style="text-align: center;">{{ $report->teenagers }}</td>
+                <td style="text-align: center;">{{ $report->adults }}</td>
+                <td style="text-align: center;">{{ $report->elderlies }}</td>
+                <td style="text-align: center;">{{ $report->pregnants }}</td>
                 @if ($hasHamlet)
                     <td style="text-align: center;">{{ $report->hamlet }}</td>
                 @endif
