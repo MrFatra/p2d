@@ -21,12 +21,18 @@ const Header = () => {
                     <p className="mt-4 text-lg md:text-xl italic text-shades font-bold">
                         "Posyandu Muncangela: Sehat Warganya, Maju Desanya"
                     </p>
-                    <Link
-                        href={route("login.index")}
+                    <a
+                        href={route("filament.admin.auth.login")}
                         className="inline-flex items-center gap-3 mt-8 border-2 border-custom-emerald text-custom-emerald px-6 py-3 rounded-lg font-bold hover:bg-custom-emerald hover:text-white transition-all duration-300"
                     >
                         Ayo Mulai <ArrowRightIcon />
-                    </Link>
+                    </a>
+                    {/* <Link
+                        href={route("index.login")}
+                        className="inline-flex items-center gap-3 mt-8 border-2 border-custom-emerald text-custom-emerald px-6 py-3 rounded-lg font-bold hover:bg-custom-emerald hover:text-white transition-all duration-300"
+                    >
+                        Ayo Mulai <ArrowRightIcon />
+                    </Link> */}
                 </div>
 
                 {/* Image Section */}
