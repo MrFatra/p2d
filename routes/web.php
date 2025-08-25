@@ -10,12 +10,12 @@ use App\Http\Controllers\CheckHistoryController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/login', [LoginController::class, 'index'])->name('login.index');
-Route::post('/login', [LoginController::class, 'login'])
-    ->name('login')
-    ->middleware('throttle:5,1');
+// Route::get('/login', [LoginController::class, 'index'])->name('login.index');
+// Route::post('/login', [LoginController::class, 'login'])
+//     ->name('login')
+//     ->middleware('throttle:5,1');
 
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+// Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('password.index');
 // Route::post('/forgot-password', [ForgotPasswordController::class, 'sendEmail'])->name('password.send-email');
