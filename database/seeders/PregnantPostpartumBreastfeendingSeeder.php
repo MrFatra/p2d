@@ -18,7 +18,7 @@ class PregnantPostpartumBreastfeendingSeeder extends Seeder
                 // 'pregnancy_status' => 'Trimester 1',
                 'pregnancy_status' => 'pregnant',
                 'muac' => 24.5,
-                'blood_pressure' => 110.75,
+                'blood_pressure' => '110.75/60',
                 'tetanus_immunization' => 'TT1',
                 'iron_tablets' => 30,
                 'anc_schedule' => '2025-08-01',

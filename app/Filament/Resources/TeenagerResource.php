@@ -114,9 +114,9 @@ class TeenagerResource extends Resource
 
                         TextInput::make('blood_pressure')
                             ->label('Tekanan Darah')
-                            ->placeholder('Contoh: 110/70')
+                            ->placeholder('Contoh: 120/80')
                             ->nullable()
-                            ->helperText('Isi tekanan darah dalam format sistolik/diastolik. Contoh: 110/70'),
+                            ->helperText('Isi tekanan darah dalam format sistolik/diastolik. Contoh: 120/80'),
                     ]),
 
                 Section::make('Kesehatan Remaja')

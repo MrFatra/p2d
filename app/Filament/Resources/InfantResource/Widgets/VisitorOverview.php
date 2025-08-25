@@ -27,11 +27,13 @@ class VisitorOverview extends BaseWidget
         $isCadre = $user->hasRole('cadre');
 
         // --- Kunjungan Bulan Ini ---
-        $thisMonthQuery = Infant::whereMonth('created_at', $now->month)
-            ->whereYear('created_at', $now->year);
+        $thisMonthQuery = User::whereHas('infants', function ($query) use ($now) {
+            return $query->whereMonth('created_at', $now->month)
+                ->whereYear('created_at', $now->year);
+        });
 
         if ($isCadre) {
-            $thisMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+            $thisMonthQuery->where('hamlet', $user->hamlet);
         }
 
         $thisMonthVisits = $thisMonthQuery->count();
@@ -39,11 +41,13 @@ class VisitorOverview extends BaseWidget
         // --- Kunjungan Bulan Lalu ---
         $lastMonth = $now->copy()->subMonth();
 
-        $lastMonthQuery = Infant::whereMonth('created_at', $lastMonth->month)
-            ->whereYear('created_at', $lastMonth->year);
+        $lastMonthQuery = User::whereHas('infants', function ($query) use ($lastMonth) {
+            return $query->whereMonth('created_at', $lastMonth->month)
+                ->whereYear('created_at', $lastMonth->year);
+        });
 
         if ($isCadre) {
-            $lastMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+            $lastMonthQuery->where('hamlet', $user->hamlet);
         }
 
         $lastMonthVisits = $lastMonthQuery->count();
@@ -113,11 +117,11 @@ class VisitorOverview extends BaseWidget
                 ->color($color),
 
             Stat::make('Total Bayi dengan Stunting', $stuntingUsers . ' Bayi')
-                ->description('Hanya yang masih kategori bayi/balita')
+                ->description('Jumlah bayi dengan tinggi badan di bawah standar usia mereka.')
                 ->color('danger'),
 
             Stat::make('Total Bayi dengan Gizi Kurang & Buruk', $malnutritionUsers . ' Bayi')
-                ->description('Hanya yang masih kategori bayi/balita')
+                ->description('Bayi dengan berat badan yang tidak sesuai standar untuk usianya.')
                 ->color('danger'),
 
             Stat::make('Total Bayi', $babyTotal . ' Orang')

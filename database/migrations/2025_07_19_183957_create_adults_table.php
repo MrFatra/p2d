@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('adults', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->float('blood_pressure')->nullable();
+            $table->string('blood_pressure')->nullable();
             $table->float('blood_glucose')->nullable();
             $table->float('cholesterol')->nullable();
             $table->float('bmi')->nullable();

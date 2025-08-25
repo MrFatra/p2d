@@ -15,7 +15,7 @@ class ElderlySeeder extends Seeder
         $elderlies = [
             [
                 'user_id' => 8,
-                'blood_pressure' => 130.5,
+                'blood_pressure' => '130.5/58',
                 'blood_glucose' => 110.2,
                 'cholesterol' => 190.4,
                 'nutrition_status' => 'Gizi Baik',
@@ -24,7 +24,7 @@ class ElderlySeeder extends Seeder
             ],
             [
                 'user_id' => 8,
-                'blood_pressure' => 125.0,
+                'blood_pressure' => '125.0/29',
                 'blood_glucose' => 105.0,
                 'cholesterol' => 200.0,
                 'nutrition_status' => 'Gizi Cukup',
@@ -33,7 +33,7 @@ class ElderlySeeder extends Seeder
             ],
             [
                 'user_id' => 8,
-                'blood_pressure' => 110.0,
+                'blood_pressure' => '110.0/20',
                 'blood_glucose' => 95.0,
                 'cholesterol' => 160.0,
                 'nutrition_status' => 'Gizi Kurang',
@@ -42,7 +42,7 @@ class ElderlySeeder extends Seeder
             ],
             [
                 'user_id' => 8,
-                'blood_pressure' => 100.0,
+                'blood_pressure' => '100/20',
                 'blood_glucose' => 85.0,
                 'cholesterol' => 140.0,
                 'nutrition_status' => 'Gizi Buruk',
@@ -51,7 +51,7 @@ class ElderlySeeder extends Seeder
             ],
             [
                 'user_id' => 8,
-                'blood_pressure' => 150.0,
+                'blood_pressure' => '150.0/60',
                 'blood_glucose' => 130.0,
                 'cholesterol' => 250.0,
                 'nutrition_status' => 'Obesitas',

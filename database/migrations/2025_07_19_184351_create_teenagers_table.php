@@ -17,7 +17,7 @@ return new class extends Migration
             $table->float('weight')->nullable();
             $table->float('height')->nullable();
             $table->float('bmi')->nullable();
-            $table->float('blood_pressure')->nullable();
+            $table->string('blood_pressure')->nullable();
             $table->boolean('anemia')->nullable();
             $table->integer('iron_tablets')->nullable();
             // must ask

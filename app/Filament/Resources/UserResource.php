@@ -68,10 +68,21 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('place_of_birth')
                             ->required()
                             ->label('Tempat Lahir'),
-                        Forms\Components\TextInput::make('gender')
+                        Forms\Components\ToggleButtons::make('gender')
                             ->required()
-                            ->label('Jenis Kelamin')
-                            ->datalist(['L' => 'Laki-laki', 'P' => 'Perempuan']),
+                            ->inline()
+                            ->options([
+                                'L' => 'Laki-Laki',
+                                'P' => 'Perempuan'
+                            ])
+                            ->colors([
+                                'L' => 'info',
+                                'P' => 'pink'
+                            ])
+                            ->icons([
+                                'L' => 'ionicon-male',
+                                'P' => 'ionicon-female'
+                            ]),
                     ]),
 
                 Section::make('Kontak')
@@ -99,8 +110,17 @@ class UserResource extends Resource
                             ->label('RT'),
                         Forms\Components\TextInput::make('rw')
                             ->label('RW'),
-                        Forms\Components\TextInput::make('hamlet')
-                            ->label('Dusun'),
+                        Select::make('hamlet')
+                            ->label('Dusun')
+                            ->native(false)
+                            ->required()
+                            ->options([
+                                'Pahing' => 'Pahing',
+                                'Manis' => 'Manis',
+                                'Puhun' => 'Puhun',
+                                'Kliwon' => 'Kliwon',
+                                'Wage' => 'Wage',
+                            ]),
                         Forms\Components\Textarea::make('address')
                             ->required()
                             ->label('Alamat'),
@@ -112,16 +132,22 @@ class UserResource extends Resource
                     ->collapsible()
                     ->columns(2)
                     ->schema([
-                        Forms\Components\Select::make('roles')
-                            ->relationship('roles', 'label')
+                        Select::make('roles')
+                            ->relationship(
+                                name: 'roles',
+                                titleAttribute: 'label',
+                                modifyQueryUsing: fn($query) => $query->whereIn('label', ['Admin', 'Kader', 'Desa'])
+                            )
                             ->preload()
                             ->native(false)
                             ->position('top')
                             ->label('Peran'),
+
                         Forms\Components\TextInput::make('password')
+                            ->revealable()
                             ->password()
                             ->required()
-                            ->visibleOn('create'),
+                            ->hiddenOn('view'),
                     ]),
             ]);
     }

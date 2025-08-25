@@ -27,23 +27,27 @@ class VisitorOverview extends BaseWidget
         $isCadre = $user->hasRole('cadre');
 
         // --- Kunjungan Bulan Ini ---
-        $thisMonthQuery = Teenager::whereMonth('created_at', $now->month)
-            ->whereYear('created_at', $now->year);
-
+        $thisMonthQuery = User::whereHas('teenagers', function ($query) use ($now) {
+            return $query->whereMonth('created_at', $now->month)
+                ->whereYear('created_at', $now->year);
+        });
+        
         if ($isCadre) {
-            $thisMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+            $thisMonthQuery->where('hamlet', $user->hamlet);
         }
-
+        
         $thisMonthVisits = $thisMonthQuery->count();
-
+        
         // --- Kunjungan Bulan Lalu ---
         $lastMonth = $now->copy()->subMonth();
 
-        $lastMonthQuery = Teenager::whereMonth('created_at', $lastMonth->month)
-            ->whereYear('created_at', $lastMonth->year);
+        $lastMonthQuery = User::whereHas('teenagers', function ($query) use ($lastMonth) {
+            return $query->whereMonth('created_at', $lastMonth->month)
+                ->whereYear('created_at', $lastMonth->year);
+        });
 
         if ($isCadre) {
-            $lastMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+            $lastMonthQuery->where('hamlet', $user->hamlet);
         }
 
         $lastMonthVisits = $lastMonthQuery->count();

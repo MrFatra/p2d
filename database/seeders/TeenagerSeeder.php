@@ -19,7 +19,7 @@ class TeenagerSeeder extends Seeder
                 'weight' => 60.0,
                 'height' => 170.0,
                 'bmi' => 20.8,
-                'blood_pressure' => 115.4,
+                'blood_pressure' => '115.4/70',
                 'anemia' => true,
                 'iron_tablets' => 6,
                 'reproductive_health' => 'baik',

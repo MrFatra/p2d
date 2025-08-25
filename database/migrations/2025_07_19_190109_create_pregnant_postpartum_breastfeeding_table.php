@@ -17,7 +17,7 @@ return new class extends Migration
             $table->enum('pregnancy_status', ['trimester 1', 'trimester 2', 'trimester 3', 'postpartum', 'pregnant', 'abortus', 'none'])->default('none');
             // MUAC = LILA = Lingkar Lengan Atas
             $table->float('muac')->nullable();
-            $table->float('blood_pressure')->nullable();
+            $table->string('blood_pressure')->nullable();
             // this string type is confusing
             $table->string('tetanus_immunization')->nullable();
             $table->integer('iron_tablets')->nullable();

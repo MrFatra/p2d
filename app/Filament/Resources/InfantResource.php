@@ -175,17 +175,17 @@ class InfantResource extends Resource
                     ->schema([
                         Grid::make(2)
                             ->schema([
-                                ToggleButtons::make('immunization_followup')
-                                    ->label('Imunisasi Lanjutan')
+                                ToggleButtons::make('complete_immunization')
+                                    ->label('Imunisasi Lengkap')
                                     ->inline()
                                     ->boolean()
-                                    ->helperText('Contoh: DPT, Campak, Hepatitis.'),
+                                    ->helperText('Apakah telah mendapatkan imunisasi lengkap?'),
 
                                 ToggleButtons::make('vitamin_a')
                                     ->label('Vitamin A')
                                     ->inline()
                                     ->boolean()
-                                    ->helperText('Apakah telah mendapatkan vitamin A bulan Februari/Agustus?'),
+                                    ->helperText('Apakah telah mendapatkan vitamin A?'),
                             ]),
                     ]),
 
@@ -209,6 +209,16 @@ class InfantResource extends Resource
                             ->icons([true => 'heroicon-o-check-circle', false => 'heroicon-o-x-circle'])
                             ->colors([true => 'success', false => 'danger'])
                             ->helperText('Makanan pendamping ASI setelah usia 6 bulan.'),
+                    ]),
+
+                Section::make('Tanggal Pemeriksaan')
+                    ->icon('heroicon-o-calendar')
+                    ->schema([
+                        DatePicker::make('checkup_date')
+                            ->label('Tanggal Pemeriksaan')
+                            ->native(false)
+                            ->readOnly()
+                            ->default(now()),
                     ]),
             ]);
     }
@@ -257,18 +267,21 @@ class InfantResource extends Resource
 
                 TextColumn::make('stunting_status')
                     ->label('Status Stunting')
-                    ->formatStateUsing(fn($state) => match ($state) {
-                        'Normal' => new HtmlString('<strong>Normal</strong>'),
-                        'Kemungkinan Stunting' => new HtmlString('<strong>Kemungkinan Stunting</strong>'),
-                        'Stunting' => new HtmlString('<strong>Stunting</strong>'),
-                        default => new HtmlString('<strong>Tidak Diketahui</strong>'),
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            'Normal' => new HtmlString('<strong>Normal</strong>'),
+                            'Severe Stunting' => new HtmlString('<strong>Stunting Parah</strong>'),
+                            'Stunting' => new HtmlString('<strong>Stunting</strong>'),
+                            default => new HtmlString('<strong>Tidak Diketahui</strong>'),
+                        };
                     })
                     ->color(fn($state) => match ($state) {
                         'Normal' => 'success',
-                        'Kemungkinan Stunting' => 'warning',
+                        'Severe Stunting' => 'danger',
                         'Stunting' => 'danger',
                         default => 'gray',
                     }),
+                    
                 TextColumn::make('head_circumference')
                     ->label('Lingkar Kepala (cm)')
                     ->numeric()
@@ -309,15 +322,6 @@ class InfantResource extends Resource
                             : '<strong class="text-red-600">Tidak</strong>'
                     ))
                     ->html(),
-
-                TextColumn::make('complete_immunization')
-                    ->label('Imunisasi Lengkap')
-                    ->formatStateUsing(fn($state) => new HtmlString(
-                        $state
-                            ? '<strong style="color: #16a34a;">Ya</strong>'  // Tailwind green-600 (fallback pakai inline style)
-                            : '<strong style="color: #dc2626;">Tidak</strong>' // Tailwind red-600
-                    ))
-                    ->html(), // ini penting!
 
                 TextColumn::make('vitamin_a')
                     ->label('Vitamin A')

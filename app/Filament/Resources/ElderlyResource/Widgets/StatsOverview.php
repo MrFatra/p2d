@@ -28,11 +28,13 @@ class StatsOverview extends BaseWidget
         $isCadre = $user->hasRole('cadre');
 
         // --- Kunjungan Bulan Ini ---
-        $thisMonthQuery = Elderly::whereMonth('created_at', $now->month)
-            ->whereYear('created_at', $now->year);
+        $thisMonthQuery = User::whereHas('elderlies', function ($query) use ($now) {
+            return $query->whereMonth('created_at', $now->month)
+                ->whereYear('created_at', $now->year);
+        });
 
         if ($isCadre) {
-            $thisMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+            $thisMonthQuery->where('hamlet', $user->hamlet);
         }
 
         $thisMonthVisits = $thisMonthQuery->count();
@@ -40,11 +42,13 @@ class StatsOverview extends BaseWidget
         // --- Kunjungan Bulan Lalu ---
         $lastMonth = $now->copy()->subMonth();
 
-        $lastMonthQuery = Elderly::whereMonth('created_at', $lastMonth->month)
-            ->whereYear('created_at', $lastMonth->year);
+        $lastMonthQuery = User::whereHas('elderlies', function ($query) use ($lastMonth) {
+            return $query->whereMonth('created_at', $lastMonth->month)
+                ->whereYear('created_at', $lastMonth->year);
+        });
 
         if ($isCadre) {
-            $lastMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+            $lastMonthQuery->where('hamlet', $user->hamlet);
         }
 
         $lastMonthVisits = $lastMonthQuery->count();

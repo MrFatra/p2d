@@ -27,23 +27,27 @@ class VisitorOverview extends BaseWidget
         $isCadre = $user->hasRole('cadre');
 
         // --- Kunjungan Bulan Ini ---
-        $thisMonthQuery = Toddler::whereMonth('created_at', $now->month)
-            ->whereYear('created_at', $now->year);
-
+        $thisMonthQuery = User::whereHas('toddlers', function ($query) use ($now) {
+            return $query->whereMonth('created_at', $now->month)
+                ->whereYear('created_at', $now->year);
+        });
+        
         if ($isCadre) {
-            $thisMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+            $thisMonthQuery->where('hamlet', $user->hamlet);
         }
-
+        
         $thisMonthVisits = $thisMonthQuery->count();
-
+        
         // --- Kunjungan Bulan Lalu ---
         $lastMonth = $now->copy()->subMonth();
 
-        $lastMonthQuery = Toddler::whereMonth('created_at', $lastMonth->month)
-            ->whereYear('created_at', $lastMonth->year);
+        $lastMonthQuery = User::whereHas('toddlers', function ($query) use ($lastMonth) {
+            return $query->whereMonth('created_at', $lastMonth->month)
+                ->whereYear('created_at', $lastMonth->year);
+        });
 
         if ($isCadre) {
-            $lastMonthQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+            $lastMonthQuery->where('hamlet', $user->hamlet);
         }
 
         $lastMonthVisits = $lastMonthQuery->count();
@@ -76,6 +80,30 @@ class VisitorOverview extends BaseWidget
             $color = 'gray';
         }
 
+        // --- Stunting ---
+        $stuntingQuery = Toddler::whereIn('stunting_status', ['Stunting', 'Severe Stunting']);
+
+        if ($isCadre) {
+            $stuntingQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+        }
+
+        $stuntingUsers = $stuntingQuery->get()
+            ->filter(fn($toddler) => Carbon::parse($toddler->user?->birth_date)->diffInMonths($now) <= 60)
+            ->groupBy('user_id')
+            ->count();
+
+        // --- Malnutrisi ---
+        $malnutritionQuery = Toddler::whereIn('nutrition_status', ['Gizi Kurang', 'Gizi Buruk']);
+
+        if ($isCadre) {
+            $malnutritionQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
+        }
+
+        $malnutritionUsers = $malnutritionQuery->get()
+            ->filter(fn($toddler) => Carbon::parse($toddler->user?->birth_date)->diffInMonths($now) <= 60)
+            ->groupBy('user_id')
+            ->count();
+
         return [
             Stat::make('Kunjungan Bulan Ini', $thisMonthVisits . ' Balita')
                 ->description('Data per ' . $now->translatedFormat('F Y'))
@@ -88,6 +116,15 @@ class VisitorOverview extends BaseWidget
             Stat::make('Perubahan Kunjungan', $percentage . '%')
                 ->description($description)
                 ->color($color),
+
+            Stat::make('Total Balita dengan Stunting', $stuntingUsers . ' Balita')
+                ->description('Jumlah Balita dengan tinggi badan di bawah standar usia mereka.')
+                ->color('danger'),
+
+            Stat::make('Total Balita dengan Gizi Kurang & Buruk', $malnutritionUsers . ' Balita')
+                ->description('Balita dengan berat badan yang tidak sesuai standar untuk usianya.')
+                ->color('danger'),
+
             Stat::make('Total Balita', $toddlerTotal . ' Orang')
                 ->description('Terdata sebagai Balita saat ini')
                 ->color($color),

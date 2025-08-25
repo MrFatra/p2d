@@ -6,28 +6,28 @@ class Health
 {
     public static function calculateBMI($weight, $height)
     {
-        if (!$weight || !$height) {
+        if (!is_numeric($weight) || !is_numeric($height) || $weight <= 0 || $height <= 0) {
             return null;
         }
 
         $heightInMeters = $height / 100;
 
-        if ($heightInMeters <= 0) {
-            return null;
-        }
-
         $bmi = $weight / ($heightInMeters * $heightInMeters);
 
-        return number_format($bmi, 2);
+        return round($bmi, 2);
     }
 
     public static function getBMICategory($bmi)
     {
+        if (!is_numeric($bmi)) {
+            return null;
+        }
+
         if ($bmi < 18.5) {
             return 'Kurus';
-        } elseif ($bmi >= 18.5 && $bmi < 25) {
+        } elseif ($bmi < 25) {
             return 'Normal';
-        } elseif ($bmi >= 25 && $bmi < 30) {
+        } elseif ($bmi < 30) {
             return 'Gemuk';
         } else {
             return 'Obesitas';

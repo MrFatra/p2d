@@ -50,103 +50,104 @@ class PregnantResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-        ->schema([
-            Section::make('Informasi Warga')
             ->schema([
-                Select::make('user_id')
-                ->label('Nama - NIK')
-                ->options(function () {
-                    return User::getUsers('mother', Auth::user()->hamlet)
-                        ->mapWithKeys(function ($user) {
-                            return [$user->id => "{$user->name} - {$user->national_id}"];
-                        })->toArray();
-                })
-                ->getOptionLabelUsing(function ($value) {
-                    $user = User::find($value);
-                    return $user ? "{$user->name} - {$user->national_id}" : $value;
-                })
-                ->searchable()
-                ->helperText(fn() => new HtmlString('<span><strong>Catatan: </strong> Anda bisa mencari data berdasarkan Nama/NIK. </span>'))
-                ->required()
-                ->placeholder('Contoh: Siti Aminah - 1234567890'),
-            ]),
-            Section::make('Informasi Kehamilan')
-                ->description('Status kehamilan ibu saat ini.')
-                ->icon('heroicon-o-user')
-                ->columns(1)
-                ->collapsible()
-                ->schema([
-                    Select::make('pregnancy_status')
-                        ->label('Status Kehamilan')
-                        ->required()
-                        ->options([
-                            'Trimester 1' => 'Trimester 1',
-                            'Trimester 2' => 'Trimester 2',
-                            'Trimester 3' => 'Trimester 3',
-                            'Postpartum' => 'Postpartum',
-                        ])
-                        ->native(false),
-                ]),
+                Section::make('Informasi Warga')
+                    ->schema([
+                        Select::make('user_id')
+                            ->label('Nama - NIK')
+                            ->options(function () {
+                                return User::getUsers('mother', Auth::user()->hamlet)
+                                    ->mapWithKeys(function ($user) {
+                                        return [$user->id => "{$user->name} - {$user->national_id}"];
+                                    })->toArray();
+                            })
+                            ->getOptionLabelUsing(function ($value) {
+                                $user = User::find($value);
+                                return $user ? "{$user->name} - {$user->national_id}" : $value;
+                            })
+                            ->searchable()
+                            ->helperText(fn() => new HtmlString('<span><strong>Catatan: </strong> Anda bisa mencari data berdasarkan Nama/NIK. </span>'))
+                            ->required()
+                            ->placeholder('Contoh: Siti Aminah - 1234567890'),
+                    ]),
+                Section::make('Informasi Kehamilan')
+                    ->description('Status kehamilan ibu saat ini.')
+                    ->icon('heroicon-o-user')
+                    ->columns(1)
+                    ->collapsible()
+                    ->schema([
+                        Select::make('pregnancy_status')
+                            ->label('Status Kehamilan')
+                            ->required()
+                            ->options([
+                                'Trimester 1' => 'Trimester 1',
+                                'Trimester 2' => 'Trimester 2',
+                                'Trimester 3' => 'Trimester 3',
+                                'Postpartum' => 'Postpartum',
+                            ])
+                            ->native(false),
+                    ]),
 
-            Section::make('Pemeriksaan Fisik')
-                ->description('Data hasil pemeriksaan fisik ibu hamil.')
-                ->icon('heroicon-o-clipboard-document')
-                ->columns(2)
-                ->collapsible()
-                ->schema([
-                    TextInput::make('muac')
-                        ->label('Lingkar Lengan Atas (cm)')
-                        ->numeric()
-                        ->required()
-                        ->suffix('cm'),
+                Section::make('Pemeriksaan Fisik')
+                    ->description('Data hasil pemeriksaan fisik ibu hamil.')
+                    ->icon('heroicon-o-clipboard-document')
+                    ->columns(2)
+                    ->collapsible()
+                    ->schema([
+                        TextInput::make('muac')
+                            ->label('Lingkar Lengan Atas (cm)')
+                            ->numeric()
+                            ->required()
+                            ->suffix('cm'),
 
-                    TextInput::make('blood_pressure')
-                        ->label('Tekanan Darah')
-                        ->placeholder('Contoh: 120/80')
-                        ->required(),
-                ]),
+                        TextInput::make('blood_pressure')
+                            ->label('Tekanan Darah')
+                            ->placeholder('Contoh: 120/80')
+                            ->nullable()
+                            ->helperText('Isi tekanan darah dalam format sistolik/diastolik. Contoh: 120/80'),
+                    ]),
 
-            Section::make('Imunisasi & Suplemen')
-                ->description('Catatan imunisasi dan konsumsi tablet penambah darah.')
-                ->icon('heroicon-o-shield-check')
-                ->columns(2)
-                ->collapsible()
-                ->schema([
-                    Select::make('tetanus_immunization')
-                        ->label('Status Imunisasi Tetanus')
-                        ->options([
-                            'Lengkap' => 'Lengkap',
-                            'Belum Lengkap' => 'Belum Lengkap',
-                            'Tidak Diketahui' => 'Tidak Diketahui',
-                        ])
-                        ->native(false)
-                        ->required(),
+                Section::make('Imunisasi & Suplemen')
+                    ->description('Catatan imunisasi dan konsumsi tablet penambah darah.')
+                    ->icon('heroicon-o-shield-check')
+                    ->columns(2)
+                    ->collapsible()
+                    ->schema([
+                        Select::make('tetanus_immunization')
+                            ->label('Status Imunisasi Tetanus')
+                            ->options([
+                                'Lengkap' => 'Lengkap',
+                                'Belum Lengkap' => 'Belum Lengkap',
+                                'Tidak Diketahui' => 'Tidak Diketahui',
+                            ])
+                            ->native(false)
+                            ->required(),
 
-                    Select::make('iron_tablets')
-                        ->label('Jumlah Tablet Tambah Darah')
-                        ->options([
-                            '0' => '0 Tablet',
-                            '30' => '30 Tablet',
-                            '60' => '60 Tablet',
-                            '90' => '90 Tablet',
-                        ])
-                        ->native(false)
-                        ->required(),
-                ]),
+                        Select::make('iron_tablets')
+                            ->label('Jumlah Tablet Tambah Darah')
+                            ->options([
+                                '0' => '0 Tablet',
+                                '30' => '30 Tablet',
+                                '60' => '60 Tablet',
+                                '90' => '90 Tablet',
+                            ])
+                            ->native(false)
+                            ->required(),
+                    ]),
 
-            Section::make('Jadwal Pemeriksaan (ANC)')
-                ->description('Tanggal kunjungan atau jadwal pemeriksaan ANC berikutnya.')
-                ->icon('heroicon-o-calendar-days')
-                ->columns(1)
-                ->collapsible()
-                ->schema([
-                    DatePicker::make('anc_schedule')
-                        ->label('Jadwal Pemeriksaan ANC')
-                        ->native(false)
-                        ->displayFormat('Y-m-d')
-                        ->closeOnDateSelection()
-                        ->required(),
-                ]),
+                Section::make('Jadwal Pemeriksaan (ANC)')
+                    ->description('Tanggal kunjungan atau jadwal pemeriksaan ANC berikutnya.')
+                    ->icon('heroicon-o-calendar-days')
+                    ->columns(1)
+                    ->collapsible()
+                    ->schema([
+                        DatePicker::make('anc_schedule')
+                            ->label('Jadwal Pemeriksaan ANC')
+                            ->native(false)
+                            ->displayFormat('Y-m-d')
+                            ->closeOnDateSelection()
+                            ->required(),
+                    ]),
             ]);
     }
 
@@ -210,7 +211,7 @@ class PregnantResource extends Resource
                     ->label('Filter Tahun')
                     ->options(
                         collect(range(now()->year, now()->year - 4))
-                            ->mapWithKeys(fn ($year) => [$year => (string) $year])
+                            ->mapWithKeys(fn($year) => [$year => (string) $year])
                             ->sortKeysDesc()
                             ->toArray()
                     )
@@ -226,10 +227,10 @@ class PregnantResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make()
                         ->label('Ubah')
-                        ->visible(fn () => auth()->user()->can('ibu-hamil:update')),
+                        ->visible(fn() => auth()->user()->can('ibu-hamil:update')),
                     Tables\Actions\DeleteAction::make()
                         ->label('Hapus')
-                        ->visible(fn () => auth()->user()->can('ibu-hamil:delete')),
+                        ->visible(fn() => auth()->user()->can('ibu-hamil:delete')),
                 ]),
             ])
             ->bulkActions([

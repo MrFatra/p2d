@@ -10,10 +10,14 @@ class Adult extends Model
 
     protected $fillable = [
         'user_id',
+        'weight',
+        'height',
+        'bmi',
+        'smoking_status',
         'blood_pressure',
         'blood_glucose',
         'cholesterol',
-        'bmi'
+        'notes',
     ];
 
     public function user()

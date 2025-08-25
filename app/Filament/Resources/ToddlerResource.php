@@ -94,6 +94,12 @@ class ToddlerResource extends Resource
                         ->numeric()
                         ->suffix('cm')
                         ->nullable(),
+
+                    TextInput::make('head_circumference')
+                        ->label('Lingkar Kepala')
+                        ->numeric()
+                        ->suffix('cm')
+                        ->helperText('Dalam Satuan cm. Contoh: 34.0'),
                 ]),
 
             Section::make('Status Gizi dan Perkembangan')
@@ -227,6 +233,23 @@ class ToddlerResource extends Resource
                 Tables\Columns\TextColumn::make('height')
                     ->label('Tinggi (cm)')
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('stunting_status')
+                    ->label('Status Stunting')
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            'Normal' => new HtmlString('<strong>Normal</strong>'),
+                            'Severe Stunting' => new HtmlString('<strong>Stunting Parah</strong>'),
+                            'Stunting' => new HtmlString('<strong>Stunting</strong>'),
+                            default => new HtmlString('<strong>Tidak Diketahui</strong>'),
+                        };
+                    })
+                    ->color(fn($state) => match ($state) {
+                        'Normal' => 'success',
+                        'Severe Stunting' => 'danger',
+                        'Stunting' => 'danger',
+                        default => 'gray',
+                    }),
 
                 Tables\Columns\TextColumn::make('nutrition_status')
                     ->label('Status Gizi')

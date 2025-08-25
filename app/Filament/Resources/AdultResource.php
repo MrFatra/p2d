@@ -4,10 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AdultResource\Pages;
 use App\Helpers\Auth;
+use App\Helpers\Health;
 use App\Models\Adult;
 use App\Models\User;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -71,6 +73,24 @@ class AdultResource extends Resource
                     ->icon('heroicon-o-clipboard-document')
                     ->columns(2)
                     ->schema([
+                        TextInput::make('weight')
+                            ->label('Berat Badan (kg)')
+                            ->numeric()
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function ($get, $set, $state) {
+                                $set('bmi', Health::calculateBMI($state, $get('height')));
+                            })
+                            ->helperText('Isi berat badan dalam kilogram.'),
+                            
+                            TextInput::make('height')
+                            ->label('Tinggi Badan (cm)')
+                            ->numeric()
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function ($get, $set, $state) {
+                                $set('bmi', Health::calculateBMI($get('weight'), $state));
+                            })
+                            ->helperText('Isi tinggi badan dalam sentimeter.'),
+
                         TextInput::make('blood_pressure')
                             ->label('Tekanan Darah')
                             ->placeholder('Contoh: 120/80')
@@ -94,9 +114,22 @@ class AdultResource extends Resource
                         TextInput::make('bmi')
                             ->label('Indeks Massa Tubuh (BMI)')
                             ->numeric()
-                            ->nullable()
-                            ->suffix(' kg/m²')
-                            ->helperText('Isi nilai BMI berdasarkan hasil perhitungan.'),
+                            ->readOnly() // Jika ingin hitung otomatis dan tidak diedit manual
+                            ->suffix('kg/m²')
+                            ->helperText('Nilai BMI dihitung otomatis dari berat dan tinggi badan.'),
+
+                        Select::make('smoking_status')
+                            ->label('Status Merokok')
+                            ->options([
+                                'never' => 'Tidak Pernah',
+                                'former' => 'Pernah Merokok',
+                                'current' => 'Sedang Merokok',
+                            ])
+                            ->nullable(),
+
+                        Textarea::make('notes')
+                            ->label('Catatan Tambahan')
+                            ->nullable(),
                     ]),
             ]);
     }

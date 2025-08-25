@@ -78,10 +78,10 @@ class ElderlyResource extends Resource
                     ->columns(3)
                     ->schema([
                         TextInput::make('blood_pressure')
-                            ->label('Tekanan Darah (mmHg)')
-                            ->numeric()
+                            ->label('Tekanan Darah')
+                            ->placeholder('Contoh: 120/80')
                             ->nullable()
-                            ->helperText('Contoh: 120/80. Diisi jika tersedia.'),
+                            ->helperText('Isi tekanan darah dalam format sistolik/diastolik. Contoh: 120/80'),
 
                         TextInput::make('blood_glucose')
                             ->label('Gula Darah (mg/dL)')

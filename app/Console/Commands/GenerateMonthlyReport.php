@@ -15,7 +15,7 @@ class GenerateMonthlyReport extends Command
 
     public function handle()
     {
-        $now = Carbon::now()->startOfMonth();
+        $now = Carbon::now()->endOfMonth();
         $month = $now->month;
         $year = $now->year;
 
