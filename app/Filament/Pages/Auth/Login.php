@@ -40,6 +40,14 @@ class Login extends BaseLogin
                             ->minLength(16)
                             ->maxLength(16)
                             ->autocomplete()
+                            ->rules(['digits:16'])
+                            ->validationMessages([
+                                'required' => 'NIK wajib diisi.',
+                                'numeric' => 'NIK harus berupa angka.',
+                                'min' => 'NIK minimal harus terdiri dari 16 digit.',
+                                'max' => 'NIK maksimal harus terdiri dari 16 digit.',
+                                'digits' => 'NIK harus tepat 16 digit.',
+                            ])
                             ->extraInputAttributes(['tabindex' => 1]),
                         $this->getPasswordFormComponent(),
 

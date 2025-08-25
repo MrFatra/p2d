@@ -53,7 +53,16 @@ class UserResource extends Resource
                             ->numeric()
                             ->minLength(16)
                             ->maxLength(16)
-                            ->required(),
+                            ->required()
+                            ->rules(['digits:16'])
+                            ->validationMessages([
+                                'required' => 'NIK wajib diisi.',
+                                'numeric' => 'NIK harus berupa angka.',
+                                'min' => 'NIK minimal harus terdiri dari 16 digit.',
+                                'max' => 'NIK maksimal harus terdiri dari 16 digit.',
+                                'digits' => 'NIK harus tepat 16 digit.',
+                            ]),
+
                         Forms\Components\TextInput::make('family_card_number')
                             ->required()
                             ->numeric()
