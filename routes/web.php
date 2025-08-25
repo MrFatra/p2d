@@ -15,7 +15,7 @@ use Inertia\Inertia;
 //     ->name('login')
 //     ->middleware('throttle:5,1');
 
-// Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('password.index');
 // Route::post('/forgot-password', [ForgotPasswordController::class, 'sendEmail'])->name('password.send-email');
