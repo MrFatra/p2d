@@ -51,6 +51,8 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('national_id')
                             ->label('NIK')
                             ->numeric()
+                            ->minLength(16)
+                            ->maxLength(16)
                             ->required(),
                         Forms\Components\TextInput::make('family_card_number')
                             ->required()

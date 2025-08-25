@@ -37,6 +37,8 @@ class Login extends BaseLogin
                             ->label('NIK')
                             ->required()
                             ->autofocus()
+                            ->minLength(16)
+                            ->maxLength(16)
                             ->autocomplete()
                             ->extraInputAttributes(['tabindex' => 1]),
                         $this->getPasswordFormComponent(),
