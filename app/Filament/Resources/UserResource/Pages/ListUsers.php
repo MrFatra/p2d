@@ -7,6 +7,7 @@ use App\Imports\UsersImport;
 use App\Models\User;
 use Filament\Actions;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Maatwebsite\Excel\Facades\Excel;
@@ -42,16 +43,26 @@ class ListUsers extends ListRecords
                     ->icon('heroicon-o-arrow-down-tray')
                     ->visible(fn() => auth()->user()->can('pengguna:import'))
                     ->form([
+                        MarkdownEditor::make('note')
+                            ->hiddenLabel()
+                            ->default(self::getImportRules())
+                            ->disabled()
+                            ->columnSpan('full'),
+
                         FileUpload::make('file')
                             ->label('File Excel')
                             ->disk('public')
-                            ->visibility("public")
+                            ->visibility('public')
                             ->directory('imports/users')
                             ->required()
-                            ->acceptedFileTypes(['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel']),
+                            ->acceptedFileTypes([
+                                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                'application/vnd.ms-excel',
+                            ]),
                     ])
                     ->action(function (array $data): void {
                         $file = public_path('storage/' . $data['file']);
+
                         Excel::import(new UsersImport, $file);
 
                         \Filament\Notifications\Notification::make()
@@ -124,5 +135,33 @@ class ListUsers extends ListRecords
                     ]);
                 })->count()),
         ];
+    }
+
+    private function getImportRules(): string
+    {
+        return "
+### 📌 Peraturan Import Excel Pengguna
+
+Berikut adalah ketentuan wajib saat melakukan import data pengguna:
+
+- **no_kk**: Wajib diisi.
+- **nik**: Wajib diisi dan harus unik (tidak boleh duplikat dengan data yang sudah ada).
+- **nama**: Wajib diisi.
+- **kata_sandi**: Wajib diisi, minimal 6 karakter.
+- **email**: Opsional, tetapi jika diisi harus valid dan belum digunakan.
+- **tempat_lahir**: Opsional.
+- **tanggal_lahir**: Format `YYYY-MM-DD`, atau format tanggal Excel.
+- **jenis_kelamin**: Hanya boleh `L` (Laki-laki) atau `P` (Perempuan).
+- **no_hp**: Opsional.
+- **rt / rw**: Harus berupa angka.
+- **alamat**: Opsional.
+- **dusun**: Wajib Diisi.
+
+### ⚠️ Keterangan Penting:
+
+- File harus berformat **.xlsx**  
+- Gunakan **header kolom yang sesuai** dengan template  
+- Jika data berupa angka (seperti Nomor KK/NIK/Nomor Telepon/RT/RW), gunakan tanda petik satu (`'`) di awal agar tidak dipotong oleh Excel.
+    ";
     }
 }
