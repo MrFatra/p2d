@@ -32,9 +32,9 @@ class TeenagerResource extends Resource
 
     protected static ?string $navigationLabel = 'Remaja';
 
-    protected static ?string $breadcrumb = 'Data Remaja';
+    protected static ?string $breadcrumb = 'Data Kesehatan Remaja';
 
-    protected static ?string $label = 'Data Remaja';
+    protected static ?string $label = 'Data Kesehatan Remaja';
 
     protected static ?int $navigationSort = 4;
 
@@ -265,6 +265,10 @@ class TeenagerResource extends Resource
                     }),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->icon('heroicon-o-eye')
+                    ->label('Lihat Data')
+                    ->visible(fn() => auth()->user()->can('remaja:read')),
                 Tables\Actions\EditAction::make()
                     ->visible(fn() => auth()->user()->can('remaja:update'))
                     ->icon('heroicon-o-pencil-square')
@@ -292,6 +296,7 @@ class TeenagerResource extends Resource
         return [
             'index' => Pages\ListTeenagers::route('/'),
             'create' => Pages\CreateTeenager::route('/create'),
+            'view' => Pages\ViewTeenager::route('/{record}'),
             'edit' => Pages\EditTeenager::route('/{record}/edit'),
         ];
     }

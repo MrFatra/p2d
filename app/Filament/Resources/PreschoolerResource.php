@@ -32,9 +32,9 @@ class PreschoolerResource extends Resource
 
     protected static ?string $navigationLabel = 'Anak Prasekolah';
 
-    protected static ?string $breadcrumb = 'Data Anak Prasekolah';
+    protected static ?string $breadcrumb = 'Data Kesehatan Anak Prasekolah';
 
-    protected static ?string $label = 'Data Anak Prasekolah';
+    protected static ?string $label = 'Data Kesehatan Anak Prasekolah';
 
     protected static ?int $navigationSort = 3;
 
@@ -307,15 +307,19 @@ class PreschoolerResource extends Resource
                     ->query(fn($query, array $data) => $query->when($data['value'], fn($query, $year) => $query->whereYear('created_at', $year))),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->icon('heroicon-o-eye')
+                    ->label('Lihat Data')
+                    ->visible(fn() => auth()->user()->can('anak_prasekolah:read')),
                 Tables\Actions\EditAction::make()
                     ->icon('heroicon-o-pencil-square')
-                    ->label('Ubah')
+                    ->label('Ubah Data')
                     ->visible(fn() => auth()->user()->can('anak_prasekolah:update')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->label('Hapus')
+                        ->label('Hapus Data')
                         ->visible(fn() => auth()->user()->can('anak_prasekolah:delete')),
                 ]),
             ]);
@@ -331,6 +335,7 @@ class PreschoolerResource extends Resource
         return [
             'index' => Pages\ListPreschoolers::route('/'),
             'create' => Pages\CreatePreschooler::route('/create'),
+            'view' => Pages\ViewPreschooler::route('/{record}'),
             'edit' => Pages\EditPreschooler::route('/{record}/edit'),
         ];
     }

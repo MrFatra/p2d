@@ -32,9 +32,9 @@ class ToddlerResource extends Resource
 
     protected static ?string $navigationLabel = 'Balita';
 
-    protected static ?string $breadcrumb = 'Data Balita';
+    protected static ?string $breadcrumb = 'Data Kesehatan Balita';
 
-    protected static ?string $label = 'Data Balita';
+    protected static ?string $label = 'Data Kesehatan Balita';
 
     protected static ?int $navigationSort = 2;
 
@@ -315,6 +315,10 @@ class ToddlerResource extends Resource
                     }),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->icon('heroicon-o-eye')
+                    ->label('Lihat Data')
+                    ->visible(fn() => auth()->user()->can('balita:read')),
                 Tables\Actions\EditAction::make()
                     ->visible(fn() => auth()->user()->can('balita:update'))
                     ->icon('heroicon-o-pencil-square')
@@ -340,6 +344,7 @@ class ToddlerResource extends Resource
         return [
             'index' => Pages\ListToddlers::route('/'),
             'create' => Pages\CreateToddler::route('/create'),
+            'view' => Pages\ViewToddler::route('/{record}'),
             'edit' => Pages\EditToddler::route('/{record}/edit'),
         ];
     }

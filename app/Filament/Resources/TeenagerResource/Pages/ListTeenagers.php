@@ -23,7 +23,7 @@ class ListTeenagers extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->visible(fn() => auth()->user()->can('remaja:create'))
-                ->label('Tambah Remaja')
+                ->label('Tambah Data Kesehatan Remaja')
                 ->icon('heroicon-o-plus-circle')
                 ->color('primary'),
 

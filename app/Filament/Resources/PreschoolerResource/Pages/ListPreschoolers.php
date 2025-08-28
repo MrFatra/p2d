@@ -23,7 +23,7 @@ class ListPreschoolers extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->visible(fn() => auth()->user()->can('anak_prasekolah:create'))
-                ->label('Tambah Apras')
+                ->label('Tambah Data Kesehatan Apras')
                 ->icon('heroicon-o-plus-circle')
                 ->color('primary'),
 

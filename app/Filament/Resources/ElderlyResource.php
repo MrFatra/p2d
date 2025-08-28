@@ -34,9 +34,9 @@ class ElderlyResource extends Resource
 
     protected static ?string $navigationLabel = 'Lansia';
 
-    protected static ?string $breadcrumb = 'Data Lansia';
+    protected static ?string $breadcrumb = 'Data Kesehatan Lansia';
 
-    protected static ?string $label = 'Data Lansia';
+    protected static ?string $label = 'Data Kesehatan Lansia';
 
     protected static ?int $navigationSort = 7;
 
@@ -239,18 +239,18 @@ class ElderlyResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make()
                     ->icon('heroicon-o-eye')
-                    ->label('Lihat Data Lansia')
+                    ->label('Lihat Data')
                     ->visible(fn() => auth()->user()->can('lansia:read')),
                 Tables\Actions\EditAction::make()
                     ->icon('heroicon-o-pencil-square')
-                    ->label('Edit Data Lansia')
+                    ->label('Edit Data')
                     ->visible(fn() => auth()->user()->can('lansia:update')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
                         ->icon('heroicon-o-trash')
-                        ->label('Hapus Data Lansia')
+                        ->label('Hapus Data')
                         ->visible(fn() => auth()->user()->can('lansia:delete')),
                 ]),
             ]);

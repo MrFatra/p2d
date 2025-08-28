@@ -24,7 +24,7 @@ class ListToddlers extends ListRecords
             Actions\CreateAction::make()
                 ->visible(fn() => auth()->user()->can('balita:create'))
                 ->icon('heroicon-o-plus-circle')
-                ->label('Tambah Balita'),
+                ->label('Tambah Data Kesehatan Balita'),
 
             Actions\Action::make('export-excel')
                 ->visible(fn() => auth()->user()->can('balita:export'))

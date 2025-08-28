@@ -23,7 +23,7 @@ class ListPregnants extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->visible(fn() => auth()->user()->can('ibu-hamil:create'))
-                ->label('Tambah Ibu Hamil')
+                ->label('Tambah Data Kesehatan Ibu Hamil')
                 ->icon('heroicon-o-plus-circle')
                 ->color('primary'),
             Actions\Action::make('export-excel')

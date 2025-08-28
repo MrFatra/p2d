@@ -40,9 +40,9 @@ class InfantResource extends Resource
 
     protected static ?string $navigationLabel = 'Bayi';
 
-    protected static ?string $breadcrumb = 'Data Bayi';
+    protected static ?string $breadcrumb = 'Data Kesehatan Bayi';
 
-    protected static ?string $label = 'Data Bayi';
+    protected static ?string $label = 'Data Kesehatan Bayi';
 
     protected static ?int $navigationSort = 1;
 
@@ -281,7 +281,7 @@ class InfantResource extends Resource
                         'Stunting' => 'danger',
                         default => 'gray',
                     }),
-                    
+
                 TextColumn::make('head_circumference')
                     ->label('Lingkar Kepala (cm)')
                     ->numeric()
@@ -399,15 +399,18 @@ class InfantResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()
-                    ->label('Lihat')
+                    ->label('Lihat Data')
                     ->visible(fn() => auth()->user()->can('bayi:read')),
                 Tables\Actions\EditAction::make()
-                    ->label('Ubah')
+                    ->label('Ubah Data')
                     ->visible(fn() => auth()->user()->can('bayi:update')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->icon('heroicon-o-trash')
+                        ->label('Hapus Data')
+                        ->visible(fn() => auth()->user()->can('bayi:delete')),
                 ]),
             ]);
     }

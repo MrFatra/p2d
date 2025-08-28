@@ -20,7 +20,7 @@ class ListAdults extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->visible(fn() => auth()->user()->can('dewasa:create'))
-                ->label('Tambah Dewasa')
+                ->label('Tambah Data Kesehatan Dewasa')
                 ->icon('heroicon-o-plus-circle')
                 ->color('primary'),
 

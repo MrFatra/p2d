@@ -24,7 +24,7 @@ class ListInfants extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->visible(fn() => auth()->user()->can('bayi:create'))
-                ->label('Tambah Bayi')
+                ->label('Tambah Data Kesehatan Bayi')
                 ->icon('heroicon-o-plus-circle')
                 ->color('primary'),
             Actions\Action::make('export-excel')

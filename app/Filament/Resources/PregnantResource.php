@@ -36,9 +36,9 @@ class PregnantResource extends Resource
 
     protected static ?string $navigationLabel = 'Ibu Hamil';
 
-    protected static ?string $breadcrumb = 'Ibu Hamil';
+    protected static ?string $breadcrumb = 'Data Kesehatan Ibu Hamil';
 
-    protected static ?string $label = 'Ibu Hamil';
+    protected static ?string $label = 'Data Kesehatan Ibu Hamil';
 
     protected static ?int $navigationSort = 6;
 
@@ -224,14 +224,13 @@ class PregnantResource extends Resource
             ])
 
             ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make()
-                        ->label('Ubah')
-                        ->visible(fn() => auth()->user()->can('ibu-hamil:update')),
-                    Tables\Actions\DeleteAction::make()
-                        ->label('Hapus')
-                        ->visible(fn() => auth()->user()->can('ibu-hamil:delete')),
-                ]),
+                Tables\Actions\ViewAction::make()
+                    ->icon('heroicon-o-eye')
+                    ->label('Lihat Data')
+                    ->visible(fn() => auth()->user()->can('ibu-hamil:read')),
+                Tables\Actions\EditAction::make()
+                    ->label('Ubah Data')
+                    ->visible(fn() => auth()->user()->can('ibu-hamil:update')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -252,6 +251,7 @@ class PregnantResource extends Resource
         return [
             'index' => Pages\ListPregnants::route('/'),
             'create' => Pages\CreatePregnant::route('/create'),
+            'view' => Pages\ViewPregnant::route('/{record}'),
             'edit' => Pages\EditPregnant::route('/{record}/edit'),
         ];
     }

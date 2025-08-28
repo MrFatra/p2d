@@ -22,8 +22,8 @@ class ListElderlies extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Tambah Data Lansia')
-                ->icon('heroicon-o-plus')
+                ->label('Tambah Data Kesehatan Lansia')
+                ->icon('heroicon-o-plus-circle')
                 ->visible(fn() => auth()->user()->can('lansia:create')),
             Actions\Action::make('export-excel')
                 ->visible(fn() => auth()->user()->can('lansia:export'))

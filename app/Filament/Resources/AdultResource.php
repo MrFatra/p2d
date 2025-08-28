@@ -31,9 +31,9 @@ class AdultResource extends Resource
 
     protected static ?string $navigationLabel = 'Dewasa';
 
-    protected static ?string $breadcrumb = 'Data Dewasa';
+    protected static ?string $breadcrumb = 'Data Kesehatan Dewasa';
 
-    protected static ?string $label = 'Data Dewasa';
+    protected static ?string $label = 'Data Kesehatan Dewasa';
 
     protected static ?int $navigationSort = 5;
 
@@ -81,8 +81,8 @@ class AdultResource extends Resource
                                 $set('bmi', Health::calculateBMI($state, $get('height')));
                             })
                             ->helperText('Isi berat badan dalam kilogram.'),
-                            
-                            TextInput::make('height')
+
+                        TextInput::make('height')
                             ->label('Tinggi Badan (cm)')
                             ->numeric()
                             ->live(onBlur: true)
@@ -200,6 +200,10 @@ class AdultResource extends Resource
                     }),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->icon('heroicon-o-eye')
+                    ->label('Lihat Data')
+                    ->visible(fn() => auth()->user()->can('dewasa:read')),
                 Tables\Actions\EditAction::make()
                     ->visible(fn() => auth()->user()->can('dewasa:update'))
                     ->icon('heroicon-o-pencil-square')
@@ -227,6 +231,7 @@ class AdultResource extends Resource
         return [
             'index' => Pages\ListAdults::route('/'),
             'create' => Pages\CreateAdult::route('/create'),
+            'view' => Pages\ViewAdult::route('/{record}'),
             'edit' => Pages\EditAdult::route('/{record}/edit'),
         ];
     }
