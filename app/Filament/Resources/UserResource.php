@@ -81,6 +81,7 @@ class UserResource extends Resource
                             ->required()
                             ->label('Tempat Lahir'),
                         Forms\Components\ToggleButtons::make('gender')
+                            ->label('Jenis Kelamin')
                             ->required()
                             ->inline()
                             ->options([

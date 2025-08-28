@@ -70,11 +70,14 @@ class EditProfile extends BaseEditProfile implements HasForms
                         ->maxLength(16),
                     $this->getNameFormComponent()->autofocus(false),
                     $this->getEmailFormComponent()->autofocus(false)->nullable(),
+                    TextInput::make('place_of_birth')
+                        ->label('Tempat Lahir'),
                     DatePicker::make('birth_date')
                         ->native(false)
                         ->required()
                         ->label('Tanggal Lahir'),
                     ToggleButtons::make('gender')
+                        ->label('Jenis Kelamin')
                         ->required()
                         ->inline()
                         ->options([
@@ -90,20 +93,16 @@ class EditProfile extends BaseEditProfile implements HasForms
                             'P' => 'ionicon-female'
                         ]),
                     TextInput::make('phone_number')
-                        ->label('Nomor Telepon')
-                        ->required(),
+                        ->label('Nomor Telepon'),
                     TextInput::make('hamlet')
-                        ->label('Dusun')
-                        ->required(),
+                        ->required()
+                        ->label('Dusun'),
                     TextInput::make('rt')
-                        ->label('RT')
-                        ->required(),
+                        ->label('RT'),
                     TextInput::make('rw')
-                        ->label('RW')
-                        ->required(),
+                        ->label('RW'),
                     Textarea::make('address')
-                        ->label('Alamat Lengkap')
-                        ->required(),
+                        ->label('Alamat Lengkap'),
 
                 ])
         ])
@@ -146,11 +145,11 @@ class EditProfile extends BaseEditProfile implements HasForms
     {
         $this->getUser()->update($this->profileData);
         Notification::make()
-        ->title('Profil berhasil diperbarui.')
-        ->success()
-        ->send();
+            ->title('Profil berhasil diperbarui.')
+            ->success()
+            ->send();
     }
-    
+
     public function updatePassword(): void
     {
         if ($this->passwordData['password'] !== $this->passwordData['passwordConfirmation']) {
@@ -159,7 +158,7 @@ class EditProfile extends BaseEditProfile implements HasForms
         } else {
             $this->resetErrorBag('passwordData.passwordConfirmation');
         }
-        
+
         $this->getUser()->update($this->passwordData);
 
         // session([
