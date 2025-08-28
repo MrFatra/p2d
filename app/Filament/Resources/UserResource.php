@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Helpers\Auth;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
@@ -147,8 +148,9 @@ class UserResource extends Resource
                             ->relationship(
                                 name: 'roles',
                                 titleAttribute: 'label',
-                                modifyQueryUsing: fn($query) => $query->whereIn('label', ['Admin', 'Kader', 'Desa'])
+                                modifyQueryUsing: fn($query) => $query->whereIn('label', ['Admin', 'Kader', 'Desa', 'Tidak ada'])
                             )
+                            ->helperText('Biarkan kosong jika pengguna adalah masyarakat umum. Pilih peran hanya jika pengguna merupakan petugas posyandu.')
                             ->preload()
                             ->native(false)
                             ->position('top')
@@ -157,7 +159,6 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('password')
                             ->revealable()
                             ->password()
-                            ->required()
                             ->hiddenOn('view'),
                     ]),
             ]);
@@ -294,5 +295,14 @@ class UserResource extends Resource
             'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $query->whereNot('id', Auth::user()->id)->get();
+
+        return $query;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
+use App\Helpers\Auth;
 use App\Imports\UsersImport;
 use App\Models\User;
 use Filament\Actions;
@@ -95,7 +96,7 @@ class ListUsers extends ListRecords
         return [
             'all' => Tab::make()
                 ->label('Semua')
-                ->badge(User::count()),
+                ->badge(User::whereNot('id', Auth::user()->id)->count()),
 
             'petugas' => Tab::make()
                 ->label('Petugas')
@@ -104,7 +105,7 @@ class ListUsers extends ListRecords
                         $q->whereIn('name', ['admin', 'cadre']);
                     });
                 })
-                ->badge(User::whereHas('roles', function ($q) {
+                ->badge(User::whereNot('id', Auth::user()->id)->whereHas('roles', function ($q) {
                     $q->whereIn('name', ['admin', 'cadre']);
                 })->count()),
 
