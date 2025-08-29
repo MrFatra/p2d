@@ -80,15 +80,46 @@ class User extends Authenticatable implements FilamentUser
         $key = "users_{$category}_{$hamlet}_month_{$now->format('Ym')}";
 
         return Cache::remember($key, 90, function () use ($category, $hamlet, $now) {
+
             $categories = [
-                'baby' => ['min' => 0, 'max' => 1, 'relation' => 'infants'],
-                'toddler' => ['min' => 1, 'max' => 5, 'relation' => 'toddlers'],
-                'teenager' => ['min' => 12, 'max' => 18, 'relation' => 'teenagers'],
-                'adult' => ['min' => 18, 'max' => 60, 'relation' => 'adults'],
-                'child' => ['min' => 6, 'max' => 12, 'relation' => 'preschoolers'],
-                'elderly' => ['min' => 60, 'max' => null, 'relation' => 'elderlies'],
-                'mother' => ['min' => 12, 'max' => 60, 'relation' => 'pregnantPostpartumBreastfeedings', 'gender' => 'P'],
+                'baby' => [
+                    'min_month' => 0,
+                    'max_month' => 11,
+                    'relation' => 'infants'
+                ],
+                'toddler' => [
+                    'min_month' => 12,
+                    'max_month' => 50,
+                    'relation' => 'toddlers'
+                ],
+                'child' => [
+                    'min_month' => 51,
+                    'max_month' => 71,
+                    'relation' => 'preschoolers'
+                ],
+                'teenager' => [
+                    'min_year' => 10,
+                    'max_year' => 17,
+                    'relation' => 'teenagers'
+                ],
+                'adult' => [
+                    'min_year' => 18,
+                    'max_year' => 59,
+                    'relation' => 'adults'
+                ],
+                'elderly' => [
+                    'min_year' => 60,
+                    'max_year' => null,
+                    'relation' => 'elderlies'
+                ],
+                'mother' => [
+                    'min_year' => 12,
+                    'max_year' => 60,
+                    'relation' => 'pregnantPostpartumBreastfeedings',
+                    'gender' => 'P'
+                ],
             ];
+
 
             if (!$category || !array_key_exists($category, $categories)) {
                 return User::all();
@@ -97,12 +128,20 @@ class User extends Authenticatable implements FilamentUser
             $config = $categories[$category];
             $query = User::query();
 
-            if (!empty($config['max'])) {
-                $query->whereDate('birth_date', '>', $now->copy()->subYears($config['max']));
+            if (isset($config['max_month'])) {
+                $query->whereDate('birth_date', '>', $now->copy()->subMonths($config['max_month'] + 1));
             }
 
-            if (!empty($config['min'])) {
-                $query->whereDate('birth_date', '<=', $now->copy()->subYears($config['min']));
+            if (isset($config['min_month'])) {
+                $query->whereDate('birth_date', '<=', $now->copy()->subMonths($config['min_month']));
+            }
+
+            if (isset($config['max_year'])) {
+                $query->whereDate('birth_date', '>', $now->copy()->subYears($config['max_year'] + 1));
+            }
+
+            if (isset($config['min_year'])) {
+                $query->whereDate('birth_date', '<=', $now->copy()->subYears($config['min_year']));
             }
 
             if (isset($config['gender'])) {
@@ -129,19 +168,38 @@ class User extends Authenticatable implements FilamentUser
         }
 
         $now = now();
-        $age = Carbon::parse($userBirthDate)->diffInYears($now);
+        $birthDate = Carbon::parse($userBirthDate);
 
-        if ($age <= 1) {
+        $ageInMonths = $birthDate->diffInMonths($now);
+        $ageInYears  = $birthDate->diffInYears($now);
+
+        // 1. Bayi 0-11 bulan
+        if ($ageInMonths <= 11) {
             return 'baby';
-        } elseif ($age > 1 && $age <= 5) {
+        }
+
+        // 2. Balita 12-50 bulan
+        if ($ageInMonths >= 12 && $ageInMonths <= 50) {
             return 'toddler';
-        } elseif ($age >= 6 && $age < 12) {
-            return 'child';
-        } elseif ($age >= 12 && $age < 18) {
+        }
+
+        // 3. Apras 51-71 bulan
+        if ($ageInMonths >= 51 && $ageInMonths <= 71) {
+            return 'apras';
+        }
+
+        // 4. Remaja 10-17 tahun
+        if ($ageInYears >= 10 && $ageInYears <= 17) {
             return 'teenager';
-        } elseif ($age >= 18 && $age < 60) {
+        }
+
+        // 5. Dewasa 18-59 tahun
+        if ($ageInYears >= 18 && $ageInYears <= 59) {
             return 'adult';
-        } elseif ($age >= 60) {
+        }
+
+        // 6. Lansia 60 tahun ke atas
+        if ($ageInYears >= 60) {
             return 'elderly';
         }
 
