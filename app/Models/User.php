@@ -89,12 +89,12 @@ class User extends Authenticatable implements FilamentUser
                 ],
                 'toddler' => [
                     'min_month' => 12,
-                    'max_month' => 50,
+                    'max_month' => 59,
                     'relation' => 'toddlers'
                 ],
                 'child' => [
-                    'min_month' => 51,
-                    'max_month' => 71,
+                    'min_month' => 60,
+                    'max_month' => 72,
                     'relation' => 'preschoolers'
                 ],
                 'teenager' => [
@@ -173,27 +173,27 @@ class User extends Authenticatable implements FilamentUser
         $ageInMonths = $birthDate->diffInMonths($now);
         $ageInYears  = $birthDate->diffInYears($now);
 
-        // 1. Bayi 0-11 bulan
-        if ($ageInMonths <= 11) {
+        // 1. Bayi 0–11 bulan
+        if ($ageInMonths >= 0 && $ageInMonths <= 11) {
             return 'baby';
         }
 
-        // 2. Balita 12-50 bulan
-        if ($ageInMonths >= 12 && $ageInMonths <= 50) {
+        // 2. Balita 12–59 bulan
+        if ($ageInMonths >= 12 && $ageInMonths <= 59) {
             return 'toddler';
         }
 
-        // 3. Apras 51-71 bulan
-        if ($ageInMonths >= 51 && $ageInMonths <= 71) {
-            return 'apras';
+        // 3. Anak Pra-Sekolah 60–72 bulan
+        if ($ageInMonths >= 60 && $ageInMonths <= 72) {
+            return 'child';
         }
 
-        // 4. Remaja 10-17 tahun
+        // 4. Remaja 10–17 tahun
         if ($ageInYears >= 10 && $ageInYears <= 17) {
             return 'teenager';
         }
 
-        // 5. Dewasa 18-59 tahun
+        // 5. Dewasa 18–59 tahun
         if ($ageInYears >= 18 && $ageInYears <= 59) {
             return 'adult';
         }
