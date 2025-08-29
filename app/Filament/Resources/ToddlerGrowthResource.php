@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ToddlerGrowthResource\Pages;
 use App\Filament\Resources\ToddlerGrowthResource\RelationManagers;
 use App\Helpers\Auth;
+use App\Helpers\Query;
 use App\Models\ToddlerGrowth;
 use App\Models\User;
 use Filament\Forms;
@@ -116,11 +117,9 @@ class ToddlerGrowthResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-        $now = \Carbon\Carbon::now();
         $user = Auth::user();
 
-        $query->whereDate('birth_date', '>', $now->copy()->subYears(5));
-        $query->whereDate('birth_date', '<=', $now->copy()->subYears(1));
+        $query = Query::takeToddlers($query);
 
         if ($user->hasRole('cadre')) {
             $query->where('hamlet', Auth::user()->hamlet);

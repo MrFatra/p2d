@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\InfantGrowthResource\Pages;
-use App\Filament\Resources\InfantGrowthResource\RelationManagers;
+use App\Filament\Resources\TeenagerGrowthResource\Pages;
+use App\Filament\Resources\TeenagerGrowthResource\RelationManagers;
 use App\Helpers\Auth;
 use App\Helpers\Query;
 use App\Models\User;
@@ -16,26 +16,21 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class InfantGrowthResource extends Resource
+class TeenagerGrowthResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'icon-baby-solid-full';
+    protected static ?string $navigationIcon = 'icon-children-solid-full';
 
-    protected static ?string $activeNavigationIcon = 'icon-baby-solid-full-active';
+    protected static ?string $activeNavigationIcon = 'icon-children-solid-full-active';
 
     protected static ?string $navigationGroup = 'Pertumbuhan';
 
-    protected static ?string $navigationLabel = 'Bayi';
+    protected static ?string $navigationLabel = 'Remaja';
 
-    protected static ?string $breadcrumb = 'Pertumbuhan Bayi';
+    protected static ?string $breadcrumb = 'Pertumbuhan Remaja';
 
-    protected static ?string $label = 'Pertumbuhan Bayi';
-
-    public static function canAccess(): bool
-    {
-        return auth()->user()->can('pertumbuhan-bayi:view');
-    }
+    protected static ?string $label = 'Pertumbuhan Remaja';
 
     public static function form(Form $form): Form
     {
@@ -73,7 +68,7 @@ class InfantGrowthResource extends Resource
                     ->toggleable(),
             ])
             ->filters([
-                // Tambahkan filter jika diperlukan
+                //
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -96,10 +91,10 @@ class InfantGrowthResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListInfantGrowths::route('/'),
-            'create' => Pages\CreateInfantGrowth::route('/create'),
-            'view' => Pages\ViewInfantGrowth::route('/{record}'),
-            'edit' => Pages\EditInfantGrowth::route('/{record}/edit'),
+            'index' => Pages\ListTeenagerGrowths::route('/'),
+            'create' => Pages\CreateTeenagerGrowth::route('/create'),
+            'view' => Pages\ViewTeenagerGrowth::route('/{record}'),
+            'edit' => Pages\EditTeenagerGrowth::route('/{record}/edit'),
         ];
     }
 
@@ -117,14 +112,13 @@ class InfantGrowthResource extends Resource
     {
         $query = parent::getEloquentQuery();
         $user = Auth::user();
-        
-        $query = Query::takeInfants($query);
+
+        $query = Query::takeTeenagers($query);
 
         if ($user->hasRole('cadre')) {
-            $query->where('hamlet', Auth::user()->hamlet);
+            $query->where('hamlet', $user->hamlet);
         }
 
         return $query;
-
     }
 }
