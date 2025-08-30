@@ -60,6 +60,7 @@ class InfantResource extends Resource
                     ->description('Pilih nama Bayi berdasarkan NIK untuk mulai mengisi data.')
                     ->schema([
                         Select::make('user_id')
+                            ->disabledOn('edit')
                             ->label('Nama - NIK')
                             ->options(function () {
                                 return User::getUsers('baby', Auth::user()->hamlet)->mapWithKeys(fn($user) => [
@@ -70,6 +71,22 @@ class InfantResource extends Resource
                                 $user = User::find($value);
                                 return $user ? "{$user->name} - {$user->national_id}" : $value;
                             })
+                            ->live()
+                            ->afterStateUpdated(function ($set, $state) {
+                                $infant = Infant::where('user_id', $state)->oldest()->first();
+                                if ($infant !== null) {
+                                    $set('birth_height', $infant->birth_height);
+                                    $set('birth_weight', $infant->birth_weight);
+                                    $set('head_circumference', $infant->head_circumference);
+                                    $set('upper_arm_circumference', $infant->upper_arm_circumference);
+                                }
+                                if ($state === null) {
+                                    $set('birth_weight', null);
+                                    $set('birth_height', null);
+                                    $set('head_circumference', null);
+                                    $set('upper_arm_circumference', null);
+                                }
+                            })
                             ->searchable()
                             ->required()
                             ->placeholder('Contoh: Siti Aminah - 1234567890')
@@ -77,24 +94,93 @@ class InfantResource extends Resource
                     ]),
 
                 Section::make('Data Lahir')
+                    ->collapsible()
                     ->icon('heroicon-o-cake')
                     ->description('Data saat bayi lahir.')
-                    ->columns(3)
+                    ->columns(2)
+                    ->dehydrated(fn($get) =>
+                    \App\Models\Infant::where('user_id', $get('user_id'))->oldest()->first() === null)
                     ->schema([
                         TextInput::make('birth_weight')
                             ->label('Berat Lahir')
                             ->numeric()
+                            ->readOnly(function (callable $get) {
+                                $userId = $get('user_id');
+                                if (!$userId) return false;
+
+                                $infant = \App\Models\Infant::where('user_id', $userId)->oldest()->first();
+                                return $infant !== null;
+                            })
                             ->suffix('kg')
                             ->helperText('Dalam Satuan Kg. Contoh: 3.2'),
 
                         TextInput::make('birth_height')
                             ->label('Panjang Lahir')
                             ->numeric()
+                            ->readOnly(function (callable $get) {
+                                $userId = $get('user_id');
+                                if (!$userId) return false;
+
+                                $infant = \App\Models\Infant::where('user_id', $userId)->oldest()->first();
+                                return $infant !== null;
+                            })
                             ->suffix('cm')
                             ->helperText('Dalam Satuan cm. Contoh: 49.5'),
 
                         TextInput::make('head_circumference')
                             ->label('Lingkar Kepala')
+                            ->numeric()
+                            ->readOnly(function (callable $get) {
+                                $userId = $get('user_id');
+                                if (!$userId) return false;
+
+                                $infant = \App\Models\Infant::where('user_id', $userId)->oldest()->first();
+                                return $infant !== null;
+                            })
+                            ->suffix('cm')
+                            ->helperText('Dalam Satuan cm. Contoh: 34.0'),
+
+                        TextInput::make('upper_arm_circumference')
+                            ->label('Lingkar Lengan')
+                            ->numeric()
+                            ->readOnly(function (callable $get) {
+                                $userId = $get('user_id');
+                                if (!$userId) return false;
+
+                                $infant = \App\Models\Infant::where('user_id', $userId)->oldest()->first();
+                                return $infant !== null;
+                            })
+                            ->suffix('cm')
+                            ->helperText('Dalam Satuan cm. Contoh: 34.0'),
+                    ]),
+
+                Section::make('Data Perkembangan')
+                    ->collapsible()
+                    ->icon('heroicon-o-clipboard-document-list')
+                    ->description('Data perkembangan bayi.')
+                    ->columns(2)
+                    ->visible(fn($get) => \App\Models\Infant::where('user_id', $get('user_id'))->oldest()->first() !== null)
+                    ->schema([
+                        TextInput::make('weight')
+                            ->label('Berat Badan')
+                            ->numeric()
+                            ->suffix('kg')
+                            ->helperText('Dalam Satuan Kg. Contoh: 3.2'),
+
+                        TextInput::make('height')
+                            ->label('Panjang Badan')
+                            ->numeric()
+                            ->suffix('cm')
+                            ->helperText('Dalam Satuan cm. Contoh: 49.5'),
+
+                        TextInput::make('growth_head_circumference')
+                            ->label('Lingkar Kepala')
+                            ->numeric()
+                            ->suffix('cm')
+                            ->helperText('Dalam Satuan cm. Contoh: 34.0'),
+
+                        TextInput::make('growth_upper_arm_circumference')
+                            ->label('Lingkar Lengan')
                             ->numeric()
                             ->suffix('cm')
                             ->helperText('Dalam Satuan cm. Contoh: 34.0'),
@@ -281,6 +367,11 @@ class InfantResource extends Resource
                         'Stunting' => 'danger',
                         default => 'gray',
                     }),
+
+                TextColumn::make('upper_arm_circumference')
+                    ->label('Lingkar Lengan (cm)')
+                    ->numeric()
+                    ->sortable(),
 
                 TextColumn::make('head_circumference')
                     ->label('Lingkar Kepala (cm)')

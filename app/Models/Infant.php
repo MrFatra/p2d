@@ -18,6 +18,7 @@ class Infant extends Model
         'weight',
         'height',
         'head_circumference',
+        'upper_arm_circumference',
         'nutrition_status',
         'complete_immunization',
         'vitamin_a',
