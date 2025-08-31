@@ -52,6 +52,7 @@ class TeenagerResource extends Resource
                     ->icon('heroicon-o-user')
                     ->schema([
                         Select::make('user_id')
+                            ->disabledOn('edit')
                             ->label('Nama - NIK')
                             ->options(function () {
                                 return User::getUsers('teenager', Auth::user()->hamlet)

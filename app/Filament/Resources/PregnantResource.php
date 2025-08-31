@@ -54,6 +54,7 @@ class PregnantResource extends Resource
                 Section::make('Informasi Warga')
                     ->schema([
                         Select::make('user_id')
+                            ->disabledOn('edit')
                             ->label('Nama - NIK')
                             ->options(function () {
                                 return User::getUsers('mother', Auth::user()->hamlet)
