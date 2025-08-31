@@ -80,12 +80,16 @@ class PregnantResource extends Resource
                             ->label('Status Kehamilan')
                             ->required()
                             ->options([
-                                'Trimester 1' => 'Trimester 1',
-                                'Trimester 2' => 'Trimester 2',
-                                'Trimester 3' => 'Trimester 3',
-                                'Postpartum' => 'Postpartum',
+                                'trimester 1' => 'Trimester 1 (0-13 minggu)',
+                                'trimester 2' => 'Trimester 2 (14-27 minggu)',
+                                'trimester 3' => 'Trimester 3 (28-40 minggu)',
+                                'postpartum'   => 'Masa Nifas (Pasca Persalinan)',
+                                'pregnant'     => 'Hamil (Belum Ditentukan Trimester)',
+                                'abortus'      => 'Keguguran (Abortus)',
+                                'none'         => 'Tidak Sedang Hamil',
                             ])
-                            ->native(false),
+                            ->native(false)
+                            ->helperText('Pilih status kehamilan ibu sesuai pemeriksaan terakhir.')
                     ]),
 
                 Section::make('Pemeriksaan Fisik')
@@ -159,7 +163,26 @@ class PregnantResource extends Resource
                     ->label('Nama Ibu'),
 
                 TextColumn::make('pregnancy_status')
-                    ->label('Status Kehamilan'),
+                    ->label('Status Kehamilan')
+                    ->badge()
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        'trimester 1' => 'Trimester 1 (0-13 minggu)',
+                        'trimester 2' => 'Trimester 2 (14-27 minggu)',
+                        'trimester 3' => 'Trimester 3 (28-40 minggu)',
+                        'postpartum'  => 'Masa Nifas',
+                        'pregnant'    => 'Hamil',
+                        'abortus'     => 'Keguguran',
+                        'none'        => 'Tidak Hamil',
+                        default       => 'Tidak Diketahui',
+                    })
+                    ->color(fn(string $state): string => match ($state) {
+                        'trimester 1', 'trimester 2', 'trimester 3' => 'info',
+                        'postpartum'  => 'success',
+                        'pregnant'    => 'warning',
+                        'abortus'     => 'danger',
+                        'none'        => 'gray',
+                        default       => 'gray',
+                    }),
 
                 TextColumn::make('muac')
                     ->label('Lingkar Lengan Atas (MUAC)'),

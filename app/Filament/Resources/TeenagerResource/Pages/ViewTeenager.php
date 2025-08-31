@@ -9,4 +9,12 @@ use Filament\Resources\Pages\ViewRecord;
 class ViewTeenager extends ViewRecord
 {
     protected static string $resource = TeenagerResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\EditAction::make()
+                ->visible(fn() => auth()->user()->can('remaja:update')),
+        ];
+    }
 }

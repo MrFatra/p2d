@@ -1,6 +1,16 @@
 @php
     use App\Helpers\Family;
 
+    function socialColor($value)
+    {
+        return match ($value) {
+            'Normal' => ['#22C55E', 'white'], // Hijau
+            'Perlu Pemantauan' => ['#FACC15', 'black'], // Kuning
+            'Terlambat' => ['#EF4444', 'white'], // Merah
+            default => ['white', 'black'],
+        };
+    }
+
     function boolColor($value)
     {
         return $value ? ['Ya', '#22C55E', 'white'] : ['Tidak', '#EF4444', 'white'];
@@ -10,8 +20,7 @@
     {
         return match ($value) {
             'Gizi Baik' => ['#22C55E', 'white'],
-            'Gizi Cukup' => ['#FDBA74', 'black'],
-            'Gizi Kurang' => ['#F59E0B', 'black'],
+            'Beresiko' => ['#FDBA74', 'black'],
             'Gizi Buruk' => ['#DC2626', 'white'],
             'Obesitas' => ['#8B5CF6', 'white'],
             default => ['white', 'black'],
@@ -44,7 +53,8 @@
         'Imunisasi Lengkap',
         'ASI Eksklusif',
         'MP-ASI',
-        'Edukasi Pola Asuh',
+        'PMT',
+        'Edukasi Parenting',
         'Tanggal Pemeriksaan',
         'Dibuat Pada',
     ];
@@ -68,11 +78,13 @@
 
                 [$bgNutrition, $colorNutrition] = nutritionColor($preschooler->nutrition_status);
                 [$bgMotor, $colorMotor] = motorColor($preschooler->motor_development);
+                [$bgSocial, $colorSocial] = socialColor($preschooler->social_development);
 
                 [$textVitA, $bgVitA, $colorVitA] = boolColor($preschooler->vitamin_a);
                 [$textImun, $bgImun, $colorImun] = boolColor($preschooler->complete_immunization);
                 [$textAsi, $bgAsi, $colorAsi] = boolColor($preschooler->exclusive_breastfeeding);
                 [$textMpasi, $bgMpasi, $colorMpasi] = boolColor($preschooler->complementary_feeding);
+                [$textPMT, $bgPMT, $colorPMT] = boolColor($preschooler->food_supplement);
                 [$textParenting, $bgParenting, $colorParenting] = boolColor($preschooler->parenting_education);
             @endphp
             <tr>
@@ -93,7 +105,10 @@
                 </td>
 
                 <td style="text-align: center;">{{ $preschooler->language_development }}</td>
-                <td style="text-align: center;">{{ $preschooler->social_development }}</td>
+
+                <td style="background-color: {{ $bgSocial }}; color: {{ $colorSocial }}; text-align: center;">
+                    {{ $preschooler->social_development }}
+                </td>
 
                 <td style="background-color: {{ $bgVitA }}; color: {{ $colorVitA }}; text-align: center;">
                     {{ $textVitA }}
@@ -109,6 +124,10 @@
 
                 <td style="background-color: {{ $bgMpasi }}; color: {{ $colorMpasi }}; text-align: center;">
                     {{ $textMpasi }}
+                </td>
+
+                <td style="background-color: {{ $bgPMT }}; color: {{ $colorPMT }}; text-align: center;">
+                    {{ $textPMT }}
                 </td>
 
                 <td style="background-color: {{ $bgParenting }}; color: {{ $colorParenting }}; text-align: center;">

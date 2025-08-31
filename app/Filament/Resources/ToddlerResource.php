@@ -109,27 +109,24 @@ class ToddlerResource extends Resource
                 ->schema([
                     ToggleButtons::make('nutrition_status')
                         ->label('Status Gizi')
-                        ->helperText('Contoh: Gizi Baik, Gizi Cukup, Gizi Kurang, Gizi Buruk, Obesitas')
+                        ->helperText('Contoh: Gizi Baik, Beresiko, Gizi Kurang, Gizi Buruk, Obesitas')
                         ->inline()
                         ->nullable()
                         ->options([
                             'Gizi Baik' => 'Gizi Baik',
-                            'Gizi Cukup' => 'Gizi Cukup',
-                            'Gizi Kurang' => 'Gizi Kurang',
+                            'Beresiko' => 'Beresiko',
                             'Gizi Buruk' => 'Gizi Buruk',
                             'Obesitas' => 'Obesitas',
                         ])
                         ->colors([
                             'Gizi Baik' => 'success',
-                            'Gizi Cukup' => 'success',
-                            'Gizi Kurang' => 'danger',
+                            'Beresiko' => 'success',
                             'Gizi Buruk' => 'danger',
                             'Obesitas' => 'danger',
                         ])
                         ->icons([
                             'Gizi Baik' => 'heroicon-o-check-circle',
-                            'Gizi Cukup' => 'heroicon-o-check-circle',
-                            'Gizi Kurang' => 'heroicon-o-x-mark',
+                            'Beresiko' => 'heroicon-o-check-circle',
                             'Gizi Buruk' => 'heroicon-o-x-mark',
                             'Obesitas' => 'heroicon-o-x-mark',
                         ]),
@@ -151,7 +148,7 @@ class ToddlerResource extends Resource
                         ])
                         ->icons([
                             'Normal' => 'heroicon-o-check-circle',
-                            'Perlu Pemantauan' => 'heroicon-o-check-circle',
+                            'Perlu Pemantauan' => 'heroicon-o-exclamation-circle',
                             'Terlambat' => 'heroicon-o-x-mark',
                         ]),
                 ]),
@@ -255,20 +252,60 @@ class ToddlerResource extends Resource
                     ->label('Status Gizi')
                     ->formatStateUsing(fn($state) => match ($state) {
                         'Gizi Baik' => new HtmlString('<strong>Gizi Baik</strong>'),
-                        'Gizi Cukup' => new HtmlString('<strong>Gizi Cukup</strong>'),
-                        'Gizi Kurang' => new HtmlString('<strong>Gizi Kurang</strong>'),
+                        'Beresiko' => new HtmlString('<strong>Beresiko</strong>'),
                         'Gizi Buruk' => new HtmlString('<strong>Gizi Buruk</strong>'),
                         'Obesitas' => new HtmlString('<strong>Obesitas</strong>'),
                         default => new HtmlString('<strong>Tidak Diketahui</strong>'),
                     })
                     ->color(fn($state) => match ($state) {
                         'Gizi Baik' => 'success',
-                        'Gizi Cukup' => 'warning',
-                        'Gizi Kurang' => 'danger',
+                        'Beresiko' => 'warning',
                         'Gizi Buruk' => 'danger',
                         'Obesitas' => 'danger',
                         default => 'gray',
                     }),
+
+                Tables\Columns\TextColumn::make('motor_development')
+                    ->label('Perkembangan Motorik')
+                    ->formatStateUsing(fn($state) => match ($state) {
+                        'Normal' => new HtmlString('<strong>Normal</strong>'),
+                        'Perlu Pemantauan' => new HtmlString('<strong>Perlu Pemantauan</strong>'),
+                        'Terlambat' => new HtmlString('<strong>Terlambat</strong>'),
+                        default => new HtmlString('<strong>Tidak Diketahui</strong>'),
+                    })
+                    ->color(fn($state) => match ($state) {
+                        'Normal' => 'success',
+                        'Perlu Pemantauan' => 'warning',
+                        'Terlambat' => 'danger',
+                        default => 'gray',
+                    }),
+
+                Tables\Columns\TextColumn::make('immunization_followup')
+                    ->label('Imunisasi Lanjutan')
+                    ->formatStateUsing(fn($state) => new HtmlString(
+                        $state
+                            ? '<strong class="text-green-600">Ya</strong>'
+                            : '<strong class="text-red-600">Tidak</strong>'
+                    ))
+                    ->html(),
+
+                Tables\Columns\TextColumn::make('food_supplement')
+                    ->label('PMT')
+                    ->formatStateUsing(fn($state) => new HtmlString(
+                        $state
+                            ? '<strong class="text-green-600">Ya</strong>'
+                            : '<strong class="text-red-600">Tidak</strong>'
+                    ))
+                    ->html(),
+
+                Tables\Columns\TextColumn::make('parenting_education')
+                    ->label('Penyuluhan Parenting')
+                    ->formatStateUsing(fn($state) => new HtmlString(
+                        $state
+                            ? '<strong class="text-green-600">Ya</strong>'
+                            : '<strong class="text-red-600">Tidak</strong>'
+                    ))
+                    ->html(),
 
                 Tables\Columns\TextColumn::make('checkup_date')
                     ->label('Tanggal Periksa')

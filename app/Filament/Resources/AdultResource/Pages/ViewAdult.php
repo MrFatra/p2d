@@ -9,4 +9,12 @@ use Filament\Resources\Pages\ViewRecord;
 class ViewAdult extends ViewRecord
 {
     protected static string $resource = AdultResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\EditAction::make()
+                ->visible(fn() => auth()->user()->can('dewasa:update')),
+        ];
+    }
 }

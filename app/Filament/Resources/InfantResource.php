@@ -213,22 +213,19 @@ class InfantResource extends Resource
                             ->inline()
                             ->options([
                                 'Gizi Baik' => 'Gizi Baik',
-                                'Gizi Cukup' => 'Gizi Cukup',
-                                'Gizi Kurang' => 'Gizi Kurang',
+                                'Beresiko' => 'Beresiko',
                                 'Gizi Buruk' => 'Gizi Buruk',
                                 'Obesitas' => 'Obesitas',
                             ])
                             ->colors([
                                 'Gizi Baik' => 'success',
-                                'Gizi Cukup' => 'success',
-                                'Gizi Kurang' => 'danger',
+                                'Beresiko' => 'warning',
                                 'Gizi Buruk' => 'danger',
                                 'Obesitas' => 'danger',
                             ])
                             ->icons([
                                 'Gizi Baik' => 'heroicon-o-check-circle',
-                                'Gizi Cukup' => 'heroicon-o-check-circle',
-                                'Gizi Kurang' => 'heroicon-o-x-mark',
+                                'Beresiko' => 'heroicon-o-exclamation-circle',
                                 'Gizi Buruk' => 'heroicon-o-x-mark',
                                 'Obesitas' => 'heroicon-o-x-mark',
                             ])
@@ -390,16 +387,14 @@ class InfantResource extends Resource
                     ->label('Status Gizi')
                     ->formatStateUsing(fn($state) => match ($state) {
                         'Gizi Baik' => new HtmlString('<strong>Gizi Baik</strong>'),
-                        'Gizi Cukup' => new HtmlString('<strong>Gizi Cukup</strong>'),
-                        'Gizi Kurang' => new HtmlString('<strong>Gizi Kurang</strong>'),
+                        'Beresiko' => new HtmlString('<strong>Beresiko</strong>'),
                         'Gizi Buruk' => new HtmlString('<strong>Gizi Buruk</strong>'),
                         'Obesitas' => new HtmlString('<strong>Obesitas</strong>'),
                         default => new HtmlString('<strong>Tidak Diketahui</strong>'),
                     })
                     ->color(fn($state) => match ($state) {
                         'Gizi Baik' => 'success',
-                        'Gizi Cukup' => 'warning',
-                        'Gizi Kurang' => 'danger',
+                        'Beresiko' => 'warning',
                         'Gizi Buruk' => 'danger',
                         'Obesitas' => 'danger',
                         default => 'gray',

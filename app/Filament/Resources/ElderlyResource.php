@@ -107,22 +107,19 @@ class ElderlyResource extends Resource
                             ->required()
                             ->options([
                                 'Gizi Baik' => 'Gizi Baik',
-                                'Gizi Cukup' => 'Gizi Cukup',
-                                'Gizi Kurang' => 'Gizi Kurang',
+                                'Beresiko' => 'Beresiko',
                                 'Gizi Buruk' => 'Gizi Buruk',
                                 'Obesitas' => 'Obesitas',
                             ])
                             ->colors([
                                 'Gizi Baik' => 'success',
-                                'Gizi Cukup' => 'success',
-                                'Gizi Kurang' => 'danger',
+                                'Beresiko' => 'warning',
                                 'Gizi Buruk' => 'danger',
                                 'Obesitas' => 'danger',
                             ])
                             ->icons([
                                 'Gizi Baik' => 'heroicon-o-check-circle',
-                                'Gizi Cukup' => 'heroicon-o-check-circle',
-                                'Gizi Kurang' => 'heroicon-o-x-mark',
+                                'Beresiko' => 'heroicon-o-exclamation-circle',
                                 'Gizi Buruk' => 'heroicon-o-x-mark',
                                 'Obesitas' => 'heroicon-o-x-mark',
                             ])
@@ -182,11 +179,39 @@ class ElderlyResource extends Resource
 
                 TextColumn::make('nutrition_status')
                     ->label('Status Gizi')
-                    ->searchable(),
+                    ->formatStateUsing(fn($state) => match ($state) {
+                        'Gizi Baik' => new HtmlString('<strong>Gizi Baik</strong>'),
+                        'Beresiko' => new HtmlString('<strong>Beresiko</strong>'),
+                        'Gizi Buruk' => new HtmlString('<strong>Gizi Buruk</strong>'),
+                        'Obesitas' => new HtmlString('<strong>Obesitas</strong>'),
+                        default => new HtmlString('<strong>Tidak Diketahui</strong>'),
+                    })
+                    ->color(fn($state) => match ($state) {
+                        'Gizi Baik' => 'success',
+                        'Beresiko' => 'warning',
+                        'Gizi Buruk' => 'danger',
+                        'Obesitas' => 'danger',
+                        default => 'gray',
+                    }),
 
                 TextColumn::make('functional_ability')
                     ->label('Kemampuan Fungsional')
                     ->searchable(),
+
+                TextColumn::make('functional_ability')
+                    ->label('Kemampuan Fungsional')
+                    ->formatStateUsing(fn($state) => match ($state) {
+                        'Mandiri' => new HtmlString('<strong>Mandiri</strong>'),
+                        'Butuh Bantuan' => new HtmlString('<strong>Butuh Bantuan</strong>'),
+                        'Tidak Mandiri' => new HtmlString('<strong>Tidak Mandiri</strong>'),
+                        default => new HtmlString('<strong>Tidak Diketahui</strong>'),
+                    })
+                    ->color(fn($state) => match ($state) {
+                        'Mandiri' => 'success',
+                        'Butuh Bantuan' => 'warning',
+                        'Tidak Mandiri' => 'danger',
+                        default => 'gray',
+                    }),
 
                 TextColumn::make('chronic_disease_history')
                     ->label('Riwayat Penyakit Kronis')

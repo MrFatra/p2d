@@ -108,18 +108,29 @@ class PreschoolerResource extends Resource
                     ->icon('heroicon-o-heart')
                     ->columns(2)
                     ->schema([
-                        Select::make('nutrition_status')
+                        ToggleButtons::make('nutrition_status')
                             ->label('Status Gizi')
-                            ->native(false)
+                            ->helperText('Contoh: Gizi Baik, Beresiko, Gizi Kurang, Gizi Buruk, Obesitas')
+                            ->inline()
+                            ->nullable()
                             ->options([
                                 'Gizi Baik' => 'Gizi Baik',
-                                'Gizi Cukup' => 'Gizi Cukup',
-                                'Gizi Kurang' => 'Gizi Kurang',
+                                'Beresiko' => 'Beresiko',
                                 'Gizi Buruk' => 'Gizi Buruk',
                                 'Obesitas' => 'Obesitas',
                             ])
-                            ->nullable()
-                            ->helperText('Tentukan status gizi berdasarkan hasil pengukuran anak.'),
+                            ->colors([
+                                'Gizi Baik' => 'success',
+                                'Beresiko' => 'success',
+                                'Gizi Buruk' => 'danger',
+                                'Obesitas' => 'danger',
+                            ])
+                            ->icons([
+                                'Gizi Baik' => 'heroicon-o-check-circle',
+                                'Beresiko' => 'heroicon-o-check-circle',
+                                'Gizi Buruk' => 'heroicon-o-x-mark',
+                                'Obesitas' => 'heroicon-o-x-mark',
+                            ]),
 
                         ToggleButtons::make('vitamin_a')
                             ->label('Vitamin A')
@@ -130,7 +141,7 @@ class PreschoolerResource extends Resource
                             ->helperText('Pilih "Ya" jika anak mendapat Vitamin A bulan ini.'),
 
                         ToggleButtons::make('complete_immunization')
-                            ->label('Imunisasi Dasar Lengkap')
+                            ->label('Imunisasi Lengkap')
                             ->boolean()
                             ->inline()
                             ->nullable()
@@ -158,7 +169,7 @@ class PreschoolerResource extends Resource
                             ->helperText('Pilih "Ya" jika anak menerima makanan tambahan dari posyandu.'),
 
                         ToggleButtons::make('parenting_education')
-                            ->label('Edukasi Pola Asuh')
+                            ->label('Edukasi Parenting')
                             ->boolean()
                             ->inline()
                             ->nullable()
@@ -245,16 +256,14 @@ class PreschoolerResource extends Resource
                     ->label('Status Gizi')
                     ->formatStateUsing(fn($state) => match ($state) {
                         'Gizi Baik' => new HtmlString('<strong>Gizi Baik</strong>'),
-                        'Gizi Cukup' => new HtmlString('<strong>Gizi Cukup</strong>'),
-                        'Gizi Kurang' => new HtmlString('<strong>Gizi Kurang</strong>'),
+                        'Beresiko' => new HtmlString('<strong>Beresiko</strong>'),
                         'Gizi Buruk' => new HtmlString('<strong>Gizi Buruk</strong>'),
                         'Obesitas' => new HtmlString('<strong>Obesitas</strong>'),
                         default => new HtmlString('<strong>Tidak Diketahui</strong>'),
                     })
                     ->color(fn($state) => match ($state) {
                         'Gizi Baik' => 'success',
-                        'Gizi Cukup' => 'warning',
-                        'Gizi Kurang' => 'danger',
+                        'Beresiko' => 'warning',
                         'Gizi Buruk' => 'danger',
                         'Obesitas' => 'danger',
                         default => 'gray',
@@ -264,14 +273,25 @@ class PreschoolerResource extends Resource
                     ->formatStateUsing(fn($state) => new HtmlString($state ? '<strong>Ya</strong>' : '<strong>Tidak</strong>'))
                     ->color(fn($state) => $state ? 'success' : 'danger'),
 
-                TextColumn::make('motor_development')
-                    ->label('Motorik')
-                    ->formatStateUsing(fn($state) => new HTMLString('<strong>' . $state . '</strong>'))
-                    ->color(fn($state) => match ($state) {
-                        'Normal' => 'success',
-                        'Perlu Pemantauan' => 'warning',
-                        'Terlambat' => 'danger'
-                    }),
+                TextColumn::make('complete_immunization')->label('Imunisasi Lengkap')
+                    ->formatStateUsing(fn($state) => new HtmlString($state ? '<strong>Ya</strong>' : '<strong>Tidak</strong>'))
+                    ->color(fn($state) => $state ? 'success' : 'danger'),
+
+                TextColumn::make('exclusive_breastfeeding')->label('ASI Ekslusif')
+                    ->formatStateUsing(fn($state) => new HtmlString($state ? '<strong>Ya</strong>' : '<strong>Tidak</strong>'))
+                    ->color(fn($state) => $state ? 'success' : 'danger'),
+
+                TextColumn::make('complementary_feeding')->label('MP-ASI')
+                    ->formatStateUsing(fn($state) => new HtmlString($state ? '<strong>Ya</strong>' : '<strong>Tidak</strong>'))
+                    ->color(fn($state) => $state ? 'success' : 'danger'),
+
+                TextColumn::make('food_supplement')->label('PMT')
+                    ->formatStateUsing(fn($state) => new HtmlString($state ? '<strong>Ya</strong>' : '<strong>Tidak</strong>'))
+                    ->color(fn($state) => $state ? 'success' : 'danger'),
+
+                TextColumn::make('parenting_education')->label('Edukasi Parenting')
+                    ->formatStateUsing(fn($state) => new HtmlString($state ? '<strong>Ya</strong>' : '<strong>Tidak</strong>'))
+                    ->color(fn($state) => $state ? 'success' : 'danger'),
 
                 TextColumn::make('checkup_date')->label('Tanggal Pemeriksaan')->date('d M Y'),
             ])
@@ -312,9 +332,9 @@ class PreschoolerResource extends Resource
                     ->label('Lihat Data')
                     ->visible(fn() => auth()->user()->can('anak_prasekolah:read')),
                 Tables\Actions\EditAction::make()
+                    ->visible(fn() => auth()->user()->can('anak_prasekolah:update'))
                     ->icon('heroicon-o-pencil-square')
-                    ->label('Ubah Data')
-                    ->visible(fn() => auth()->user()->can('anak_prasekolah:update')),
+                    ->label('Ubah Data'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
