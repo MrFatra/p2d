@@ -70,7 +70,8 @@ class UserResource extends Resource
                             ->required()
                             ->numeric()
                             ->label('No. KK')
-                            ->helperText('Masukkan 16 digit nomor sesuai dengan Kartu Keluarga Anda.'),
+                            ->helperText('Masukkan 16 digit nomor sesuai dengan Kartu Keluarga Anda.')
+                            ->live(onBlur: true),
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->label('Nama'),
@@ -108,26 +109,52 @@ class UserResource extends Resource
                         Select::make('father_id')
                             ->label('Pilih Ayah')
                             ->searchable()
+                            ->reactive()
                             ->preload()
                             ->native(false)
-                            ->options(function ($get) {
-                                return User::where('family_card_number', $get('family_card_number'))
-                                    ->where('gender', 'L')
-                                    ->pluck('name', 'id')
-                                    ->toArray();
+                            ->options(function ($get, $set, $record) {
+                                $options = [];
+
+                                if ($familyCard = $get('family_card_number')) {
+                                    $options = User::where('family_card_number', $familyCard)
+                                        ->where('gender', 'L')
+                                        ->pluck('name', 'id')
+                                        ->toArray();
+                                }
+
+                                if ($record && $record->father_id && !array_key_exists($record->father_id, $options)) {
+                                    $set('father_id', null);
+                                } else {
+                                    $set('father_id', $record->father_id);
+                                }
+
+                                return $options;
                             })
                             ->placeholder('Pilih nama ayah'),
 
                         Select::make('mother_id')
                             ->label('Pilih Ibu')
                             ->searchable()
+                            ->reactive()
                             ->preload()
                             ->native(false)
-                            ->options(function ($get) {
-                                return User::where('family_card_number', $get('family_card_number'))
-                                    ->where('gender', 'P')
-                                    ->pluck('name', 'id')
-                                    ->toArray();
+                            ->options(function ($get, $set, $record) {
+                                $options = [];
+
+                                if ($familyCard = $get('family_card_number')) {
+                                    $options = User::where('family_card_number', $familyCard)
+                                        ->where('gender', 'P')
+                                        ->pluck('name', 'id')
+                                        ->toArray();
+                                }
+
+                                if ($record && $record->mother_id && !array_key_exists($record->mother_id, $options)) {
+                                    $set('mother_id', null);
+                                } else {
+                                    $set('mother_id', $record->mother_id);
+                                }
+
+                                return $options;
                             })
                             ->placeholder('Pilih nama ibu'),
                     ]),
