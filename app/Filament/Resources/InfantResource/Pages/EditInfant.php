@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\InfantResource\Pages;
 
 use App\Filament\Resources\InfantResource;
+use App\Helpers\Family;
+use App\Models\User;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
@@ -12,6 +14,7 @@ class EditInfant extends EditRecord
 
     protected function mutateFormDataBeforeFill(array $data): array
     {
+        $user = User::with(['father', 'mother'])->find($data['user_id']);
         $infant = \App\Models\Infant::where('user_id', $data['user_id'])->oldest()->first();
 
         if ($infant) {
@@ -19,6 +22,11 @@ class EditInfant extends EditRecord
             $data['head_circumference'] = $infant->head_circumference ?? null;
             $data['growth_head_circumference'] = $this->record->head_circumference ?? null;
             $data['growth_upper_arm_circumference'] = $this->record->upper_arm_circumference ?? null;
+        }
+
+        if ($user) {
+            $data['father_name'] = $user->father->name;
+            $data['mother_name'] = $user->mother->name;
         }
 
         return $data;

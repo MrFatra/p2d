@@ -9,6 +9,7 @@ use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -59,15 +60,17 @@ class UserResource extends Resource
                             ->validationMessages([
                                 'required' => 'NIK wajib diisi.',
                                 'numeric' => 'NIK harus berupa angka.',
-                                'min' => 'NIK minimal harus terdiri dari 16 digit.',
-                                'max' => 'NIK maksimal harus terdiri dari 16 digit.',
-                                'digits' => 'NIK harus tepat 16 digit.',
-                            ]),
+                                'min'     => 'NIK harus terdiri dari 16 digit.',
+                                'max'     => 'NIK harus terdiri dari 16 digit.',
+                                'digits'  => 'NIK harus terdiri dari tepat 16 digit.',
+                            ])
+                            ->helperText('Masukkan 16 digit Nomor Induk Kependudukan (NIK) sesuai dengan KTP.'),
 
                         Forms\Components\TextInput::make('family_card_number')
                             ->required()
                             ->numeric()
-                            ->label('No. KK'),
+                            ->label('No. KK')
+                            ->helperText('Masukkan 16 digit nomor sesuai dengan Kartu Keluarga Anda.'),
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->label('Nama'),
@@ -96,6 +99,37 @@ class UserResource extends Resource
                                 'L' => 'ionicon-male',
                                 'P' => 'ionicon-female'
                             ]),
+                    ]),
+
+                Section::make('Data Keluarga')
+                    ->description('Informasi orang tua dari pengguna yang dipilih.')
+                    ->columns(2)
+                    ->schema([
+                        Select::make('father_id')
+                            ->label('Pilih Ayah')
+                            ->searchable()
+                            ->preload()
+                            ->native(false)
+                            ->options(function ($get) {
+                                return User::where('family_card_number', $get('family_card_number'))
+                                    ->where('gender', 'L')
+                                    ->pluck('name', 'id')
+                                    ->toArray();
+                            })
+                            ->placeholder('Pilih nama ayah'),
+
+                        Select::make('mother_id')
+                            ->label('Pilih Ibu')
+                            ->searchable()
+                            ->preload()
+                            ->native(false)
+                            ->options(function ($get) {
+                                return User::where('family_card_number', $get('family_card_number'))
+                                    ->where('gender', 'P')
+                                    ->pluck('name', 'id')
+                                    ->toArray();
+                            })
+                            ->placeholder('Pilih nama ibu'),
                     ]),
 
                 Section::make('Kontak')

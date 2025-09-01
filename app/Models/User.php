@@ -19,6 +19,8 @@ class User extends Authenticatable implements FilamentUser
     protected $fillable = [
         'family_card_number',
         'national_id',
+        'father_id',
+        'mother_id',
         'name',
         'password',
         'birth_date',
@@ -260,5 +262,15 @@ class User extends Authenticatable implements FilamentUser
     public function preschoolers()
     {
         return $this->hasMany(Preschooler::class);
+    }
+
+    public function father()
+    {
+        return $this->belongsTo(User::class, 'father_id');
+    }
+
+    public function mother()
+    {
+        return $this->belongsTo(User::class, 'mother_id');
     }
 }

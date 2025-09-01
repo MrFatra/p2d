@@ -36,16 +36,23 @@ class EditUser extends EditRecord
             $selectedRoleIds = [$selectedRoleIds];
         }
 
-        $roleNames = Role::whereIn('id', $selectedRoleIds)->pluck('name')->toArray();
+        // Cek apakah nilai roles berubah dari sebelumnya
+        $currentRoleNames = $this->record->roles->pluck('name')->toArray();
+        $newRoleNames = \Spatie\Permission\Models\Role::whereIn('id', $selectedRoleIds)->pluck('name')->toArray();
 
-        if (empty($roleNames)) {
-            $roleNames = 'none';
+        sort($currentRoleNames);
+        sort($newRoleNames);
+
+        // Jika tidak berubah, tidak perlu sync
+        if ($currentRoleNames === $newRoleNames) {
+            return;
         }
 
-        if ($this->record->hasRole('none')) {
-            $roleNames = User::determineTypeOfUser($this->record->birth_date);
+        // Jika kosong atau masih punya role "none", tentukan role berdasarkan tanggal lahir
+        if (empty($newRoleNames) || $this->record->hasRole('none')) {
+            $newRoleNames = User::determineTypeOfUser($this->record->birth_date);
         }
 
-        $this->record->syncRoles($roleNames);
+        $this->record->syncRoles($newRoleNames);
     }
 }

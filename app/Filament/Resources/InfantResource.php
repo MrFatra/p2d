@@ -5,12 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\InfantResource\Pages;
 use App\Filament\Resources\InfantResource\RelationManagers;
 use App\Helpers\Auth;
+use App\Helpers\Constant;
 use App\Models\Infant;
 use App\Helpers\Family;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -86,11 +88,45 @@ class InfantResource extends Resource
                                     $set('head_circumference', null);
                                     $set('upper_arm_circumference', null);
                                 }
+
+                                $user = User::with(['father', 'mother'])->find($state);
+
+                                if ($user) {
+                                    $set('father_name', optional($user->father)->name);
+                                    $set('mother_name', optional($user->mother)->name);
+                                } else {
+                                    $set('father_name', null);
+                                    $set('mother_name', null);
+                                }
                             })
                             ->searchable()
                             ->required()
                             ->placeholder('Contoh: Siti Aminah - 1234567890')
                             ->helperText(new HtmlString('<strong>Catatan:</strong> Anda bisa mencari berdasarkan Nama/NIK')),
+                    ]),
+
+
+                Section::make('Data Keluarga')
+                    ->description('Informasi mengenai orang tua.')
+                    ->collapsible()
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('father_name')
+                            ->label('Nama Ayah')
+                            ->readOnly()
+                            ->dehydrated(false)
+                            ->helperText('Data ini diambil secara otomatis dan tidak dapat diubah di sini.'),
+
+                        TextInput::make('mother_name')
+                            ->label('Nama Ibu')
+                            ->readOnly()
+                            ->dehydrated(false)
+                            ->helperText('Data ini diambil secara otomatis dan tidak dapat diubah di sini.'),
+
+                        Placeholder::make('info_alert_note')
+                            ->hiddenLabel()
+                            ->content(Constant::renderInfoAlert('Untuk mengubah nama <strong>Ayah</strong> atau <strong>Ibu</strong>, silakan kunjungi halaman <em>Edit Pengguna</em>.'))
+                            ->columnSpanFull()
                     ]),
 
                 Section::make('Data Lahir')
@@ -310,19 +346,11 @@ class InfantResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('ayah')
-                    ->label('Nama Ayah')
-                    ->getStateUsing(
-                        fn($record) =>
-                        \App\Helpers\Family::getFatherName($record->user?->family_card_number)
-                    ),
+                TextColumn::make('user.father.name')
+                    ->label('Nama Ayah'),
 
-                TextColumn::make('ibu')
-                    ->label('Nama Ibu')
-                    ->getStateUsing(
-                        fn($record) =>
-                        \App\Helpers\Family::getMotherName($record->user?->family_card_number)
-                    ),
+                TextColumn::make('user.mother.name')
+                    ->label('Nama Ibu'),
 
                 TextColumn::make('user.name')
                     ->label('Nama Bayi')
