@@ -19,6 +19,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
 
@@ -297,5 +298,20 @@ class ElderlyResource extends Resource
             'view' => Pages\ViewElderly::route('/{record}'),
             'edit' => Pages\EditElderly::route('/{record}/edit'),
         ];
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return auth()->user()->hasPermissionTo('lansia:update');
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->hasPermissionTo('lansia:create');
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return auth()->user()->hasPermissionTo('lansia:delete');
     }
 }

@@ -25,6 +25,10 @@ class RolePermissionSeeder extends Seeder
                 'name' => 'cadre',
             ],
             [
+                'label' => 'Bidan',
+                'name' => 'midwife',
+            ],
+            [
                 'label' => 'Bayi',
                 'name' => 'baby',
             ],
@@ -93,6 +97,7 @@ class RolePermissionSeeder extends Seeder
             'dashboard',
             'pertumbuhan-bayi',
             'pertumbuhan-balita',
+            'pertumbuhan-remaja',
             'laporan-data-posyandu',
         ];
 

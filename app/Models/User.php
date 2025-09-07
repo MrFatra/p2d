@@ -55,7 +55,7 @@ class User extends Authenticatable implements FilamentUser
         parent::boot();
 
         static::creating(function ($user) {
-            if (!$user->hasRole(['admin', 'cadre', 'resident'])) {
+            if (!$user->hasRole(['admin', 'cadre', 'resident', 'midwife'])) {
                 $user->syncRoles(self::determineTypeOfUser($user->birth_date));
             }
         });
@@ -65,7 +65,7 @@ class User extends Authenticatable implements FilamentUser
                 unset($user->password);
             }
 
-            if ($user->isDirty('birth_date') && !$user->hasRole(['admin', 'cadre', 'resident'])) {
+            if ($user->isDirty('birth_date') && !$user->hasRole(['admin', 'cadre', 'resident', 'midwife'])) {
                 $user->syncRoles(self::determineTypeOfUser($user->birth_date));
             }
         });
@@ -159,6 +159,8 @@ class User extends Authenticatable implements FilamentUser
                 $query->where('hamlet', $hamlet);
             }
 
+            $query->where('is_death', false);
+
             return $query->get();
         });
     }
@@ -215,7 +217,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->hasRole(['admin', 'cadre', 'resident']);
+        return $this->hasRole(['admin', 'cadre', 'resident', 'midwife']);
     }
 
     // === Relationships ===

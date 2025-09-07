@@ -20,6 +20,7 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Resources\Resource;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 
 class ToddlerResource extends Resource
@@ -414,5 +415,20 @@ class ToddlerResource extends Resource
             'view' => Pages\ViewToddler::route('/{record}'),
             'edit' => Pages\EditToddler::route('/{record}/edit'),
         ];
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return auth()->user()->hasPermissionTo('balita:update');
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->hasPermissionTo('balita:create');
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return auth()->user()->hasPermissionTo('balita:delete');
     }
 }

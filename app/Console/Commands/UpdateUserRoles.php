@@ -31,7 +31,7 @@ class UpdateUserRoles extends Command
         User::chunk(100, function ($users) {
             foreach ($users as $user) {
                 
-                if ($user->hasRole(['admin', 'cadre', 'resident'])) {
+                if ($user->hasRole(['admin', 'cadre', 'resident', 'midwife'])) {
                     continue;
                 }
 

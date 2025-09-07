@@ -71,7 +71,11 @@ class UserResource extends Resource
                             ->numeric()
                             ->label('No. KK')
                             ->helperText('Masukkan 16 digit nomor sesuai dengan Kartu Keluarga Anda.')
-                            ->live(onBlur: true),
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (callable $set) {
+                                $set('father_id', null);
+                                $set('mother_id', null);
+                            }),
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->label('Nama'),
@@ -122,12 +126,6 @@ class UserResource extends Resource
                                         ->toArray();
                                 }
 
-                                if ($record && $record->father_id && !array_key_exists($record->father_id, $options)) {
-                                    $set('father_id', null);
-                                } else {
-                                    $set('father_id', $record->father_id);
-                                }
-
                                 return $options;
                             })
                             ->placeholder('Pilih nama ayah'),
@@ -146,12 +144,6 @@ class UserResource extends Resource
                                         ->where('gender', 'P')
                                         ->pluck('name', 'id')
                                         ->toArray();
-                                }
-
-                                if ($record && $record->mother_id && !array_key_exists($record->mother_id, $options)) {
-                                    $set('mother_id', null);
-                                } else {
-                                    $set('mother_id', $record->mother_id);
                                 }
 
                                 return $options;
@@ -210,7 +202,7 @@ class UserResource extends Resource
                             ->relationship(
                                 name: 'roles',
                                 titleAttribute: 'label',
-                                modifyQueryUsing: fn($query) => $query->whereIn('label', ['Admin', 'Kader', 'Desa', 'Tidak ada'])
+                                modifyQueryUsing: fn($query) => $query->whereIn('label', ['Admin', 'Kader', 'Desa', 'Bidan', 'Tidak ada'])
                             )
                             ->helperText('Biarkan kosong jika pengguna adalah masyarakat umum. Pilih peran hanya jika pengguna merupakan petugas posyandu.')
                             ->preload()
@@ -219,9 +211,13 @@ class UserResource extends Resource
                             ->label('Peran'),
 
                         Forms\Components\TextInput::make('password')
+                            ->label('Password')
                             ->revealable()
                             ->password()
-                            ->hiddenOn('view'),
+                            ->hiddenOn('view')
+                            ->required(fn(string $context) => $context === 'create')
+                            ->helperText(fn(string $context) => $context === 'edit' ? 'Biarkan kosong jika tidak ingin mengubah password.' : null),
+
                     ]),
             ]);
     }
@@ -288,6 +284,7 @@ class UserResource extends Resource
                     ->color(fn($state) => match ($state) {
                         'Admin' => 'warning',
                         'Kader' => 'warning',
+                        'Bidan' => 'warning',
                         'Bayi' => 'info',
                         'Balita' => 'info',
                         'Apras' => 'cyan',
@@ -366,5 +363,20 @@ class UserResource extends Resource
         $query->whereNot('id', Auth::user()->id)->get();
 
         return $query;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return auth()->user()->hasPermissionTo('pengguna:update');
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->hasPermissionTo('pengguna:create');
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return auth()->user()->hasPermissionTo('pengguna:delete');
     }
 }

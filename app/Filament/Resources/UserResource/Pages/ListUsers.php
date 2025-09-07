@@ -102,11 +102,11 @@ class ListUsers extends ListRecords
                 ->label('Petugas')
                 ->modifyQueryUsing(function ($query) {
                     $query->whereHas('roles', function ($q) {
-                        $q->whereIn('name', ['admin', 'cadre']);
+                        $q->whereIn('name', ['admin', 'cadre', 'resident', 'midwife']);
                     });
                 })
                 ->badge(User::whereNot('id', Auth::user()->id)->whereHas('roles', function ($q) {
-                    $q->whereIn('name', ['admin', 'cadre']);
+                    $q->whereIn('name', ['admin', 'cadre', 'resident', 'midwife']);
                 })->count()),
 
             'pengguna' => Tab::make()

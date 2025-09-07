@@ -45,9 +45,11 @@ class RoleResource extends Resource
                     ->schema([
                         TextInput::make('label')
                             ->label('Nama Peran')
+                            ->disabledOn('edit')
                             ->required(),
                         TextInput::make('name')
                             ->label('Peran')
+                            ->disabledOn('edit')
                             ->required()
                             ->unique(ignoreRecord: true),
                     ]),

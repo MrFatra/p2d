@@ -20,6 +20,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 
 class PreschoolerResource extends Resource
@@ -388,5 +389,20 @@ class PreschoolerResource extends Resource
             'view' => Pages\ViewPreschooler::route('/{record}'),
             'edit' => Pages\EditPreschooler::route('/{record}/edit'),
         ];
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return auth()->user()->hasPermissionTo('anak_prasekolah:update');
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->hasPermissionTo('anak_prasekolah:create');
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return auth()->user()->hasPermissionTo('anak_prasekolah:delete');
     }
 }

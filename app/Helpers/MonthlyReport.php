@@ -33,7 +33,7 @@ class MonthlyReport
 
         if ($user && $user->hasRole('cadre')) {
             $hamlet = $hamlet ?? $user->hamlet;
-        } else if ($user && $user->hasRole(['admin', 'resident'])) {
+        } else if ($user && $user->hasRole(['admin', 'resident', 'midwife'])) {
             $hamlet = null;
         }
 

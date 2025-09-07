@@ -62,6 +62,23 @@ class UserSeeder extends Seeder
             'rw' => 1,
         ]);
 
+        $babyDeath = User::create([
+            'family_card_number' => '3174012300012541',
+            'national_id' => '3174011506240087',
+            'name' => 'Aurelia Die',
+            'email' => 'aurelia.die@example.com',
+            'password' => bcrypt('password'),
+            'birth_date' => '2025-06-15',
+            'place_of_birth' => 'Depok',
+            'gender' => 'P',
+            'phone_number' => '081222334455',
+            'address' => 'Jl. Dahlia No.9, Depok',
+            'hamlet' => 'Pahing',
+            'rt' => 3,
+            'rw' => 1,
+            'is_death' => true
+        ]);
+
         // TODDLER
         $toddler = User::create([
             'family_card_number' => '3174012300012347',
@@ -181,5 +198,22 @@ class UserSeeder extends Seeder
             'rw' => 0,
         ]);
         $none->syncRoles('none');
+
+        $midwife = User::create([
+            'family_card_number' => '3174012300012359',
+            'national_id' => '3174011804900023',
+            'name' => 'Diva Pratiwi',
+            'email' => 'diva@example.com',
+            'password' => bcrypt('password'),
+            'birth_date' => '1990-04-18',
+            'place_of_birth' => 'Bandung',
+            'gender' => 'P',
+            'phone_number' => '081311223344',
+            'address' => 'Jl. Mawar No.7, Bekasi',
+            'hamlet' => 'Manis',
+            'rt' => 2,
+            'rw' => 6,
+        ]);
+        $midwife->syncRoles('midwife');
     }
 }
