@@ -381,7 +381,7 @@ class InfantResource extends Resource
                                     ])
                                     ->columns(2)
                                     ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
-                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 12),
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInYears(now()) >= 1),
                             ]),
                     ]),
 
