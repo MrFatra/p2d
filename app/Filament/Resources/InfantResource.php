@@ -10,9 +10,11 @@ use App\Models\Infant;
 use App\Helpers\Family;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -306,6 +308,16 @@ class InfantResource extends Resource
                                     ->inline()
                                     ->boolean()
                                     ->helperText('Apakah telah mendapatkan vitamin A?'),
+
+                                CheckboxList::make('one_month')
+                                    ->label('Imunisasi Umur 1 Bulan')
+                                    ->options([
+                                        'Polio Tetes 1' => 'Polio Tetes 1',
+                                        'BCG' => 'BCG',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 1),
                             ]),
                     ]),
 
