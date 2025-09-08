@@ -318,6 +318,70 @@ class InfantResource extends Resource
                                     ->columns(2)
                                     ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
                                         && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 1),
+
+                                CheckboxList::make('two_month')
+                                    ->label('Imunisasi Umur 2 Bulan')
+                                    ->options([
+                                        'DPT-HB-Hib 1' => 'DPT-HB-Hib 1',
+                                        'Polio Tetes 2' => 'Polio Tetes 2',
+                                        'PCV 1' => 'PCV 1',
+                                        'RV 1' => 'RV 1',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 2),
+
+                                CheckboxList::make('three_month')
+                                    ->label('Imunisasi Umur 3 Bulan')
+                                    ->options([
+                                        'DPT-HB-Hib 2' => 'DPT-HB-Hib 2',
+                                        'Polio Tetes 3' => 'Polio Tetes 3',
+                                        'PCV 2' => 'PCV 2',
+                                        'RV 2' => 'RV 2',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 3),
+
+                                CheckboxList::make('four_month')
+                                    ->label('Imunisasi Umur 4 Bulan')
+                                    ->options([
+                                        'DPT-HB-Hib 3' => 'DPT-HB-Hib 3',
+                                        'Polio Tetes 4' => 'Polio Tetes 4',
+                                        'Polio Suntik 1' => 'Polio Suntik 1',
+                                        'RV 3' => 'RV 3',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 4),
+
+                                CheckboxList::make('nine_month')
+                                    ->label('Imunisasi Umur 9 Bulan')
+                                    ->options([
+                                        'Campak Rubella 1' => 'Campak Rubella 1',
+                                        'Polio Suntik 2' => 'Polio Suntik 2',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 9),
+
+                                CheckboxList::make('ten_month')
+                                    ->label('Imunisasi Umur 10 Bulan')
+                                    ->options([
+                                        'JE*' => 'JE*',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 10),
+
+                                CheckboxList::make('one_year')
+                                    ->label('Imunisasi Umur 1 Tahun')
+                                    ->options([
+                                        'PCV 3' => 'PCV 3',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 12),
                             ]),
                     ]),
 
