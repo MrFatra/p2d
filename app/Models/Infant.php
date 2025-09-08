@@ -27,11 +27,25 @@ class Infant extends Model
         'complementary_feeding',
         'motor_development',
         'checkup_date',
+        'one_day',
+        'hb_immunization',
         'one_month',
+        'two_month',
+        'three_month',
+        'four_month',
+        'nine_month',
+        'ten_month',
+        'one_year',
     ];
 
     protected $casts = [
         'one_month' => 'array',
+        'two_month' => 'array',
+        'three_month' => 'array',
+        'four_month' => 'array',
+        'nine_month' => 'array',
+        'ten_month' => 'array',
+        'one_year' => 'array', 
     ];
 
     // Relasi ke user
