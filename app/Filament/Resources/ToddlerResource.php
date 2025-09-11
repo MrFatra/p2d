@@ -237,10 +237,6 @@ class ToddlerResource extends Resource
                             if (! $u = \App\Models\User::find($get('user_id'))) return false;
                             return \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 18;
                         })
-                        ->disableOptionWhen(function ($value, $state) {
-                            // Kalau option ini sudah ada di DB, disable supaya tidak bisa diubah lagi
-                            return in_array($value, $state ?? []);
-                        })
                         ->helperText('Pilih imunisasi yang sudah diberikan pada umur 18 bulan')
                 ]),
 
