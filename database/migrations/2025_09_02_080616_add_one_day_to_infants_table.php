@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('infants', function (Blueprint $table) {
-            $table->json('one_day', ['Hepatitis B'])->nullable();
+            $table->json('one_day')->nullable();
             $table->boolean('hb_immunization')->nullable();
+            $table->date('hb_date')->nullable();
         });
     }
 

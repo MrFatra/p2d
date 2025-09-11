@@ -29,6 +29,7 @@ class Infant extends Model
         'checkup_date',
         'one_day',
         'hb_immunization',
+        'hb_date',
         'one_month',
         'two_month',
         'three_month',
@@ -39,13 +40,14 @@ class Infant extends Model
     ];
 
     protected $casts = [
+        'one_day' => 'array',
         'one_month' => 'array',
         'two_month' => 'array',
         'three_month' => 'array',
         'four_month' => 'array',
         'nine_month' => 'array',
         'ten_month' => 'array',
-        'one_year' => 'array', 
+        'one_year' => 'array',
     ];
 
     // Relasi ke user

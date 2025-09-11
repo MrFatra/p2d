@@ -225,24 +225,6 @@ class InfantResource extends Resource
                             ->helperText('Dalam Satuan cm. Contoh: 34.0'),
                     ]),
 
-                Section::make('Pemeriksaan Fisik')
-                    ->icon('heroicon-o-scale')
-                    ->description('Pengukuran berat dan tinggi badan.')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('weight')
-                            ->label('Berat Badan (kg)')
-                            ->suffix('kg')
-                            ->numeric()
-                            ->helperText('Berat badan saat pemeriksaan terakhir. Dalam Satuan Kg. Contoh: 3.2'),
-
-                        TextInput::make('height')
-                            ->label('Tinggi Badan (cm)')
-                            ->suffix('cm')
-                            ->numeric()
-                            ->helperText('Tinggi badan saat pemeriksaan terakhir. Dalam Satuan cm. Contoh: 34.0'),
-                    ]),
-
                 Section::make('Status Gizi & Perkembangan')
                     ->icon('heroicon-o-clipboard-document-list')
                     ->description('Penilaian status gizi dan perkembangan motorik bayi.')
@@ -308,6 +290,32 @@ class InfantResource extends Resource
                                     ->inline()
                                     ->boolean()
                                     ->helperText('Apakah telah mendapatkan vitamin A?'),
+
+                                ToggleButtons::make('hb_immunization')
+                                    ->label('Apakah Hepatitis B sudah diberikan?')
+                                    ->boolean()
+                                    ->default(0)
+                                    ->inline(false)
+                                    ->live()
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInDays(now()) >= 1),
+
+                                DatePicker::make('hb_date')
+                                    ->label('Tanggal Imunisasi HB')
+                                    ->native(false)
+                                    ->closeOnDateSelection()
+                                    ->nullable()
+                                    ->reactive()
+                                    ->visible(fn($get) => $get('hb_immunization') == 1),
+
+                                CheckboxList::make('one_day')
+                                    ->label('Imunisasi Umur 1 Hari')
+                                    ->options([
+                                        'Hepatitis B' => 'Hepatitis B',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInDays(now()) >= 1),
 
                                 CheckboxList::make('one_month')
                                     ->label('Imunisasi Umur 1 Bulan')
