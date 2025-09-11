@@ -10,9 +10,11 @@ use App\Models\Infant;
 use App\Helpers\Family;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -223,24 +225,6 @@ class InfantResource extends Resource
                             ->helperText('Dalam Satuan cm. Contoh: 34.0'),
                     ]),
 
-                Section::make('Pemeriksaan Fisik')
-                    ->icon('heroicon-o-scale')
-                    ->description('Pengukuran berat dan tinggi badan.')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('weight')
-                            ->label('Berat Badan (kg)')
-                            ->suffix('kg')
-                            ->numeric()
-                            ->helperText('Berat badan saat pemeriksaan terakhir. Dalam Satuan Kg. Contoh: 3.2'),
-
-                        TextInput::make('height')
-                            ->label('Tinggi Badan (cm)')
-                            ->suffix('cm')
-                            ->numeric()
-                            ->helperText('Tinggi badan saat pemeriksaan terakhir. Dalam Satuan cm. Contoh: 34.0'),
-                    ]),
-
                 Section::make('Status Gizi & Perkembangan')
                     ->icon('heroicon-o-clipboard-document-list')
                     ->description('Penilaian status gizi dan perkembangan motorik bayi.')
@@ -306,6 +290,106 @@ class InfantResource extends Resource
                                     ->inline()
                                     ->boolean()
                                     ->helperText('Apakah telah mendapatkan vitamin A?'),
+
+                                ToggleButtons::make('hb_immunization')
+                                    ->label('Apakah Hepatitis B sudah diberikan?')
+                                    ->boolean()
+                                    ->default(0)
+                                    ->inline(false)
+                                    ->live()
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInDays(now()) >= 1),
+
+                                DatePicker::make('hb_date')
+                                    ->label('Tanggal Imunisasi HB')
+                                    ->native(false)
+                                    ->closeOnDateSelection()
+                                    ->nullable()
+                                    ->reactive()
+                                    ->visible(fn($get) => $get('hb_immunization') == 1),
+
+                                CheckboxList::make('one_day')
+                                    ->label('Imunisasi Umur 1 Hari')
+                                    ->options([
+                                        'Hepatitis B' => 'Hepatitis B',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInDays(now()) >= 1),
+
+                                CheckboxList::make('one_month')
+                                    ->label('Imunisasi Umur 1 Bulan')
+                                    ->options([
+                                        'Polio Tetes 1' => 'Polio Tetes 1',
+                                        'BCG' => 'BCG',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 1),
+
+                                CheckboxList::make('two_month')
+                                    ->label('Imunisasi Umur 2 Bulan')
+                                    ->options([
+                                        'DPT-HB-Hib 1' => 'DPT-HB-Hib 1',
+                                        'Polio Tetes 2' => 'Polio Tetes 2',
+                                        'PCV 1' => 'PCV 1',
+                                        'RV 1' => 'RV 1',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 2),
+
+                                CheckboxList::make('three_month')
+                                    ->label('Imunisasi Umur 3 Bulan')
+                                    ->options([
+                                        'DPT-HB-Hib 2' => 'DPT-HB-Hib 2',
+                                        'Polio Tetes 3' => 'Polio Tetes 3',
+                                        'PCV 2' => 'PCV 2',
+                                        'RV 2' => 'RV 2',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 3),
+
+                                CheckboxList::make('four_month')
+                                    ->label('Imunisasi Umur 4 Bulan')
+                                    ->options([
+                                        'DPT-HB-Hib 3' => 'DPT-HB-Hib 3',
+                                        'Polio Tetes 4' => 'Polio Tetes 4',
+                                        'Polio Suntik 1' => 'Polio Suntik 1',
+                                        'RV 3' => 'RV 3',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 4),
+
+                                CheckboxList::make('nine_month')
+                                    ->label('Imunisasi Umur 9 Bulan')
+                                    ->options([
+                                        'Campak Rubella 1' => 'Campak Rubella 1',
+                                        'Polio Suntik 2' => 'Polio Suntik 2',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 9),
+
+                                CheckboxList::make('ten_month')
+                                    ->label('Imunisasi Umur 10 Bulan')
+                                    ->options([
+                                        'JE*' => 'JE*',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 10),
+
+                                CheckboxList::make('one_year')
+                                    ->label('Imunisasi Umur 1 Tahun')
+                                    ->options([
+                                        'PCV 3' => 'PCV 3',
+                                    ])
+                                    ->columns(2)
+                                    ->visible(fn($get) => ($u = \App\Models\User::find($get('user_id')))
+                                        && \Carbon\Carbon::parse($u->birth_date)->diffInYears(now()) >= 1),
                             ]),
                     ]),
 
