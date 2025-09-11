@@ -8,6 +8,7 @@ use App\Helpers\Constant;
 use App\Models\Toddler;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Form;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -225,6 +226,22 @@ class ToddlerResource extends Resource
                         ->nullable()
                         ->helperText('Apakah orang tua ikut penyuluhan?'),
 
+                    CheckboxList::make('eighteen_month')
+                        ->label('Imunisasi Umur 18 Bulan')
+                        ->options([
+                            'DPT-HB-Hib 4' => 'DPT-HB-Hib 4',
+                            'Campak Rubella 2' => 'Campak Rubella 2',
+                        ])
+                        ->columns(2)
+                        ->visible(function ($get) {
+                            if (! $u = \App\Models\User::find($get('user_id'))) return false;
+                            return \Carbon\Carbon::parse($u->birth_date)->diffInMonths(now()) >= 18;
+                        })
+                        ->disableOptionWhen(function ($value, $state) {
+                            // Kalau option ini sudah ada di DB, disable supaya tidak bisa diubah lagi
+                            return in_array($value, $state ?? []);
+                        })
+                        ->helperText('Pilih imunisasi yang sudah diberikan pada umur 18 bulan')
                 ]),
 
             Section::make('Tanggal Pemeriksaan')
