@@ -42,8 +42,8 @@ class ToddlerExport implements
     public function map($toddler): array
     {
         return [
-            Family::getFatherName($toddler->user?->family_card_number),
-            Family::getMotherName($toddler->user?->family_card_number),
+            $toddler->user?->father->name,
+            $toddler->user?->mother->name,
             $toddler->user->name,
             $toddler->weight,
             $toddler->height,

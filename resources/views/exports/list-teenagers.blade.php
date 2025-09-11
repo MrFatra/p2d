@@ -44,8 +44,8 @@
             @endphp
 
             <tr>
-                <td>{{ \App\Helpers\Family::getFatherName($teenager->user?->family_card_number) }}</td>
-                <td>{{ \App\Helpers\Family::getMotherName($teenager->user?->family_card_number) }}</td>
+                <td>{{ $teenager->user?->father->name }}</td>
+                <td>{{ $teenager->user?->mother->name }}</td>
                 <td style="text-align: left;">{{ $teenager->user->name }}</td>
                 <td style="text-align: right;">{{ $teenager->weight }}</td>
                 <td style="text-align: right;">{{ $teenager->height }}</td>

@@ -18,15 +18,15 @@ class EditInfant extends EditRecord
         $infant = \App\Models\Infant::where('user_id', $data['user_id'])->oldest()->first();
 
         if ($infant) {
-            $data['upper_arm_circumference'] = $infant->upper_arm_circumference ?? null;
-            $data['head_circumference'] = $infant->head_circumference ?? null;
+            $data['upper_arm_circumference'] = optional($infant)->upper_arm_circumference ?? null;
+            $data['head_circumference'] = optional($infant)->head_circumference ?? null;
             $data['growth_head_circumference'] = $this->record->head_circumference ?? null;
             $data['growth_upper_arm_circumference'] = $this->record->upper_arm_circumference ?? null;
         }
 
         if ($user) {
-            $data['father_name'] = $user->father->name;
-            $data['mother_name'] = $user->mother->name;
+            $data['father_name'] = optional($user->father)->name;
+            $data['mother_name'] = optional($user->mother)->name;
         }
 
         return $data;

@@ -25,12 +25,12 @@ class ViewInfant extends ViewRecord
         $user = User::with(['father', 'mother'])->find($data['user_id']);
         $infant = Infant::where('user_id', $data['user_id'])->oldest()->first();
 
-        $data['father_name'] = $user->father->name;
-        $data['mother_name'] = $user->mother->name;
-        $data['birth_weight'] = $infant->birth_weight;
-        $data['birth_height'] = $infant->birth_height;
-        $data['upper_arm_circumference'] = $infant->upper_arm_circumference;
-        $data['head_circumference'] = $infant->head_circumference;
+        $data['father_name'] = optional($user->father)->name;
+        $data['mother_name'] = optional($user->mother)->name;
+        $data['birth_weight'] = optional($infant)->birth_weight;
+        $data['birth_height'] = optional($infant)->birth_height;
+        $data['upper_arm_circumference'] = optional($infant)->upper_arm_circumference;
+        $data['head_circumference'] = optional($infant)->head_circumference;
 
         $data['growth_upper_arm_circumference'] = $this->record->upper_arm_circumference;
         $data['growth_head_circumference'] = $this->record->head_circumference;

@@ -42,8 +42,8 @@ class InfantExport implements
     public function map($infant): array
     {
         return [
-            Family::getFatherName($infant->user?->family_card_number),
-            Family::getMotherName($infant->user?->family_card_number),
+            $infant->user?->father->name,
+            $infant->user?->mother->name,
             $infant->user->name,
             $infant->weight,
             $infant->height,

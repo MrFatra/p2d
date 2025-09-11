@@ -43,8 +43,6 @@ class AdultExport implements
     public function map($adult): array
     {
         return [
-            Family::getFatherName($adult->user?->family_card_number),
-            Family::getMotherName($adult->user?->family_card_number),
             $adult->user?->name,
             $adult->bmi,
             $adult->blood_pressure,
@@ -61,9 +59,7 @@ class AdultExport implements
     public function headings(): array
     {
         return [
-            'Nama Ayah',
-            'Nama Ibu',
-            'Nama Dewasa',
+            'Nama',
             'BMI',
             'Tekanan Darah',
             'Diabetes',

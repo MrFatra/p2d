@@ -43,8 +43,8 @@ class TeenagerExport implements
     public function map($teenager): array
     {
         return [
-            Family::getFatherName($teenager->user?->family_card_number),
-            Family::getMotherName($teenager->user?->family_card_number),
+            $teenager->user?->father->name,
+            $teenager->user?->mother->name,
             $teenager->user->name,
             $teenager->weight,
             $teenager->height,
