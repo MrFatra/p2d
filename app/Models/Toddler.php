@@ -20,10 +20,15 @@ class Toddler extends Model
         'nutrition_status',
         'vitamin_a',
         'immunization_followup',
+        'eighteen_month',
         'food_supplement',
         'parenting_education',
         'motor_development',
         'checkup_date',
+    ];
+
+    protected $casts = [
+        'eighteen_month' => 'array',
     ];
 
     public function user()
