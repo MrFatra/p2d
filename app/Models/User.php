@@ -96,7 +96,7 @@ class User extends Authenticatable implements FilamentUser
                 ],
                 'child' => [
                     'min_month' => 60,
-                    'max_month' => 72,
+                    'max_month' => 71,
                     'relation' => 'preschoolers'
                 ],
                 'teenager' => [
@@ -188,7 +188,7 @@ class User extends Authenticatable implements FilamentUser
         }
 
         // 3. Anak Pra-Sekolah 60–72 bulan
-        if ($ageInMonths >= 60 && $ageInMonths <= 72) {
+        if ($ageInMonths >= 60 && $ageInMonths <= 71) {
             return 'child';
         }
 
