@@ -103,7 +103,7 @@ class UserSeeder extends Seeder
             'name' => 'Agung Prasetyo',
             'email' => 'agung.prasetyo@example.com',
             'password' => bcrypt('password'),
-            'birth_date' => '2015-07-14',
+            'birth_date' => '2017-07-14',
             'place_of_birth' => 'Tangerang',
             'gender' => 'L',
             'phone_number' => '081344556677',
