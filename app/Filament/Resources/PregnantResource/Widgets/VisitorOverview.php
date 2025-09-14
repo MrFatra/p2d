@@ -94,7 +94,6 @@ class VisitorOverview extends BaseWidget
 
             Stat::make('Total Ibu Hamil', $pregnantTotal . ' Orang')
                 ->description('Terdata sebagai ibu hamil saat ini')
-                ->color('primary'),
         ];
     }
 }

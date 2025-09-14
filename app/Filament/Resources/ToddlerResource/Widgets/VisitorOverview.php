@@ -130,7 +130,6 @@ class VisitorOverview extends BaseWidget
 
             Stat::make('Total Balita', $toddlerTotal . ' Orang')
                 ->description('Terdata sebagai Balita saat ini')
-                ->color($color),
         ];
     }
 }
