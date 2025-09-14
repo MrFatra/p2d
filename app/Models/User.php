@@ -83,79 +83,35 @@ class User extends Authenticatable implements FilamentUser
         $key = "users_{$category}_{$hamlet}_month_{$now->format('Ym')}";
 
         return Cache::remember($key, 90, function () use ($category, $hamlet, $now) {
-
-            $categories = [
-                'baby' => [
-                    'min_month' => 0,
-                    'max_month' => 11,
-                    'relation' => 'infants'
-                ],
-                'toddler' => [
-                    'min_month' => 12,
-                    'max_month' => 59,
-                    'relation' => 'toddlers'
-                ],
-                'child' => [
-                    'min_month' => 60,
-                    'max_month' => 119,
-                    'relation' => 'preschoolers'
-                ],
-                'teenager' => [
-                    'min_year' => 10,
-                    'max_year' => 17,
-                    'relation' => 'teenagers'
-                ],
-                'adult' => [
-                    'min_year' => 18,
-                    'max_year' => 59,
-                    'relation' => 'adults'
-                ],
-                'elderly' => [
-                    'min_year' => 60,
-                    'max_year' => null,
-                    'relation' => 'elderlies'
-                ],
-                'mother' => [
-                    'min_year' => 12,
-                    'max_year' => 60,
-                    'relation' => 'pregnantPostpartumBreastfeedings',
-                    'gender' => 'P'
-                ],
-            ];
-
-
-            if (!$category || !array_key_exists($category, $categories)) {
-                return User::all();
-            }
-
-            $config = $categories[$category];
             $query = User::query();
 
-            if (isset($config['max_month'])) {
-                $query->whereDate('birth_date', '>', $now->copy()->subMonths($config['max_month'] + 1));
+            // If a category is specified, filter by role name.
+            if ($category) {
+                $query->whereHas('roles', function ($q) use ($category) {
+                    $q->where('name', $category);
+                });
             }
 
-            if (isset($config['min_month'])) {
-                $query->whereDate('birth_date', '<=', $now->copy()->subMonths($config['min_month']));
+            // This map is to find users who have NOT had a check-up this month.
+            $relations = [
+                'baby' => 'infants',
+                'toddler' => 'toddlers',
+                'child' => 'preschoolers',
+                'teenager' => 'teenagers',
+                'adult' => 'adults',
+                'elderly' => 'elderlies',
+                'pregnant' => 'pregnantPostpartumBreastfeedings',
+            ];
+
+            if ($category && array_key_exists($category, $relations)) {
+                $relation = $relations[$category];
+                $query->whereDoesntHave($relation, function ($q) use ($now) {
+                    $q->whereYear('created_at', $now->year)
+                        ->whereMonth('created_at', $now->month);
+                });
             }
 
-            if (isset($config['max_year'])) {
-                $query->whereDate('birth_date', '>', $now->copy()->subYears($config['max_year'] + 1));
-            }
-
-            if (isset($config['min_year'])) {
-                $query->whereDate('birth_date', '<=', $now->copy()->subYears($config['min_year']));
-            }
-
-            if (isset($config['gender'])) {
-                $query->where('gender', $config['gender']);
-            }
-
-            $query->whereDoesntHave($config['relation'], function ($q) use ($now) {
-                $q->whereYear('created_at', $now->year)
-                    ->whereMonth('created_at', $now->month);
-            });
-
+            // Filter by hamlet if the user is a cadre.
             if (Auth::user()->hasRole('cadre')) {
                 $query->where('hamlet', $hamlet);
             }
