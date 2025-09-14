@@ -172,39 +172,20 @@ class User extends Authenticatable implements FilamentUser
             return 'none';
         }
 
-        $now = now();
         $birthDate = Carbon::parse($userBirthDate);
+        $ageInMonths = $birthDate->diffInMonths(now());
 
-        $ageInMonths = $birthDate->diffInMonths($now);
-        $ageInYears  = $birthDate->diffInYears($now);
-
-        // 1. Bayi 0–11 bulan
-        if ($ageInMonths >= 0 && $ageInMonths <= 11) {
+        if ($ageInMonths <= 11) { // 0-11 bulan
             return 'baby';
-        }
-
-        // 2. Balita 12–59 bulan
-        if ($ageInMonths >= 12 && $ageInMonths <= 59) {
+        } elseif ($ageInMonths <= 59) { // 1-4 tahun (12-59 bulan)
             return 'toddler';
-        }
-
-        // 3. Anak Pra-Sekolah 60–72 bulan
-        if ($ageInMonths >= 60 && $ageInMonths <= 119) {
+        } elseif ($ageInMonths <= 119) { // 5-9 tahun (60-119 bulan)
             return 'child';
-        }
-
-        // 4. Remaja 10–17 tahun
-        if ($ageInYears >= 10 && $ageInYears <= 17) {
+        } elseif ($ageInMonths < 216) { // 10-17 tahun (120-215 bulan)
             return 'teenager';
-        }
-
-        // 5. Dewasa 18–59 tahun
-        if ($ageInYears >= 18 && $ageInYears <= 59) {
+        } elseif ($ageInMonths < 720) { // 18-59 tahun (216-719 bulan)
             return 'adult';
-        }
-
-        // 6. Lansia 60 tahun ke atas
-        if ($ageInYears >= 60) {
+        } elseif ($ageInMonths >= 720) { // 60+ tahun
             return 'elderly';
         }
 
