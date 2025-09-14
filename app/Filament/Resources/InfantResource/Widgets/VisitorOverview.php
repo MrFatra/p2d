@@ -53,7 +53,7 @@ class VisitorOverview extends BaseWidget
         $lastMonthVisits = $lastMonthQuery->count();
 
         // --- Total Bayi ---
-        $infantQuery = User::role('baby');
+        $infantQuery = User::where('is_death', false)->role('baby');
 
         if ($isCadre) {
             $infantQuery->where('hamlet', $user->hamlet);
@@ -80,7 +80,8 @@ class VisitorOverview extends BaseWidget
         }
 
         // --- Stunting ---
-        $stuntingQuery = Infant::whereIn('stunting_status', ['Stunting', 'Kemungkinan Stunting']);
+        $stuntingQuery = Infant::whereIn('stunting_status', ['Stunting', 'Kemungkinan Stunting'])
+            ->whereHas('user', fn($q) => $q->where('is_death', false));
 
         if ($isCadre) {
             $stuntingQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
@@ -92,7 +93,8 @@ class VisitorOverview extends BaseWidget
             ->count();
 
         // --- Malnutrisi ---
-        $malnutritionQuery = Infant::whereIn('nutrition_status', ['Gizi Kurang', 'Gizi Buruk']);
+        $malnutritionQuery = Infant::whereIn('nutrition_status', ['Gizi Kurang', 'Gizi Buruk'])
+            ->whereHas('user', fn($q) => $q->where('is_death', false));
 
         if ($isCadre) {
             $malnutritionQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
@@ -125,8 +127,7 @@ class VisitorOverview extends BaseWidget
                 ->color('danger'),
 
             Stat::make('Total Bayi', $babyTotal . ' Orang')
-                ->description('Terdata sebagai Bayi saat ini')
-                ->color('primary'),
+                ->description('Terdata sebagai Bayi saat ini'),
         ];
     }
 }

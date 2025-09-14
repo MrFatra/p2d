@@ -53,7 +53,7 @@ class VisitorOverview extends BaseWidget
         $lastMonthVisits = $lastMonthQuery->count();
 
         // --- Total Apras ---
-        $preschoolerCount = User::role('child');
+        $preschoolerCount = User::where('is_death', false)->role('child');
 
         if ($isCadre) {
             $preschoolerCount->where('hamlet', $user->hamlet);
@@ -92,8 +92,7 @@ class VisitorOverview extends BaseWidget
                 ->description($description)
                 ->color($color),
             Stat::make('Total Apras', $preschoolerTotal . ' Orang')
-                ->description('Terdata sebagai Apras saat ini')
-                ->color($color),
+                ->description('Terdata sebagai Apras saat ini'),
         ];
     }
 }

@@ -31,13 +31,13 @@ class VisitorOverview extends BaseWidget
             return $query->whereMonth('created_at', $now->month)
                 ->whereYear('created_at', $now->year);
         });
-        
+
         if ($isCadre) {
             $thisMonthQuery->where('hamlet', $user->hamlet);
         }
-        
+
         $thisMonthVisits = $thisMonthQuery->count();
-        
+
         // --- Kunjungan Bulan Lalu ---
         $lastMonth = $now->copy()->subMonth();
 
@@ -53,7 +53,8 @@ class VisitorOverview extends BaseWidget
         $lastMonthVisits = $lastMonthQuery->count();
 
         // --- Total Balita ---
-        $toddlerQuery = User::role('toddler');
+        $toddlerQuery = User::where('is_death', false)->role('toddler');
+
         if ($isCadre) {
             $toddlerQuery->where('hamlet', $user->hamlet);
         }
@@ -81,7 +82,8 @@ class VisitorOverview extends BaseWidget
         }
 
         // --- Stunting ---
-        $stuntingQuery = Toddler::whereIn('stunting_status', ['Stunting', 'Severe Stunting']);
+        $stuntingQuery = Toddler::whereIn('stunting_status', ['Stunting', 'Severe Stunting'])
+            ->whereHas('user', fn($q) => $q->where('is_death', false));
 
         if ($isCadre) {
             $stuntingQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));
@@ -93,7 +95,8 @@ class VisitorOverview extends BaseWidget
             ->count();
 
         // --- Malnutrisi ---
-        $malnutritionQuery = Toddler::whereIn('nutrition_status', ['Gizi Kurang', 'Gizi Buruk']);
+        $malnutritionQuery = Toddler::whereIn('nutrition_status', ['Gizi Kurang', 'Gizi Buruk'])
+            ->whereHas('user', fn($q) => $q->where('is_death', false));
 
         if ($isCadre) {
             $malnutritionQuery->whereHas('user', fn($q) => $q->where('hamlet', $user->hamlet));

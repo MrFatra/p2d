@@ -53,8 +53,7 @@ class StatsOverview extends BaseWidget
 
         $lastMonthVisits = $lastMonthQuery->count();
 
-        // --- Total Ibu Hamil ---
-        $elderlyQuery = User::role('elderly');
+        $elderlyQuery = User::where('is_death', false)->role('elderly');
 
         if ($isCadre) {
             $elderlyQuery->where('hamlet', $user->hamlet);

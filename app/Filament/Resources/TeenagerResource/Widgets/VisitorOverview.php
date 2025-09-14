@@ -53,7 +53,7 @@ class VisitorOverview extends BaseWidget
         $lastMonthVisits = $lastMonthQuery->count();
 
         // --- Total Remaja ---
-        $teenagerCount = User::role('teenager');
+        $teenagerCount = User::where('is_death', false)->role('teenager');
 
         if ($isCadre) {
             $teenagerCount->where('hamlet', $user->hamlet);
@@ -92,8 +92,7 @@ class VisitorOverview extends BaseWidget
                 ->description($description)
                 ->color($color),
             Stat::make('Total Remaja', $teenagerTotal . ' Orang')
-                ->description('Terdata sebagai Remaja saat ini')
-                ->color($color),
+                ->description('Terdata sebagai Remaja saat ini'),
         ];
     }
 }

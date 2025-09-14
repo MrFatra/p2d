@@ -55,7 +55,7 @@ class AdultVisitor extends BaseWidget
         $lastMonthVisits = $lastMonthQuery->count();
 
         // --- Total Dewasa ---
-        $adultCount = User::role('adult');
+        $adultCount = User::where('is_death', false)->role('adult');
 
         if ($isCadre) {
             $adultCount->where('hamlet', $user->hamlet);

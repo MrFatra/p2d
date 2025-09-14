@@ -53,7 +53,7 @@ class VisitorOverview extends BaseWidget
         $lastMonthVisits = $lastMonthQuery->count();
 
         // --- Total Ibu Hamil ---
-        $pregnantQuery = User::role('pregnant');
+        $pregnantQuery = User::where('is_death', false)->role('pregnant');
 
         if ($isCadre) {
             $pregnantQuery->where('hamlet', $user->hamlet);
