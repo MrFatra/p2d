@@ -34,6 +34,7 @@ class User extends Authenticatable implements FilamentUser
         'hamlet',
         'otp',
         'otp_expires_at',
+        'is_death',
     ];
 
     protected $hidden = [
@@ -96,7 +97,7 @@ class User extends Authenticatable implements FilamentUser
                 ],
                 'child' => [
                     'min_month' => 60,
-                    'max_month' => 71,
+                    'max_month' => 119,
                     'relation' => 'preschoolers'
                 ],
                 'teenager' => [
@@ -188,7 +189,7 @@ class User extends Authenticatable implements FilamentUser
         }
 
         // 3. Anak Pra-Sekolah 60–72 bulan
-        if ($ageInMonths >= 60 && $ageInMonths <= 71) {
+        if ($ageInMonths >= 60 && $ageInMonths <= 119) {
             return 'child';
         }
 

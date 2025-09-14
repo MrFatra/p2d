@@ -88,22 +88,34 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('place_of_birth')
                             ->required()
                             ->label('Tempat Lahir'),
-                        Forms\Components\ToggleButtons::make('gender')
-                            ->label('Jenis Kelamin')
-                            ->required()
-                            ->inline()
-                            ->options([
-                                'L' => 'Laki-Laki',
-                                'P' => 'Perempuan'
+                        Forms\Components\Group::make()
+                            ->columns(2)
+                            ->schema([
+                                Forms\Components\ToggleButtons::make('gender')
+                                    ->label('Jenis Kelamin')
+                                    ->required()
+                                    ->inline()
+                                    ->options([
+                                        'L' => 'Laki-Laki',
+                                        'P' => 'Perempuan'
+                                    ])
+                                    ->colors([
+                                        'L' => 'info',
+                                        'P' => 'pink'
+                                    ])
+                                    ->icons([
+                                        'L' => 'ionicon-male',
+                                        'P' => 'ionicon-female'
+                                    ]),
+                                    Forms\Components\ToggleButtons::make('is_death')
+                                    ->boolean()
+                                    ->inline()
+                                    ->colors([
+                                        '0' => 'gray',
+                                        '1' => 'danger'
+                                    ])
+                                    ->label('Status Kematian'),
                             ])
-                            ->colors([
-                                'L' => 'info',
-                                'P' => 'pink'
-                            ])
-                            ->icons([
-                                'L' => 'ionicon-male',
-                                'P' => 'ionicon-female'
-                            ]),
                     ]),
 
                 Section::make('Data Keluarga')
