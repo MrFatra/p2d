@@ -91,7 +91,7 @@ class StatsOverview extends BaseWidget
                 ->description($description)
                 ->color($color),
             Stat::make('Total Lansia', $elderlyTotal . ' Orang')
-                ->description('Terdata sebagai Lamsia saat ini')
+                ->description('Terdata sebagai Lansia saat ini')
                 ->color($color),
         ];
     }
