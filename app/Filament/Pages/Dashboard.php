@@ -22,7 +22,7 @@ class Dashboard extends BaseDashboard
 
     public function getTitle(): string
     {
-        if ($this->hamlet && !Auth::user()->hasRole(['admin', 'resident'])) {
+        if ($this->hamlet && !Auth::user()->hasRole(['admin', 'resident', 'midwife'])) {
             return 'Beranda Dusun ' . $this->hamlet;
         } else {
             return 'Beranda';
