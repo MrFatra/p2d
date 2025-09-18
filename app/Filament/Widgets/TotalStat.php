@@ -9,6 +9,8 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class TotalStat extends BaseWidget
 {
 
+    protected static ?int $sort = 3;
+
     public static function canAccess(): bool
     {
         return auth()->user()->can('dashboard:stats');
