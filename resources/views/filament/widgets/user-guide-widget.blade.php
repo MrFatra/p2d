@@ -1,5 +1,5 @@
 <x-filament-widgets::widget>
-    <x-filament::section class="!bg-blue-100 border border-blue-500">
+    <x-filament::section class="border border-blue-500" style="background-color: #dbeafe !important">
 
         <div class="flex items-center text-blue-800">
             <div class="text-sm">
