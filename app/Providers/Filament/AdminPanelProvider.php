@@ -45,6 +45,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 \App\Filament\Widgets\CustomAccountWidget::class,
+                \App\Filament\Widgets\UserGuideWidget::class,
                 \App\Filament\Widgets\TotalStat::class,
                 \App\Filament\Widgets\TotalChart::class,
             ])
