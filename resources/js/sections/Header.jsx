@@ -6,7 +6,7 @@ const ArrowRightIcon = (props) => <FaArrowRight {...props} />;
 const Header = () => {
     return (
         <section
-            className="bg-[url('/images/header-bg.jpg')] bg-cover bg-center bg-fixed bg-no-repeat text-foreground"
+            className="bg-cover bg-center bg-fixed bg-no-repeat text-foreground"
         >
             <div className="max-w-7xl mx-auto px-6 py-32 flex flex-col-reverse lg:flex-row items-center gap-12">
                 {/* Text Section */}

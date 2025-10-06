@@ -10,31 +10,37 @@ export default function ImmunizationSchedule() {
     const { schedules } = usePage().props;
     const today = new Date();
     const [date, setDate] = useState(today);
-    const typeMapping = {
-        Donor: "Donor Darah",
-        "Infant Posyandu": "Posyandu Bayi",
-        "Toddler Posyandu": "Posyandu Balita",
-        "Pregnant Women Posyandu": "Posyandu Ibu Hamil",
-        "Teenager Posyandu": "Posyandu Remaja",
-        "Elderly Posyandu": "Posyandu Lansia",
-    };
 
     // 🔹 Mapping schedules dari Laravel ke events untuk kalender
     const events = useMemo(() => {
-        return schedules.map((schedule) => ({
-            id: schedule.id,
-            date: new Date(schedule.date_open), // gunakan date_open sebagai tanggal utama
-            type: schedule.type,
-            description: schedule.notes ?? "Tidak ada deskripsi",
-            start: new Date(schedule.date_open),
-            end: new Date(schedule.date_closed),
-        }));
+        return schedules.map((schedule) => {
+            const [openHour, openMinute] = schedule.time_opened.split(':').map(Number);
+            const [closeHour, closeMinute] = schedule.time_closed.split(':').map(Number);
+
+            const startDateTime = new Date(schedule.date_open);
+            startDateTime.setHours(openHour, openMinute);
+
+            const endDateTime = new Date(schedule.date_closed);
+            endDateTime.setHours(closeHour, closeMinute);
+
+            const formatTime = (time) => time.split(':').slice(0, 2).join(':');
+
+            return {
+                id: schedule.id,
+                type: schedule.type,
+                description: schedule.notes ?? "Tidak ada deskripsi",
+                start: startDateTime,
+                end: endDateTime,
+                time_opened: formatTime(schedule.time_opened),
+                time_closed: formatTime(schedule.time_closed),
+            };
+        });
     }, [schedules]);
 
     // 🔹 Ambil event yang cocok dengan tanggal dipilih
     const getEvent = (selectedDate) => {
         return events.find(
-            (event) => event.date.toDateString() === selectedDate.toDateString()
+            (event) => event.start.toDateString() === selectedDate.toDateString()
         );
     };
 
@@ -50,7 +56,7 @@ export default function ImmunizationSchedule() {
                 </p>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-8 bg-white p-8 rounded-lg shadow-lg">
+            <div className="flex flex-col items-center md:flex-row gap-8 bg-white p-8 rounded-lg shadow-lg">
                 <div className="w-full lg:w-1/2">
                     <Calendar
                         onChange={(val) => setDate(val)}
@@ -83,24 +89,16 @@ export default function ImmunizationSchedule() {
                 <div className="w-full lg:w-1/2 flex flex-col justify-center">
                     {getEvent(date) ? (
                         <div className="relative bg-gradient-to-br from-custom-emerald/90 to-custom-emerald/70 text-white p-8 rounded-2xl shadow-lg transform hover:scale-[1.02] transition duration-300 ease-in-out">
-                            {/* Badge jenis kegiatan */}
-                            <span className="absolute top-4 right-4 bg-shades backdrop-blur-sm text-white font-medium text-xs px-3 py-1 rounded-full">
-                                {typeMapping[getEvent(date).type] ||
-                                    getEvent(date).type}
-                            </span>
 
                             {/* Judul Kegiatan */}
-                            <h3 className="text-3xl font-extrabold mb-4 flex items-center gap-2">
-                                📅 {typeMapping[getEvent(date).type] ||
-                                    getEvent(date).type}
+                            <h3 className="text-[1.65rem] lg:text-3xl font-extrabold mb-4 flex items-center gap-2">
+                                📅 {getEvent(date).type}
                             </h3>
 
                             {/* Detail Tanggal */}
-                            <p className="mb-3 flex items-center gap-2">
-                                <span className="font-semibold text-white">
-                                    Tanggal:
-                                </span>{" "}
-                                {getEvent(date).date.toLocaleDateString(
+                            <p className="mt-2 font-bold text-white text-lg">Tanggal Mulai:</p>
+                            <p>
+                                {getEvent(date).start.toLocaleDateString(
                                     "id-ID",
                                     {
                                         weekday: "long",
@@ -111,7 +109,19 @@ export default function ImmunizationSchedule() {
                                 )}
                             </p>
 
+                            {/* Detail Waktu */}
+                            <p className="mt-2 font-bold text-white text-lg">Waktu Mulai:</p>
+                            <p>
+                                {getEvent(date).time_opened}
+                            </p>
+
+                            <p className="mt-2 font-bold text-white text-lg">Waktu Selesai:</p>
+                            <p>
+                                {getEvent(date).time_closed}
+                            </p>
+
                             {/* Deskripsi */}
+                            <p className="mt-2 font-bold text-white text-lg">Keterangan:</p>
                             <p className="text-white/90 leading-relaxed">
                                 {getEvent(date).description}
                             </p>

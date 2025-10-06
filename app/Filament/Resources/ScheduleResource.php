@@ -53,11 +53,11 @@ class ScheduleResource extends Resource
                             ->required()
                             ->options([
                                 'Donor' => 'Donor',
-                                'Infant Posyandu' => 'Posyandu Bayi',
-                                'Toddler Posyandu' => 'Posyandu Balita',
-                                'Pregnant Women Posyandu' => 'Posyandu Ibu Hamil',
-                                'Teenager Posyandu' => 'Posyandu Remaja',
-                                'Elderly Posyandu' => 'Posyandu Lansia',
+                                'Posyandu Umum' => 'Posyandu Umum',
+                                'Posyandu Balita' => 'Posyandu Balita',
+                                'Posyandu Ibu Hamil' => 'Posyandu Ibu Hamil',
+                                'Posyandu Remaja' => 'Posyandu Remaja',
+                                'Posyandu Lansia' => 'Posyandu Lansia',
                             ])
                             ->native(false),
                         TextInput::make('notes')
@@ -111,21 +111,14 @@ class ScheduleResource extends Resource
                 TextColumn::make('type')
                     ->label('Jadwal Posyandu')
                     ->badge()
-                    ->formatStateUsing(fn(string $state): string => match ($state) {
-                        'Donor' => 'Donor',
-                        'Infant Posyandu' => 'Posyandu Bayi',
-                        'Toddler Posyandu' => 'Posyandu Balita',
-                        'Pregnant Women Posyandu' => 'Posyandu Ibu Hamil',
-                        'Teenager Posyandu' => 'Posyandu Remaja',
-                        'Elderly Posyandu' => 'Posyandu Lansia',
-                    })
                     ->color(fn(string $state): string => match ($state) {
                         'Donor' => 'danger',
-                        'Infant Posyandu' => 'warning',
-                        'Toddler Posyandu' => 'success',
-                        'Pregnant Women Posyandu' => 'secondary',
-                        'Teenager Posyandu' => 'primary',
-                        'Elderly Posyandu' => 'info',
+                        'Posyandu Umum' => 'success',
+                        'Posyandu Bayi' => 'info',
+                        'Posyandu Balita' => 'info',
+                        'Posyandu Ibu Hamil' => 'pink',
+                        'Posyandu Remaja' => 'primary',
+                        'Posyandu Lansia' => 'warning',
                         default => 'gray',
                     }),
                 TextColumn::make('date_open')
@@ -143,27 +136,23 @@ class ScheduleResource extends Resource
                 TextColumn::make('notes')
                     ->label('Deskripsi'),
             ])
-            ->filters([
-
-            ])->headerActions([
-
-            ])
+            ->filters([])->headerActions([])
             ->actions([
                 Tables\Actions\ViewAction::make()
                     ->icon('heroicon-o-eye')
                     ->label('Lihat Jadwal')
-                    ->visible(fn () => auth()->user()->can('jadwal:read')),
+                    ->visible(fn() => auth()->user()->can('jadwal:read')),
                 Tables\Actions\EditAction::make()
                     ->icon('heroicon-o-pencil-square')
                     ->label('Ubah Jadwal')
-                    ->visible(fn () => auth()->user()->can('jadwal:update')),
+                    ->visible(fn() => auth()->user()->can('jadwal:update')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
                         ->icon('heroicon-o-trash')
                         ->label('Hapus Jadwal')
-                        ->visible(fn () => auth()->user()->can('jadwal:delete')),
+                        ->visible(fn() => auth()->user()->can('jadwal:delete')),
                 ]),
             ]);
     }

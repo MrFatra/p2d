@@ -21,21 +21,7 @@ class LandingPageController extends Controller
         $schedules = Schedule::whereMonth('date_open', $now->month)
             ->whereYear('date_open', $now->year)
             ->orderBy('date_open', 'asc')
-            ->get()
-            ->map(function ($schedule) {
-                $typeMapping = [
-                    'Donor' => 'Donor Darah',
-                    'Infant Posyandu' => 'Posyandu Bayi',
-                    'Toddler Posyandu' => 'Posyandu Balita',
-                    'Pregnant Women Posyandu' => 'Posyandu Ibu Hamil',
-                    'Teenager Posyandu' => 'Posyandu Remaja',
-                    'Elderly Posyandu' => 'Posyandu Lansia',
-                ];
-
-                $schedule->type_label = $typeMapping[$schedule->type] ?? $schedule->type;
-                $schedule->tanggal_label = \Carbon\Carbon::parse($schedule->date_open)->translatedFormat('l, d F Y');
-                return $schedule;
-            });
+            ->get();
 
         $latestArticles = Article::where('status', 'published')
             ->orderBy('published_at', 'desc')
