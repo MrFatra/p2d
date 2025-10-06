@@ -283,10 +283,8 @@ class UserResource extends Resource
                     ->sortable()
                     ->searchable(),
 
-                TextColumn::make('address')
-                    ->label('Alamat')
-                    ->limit(30)
-                    ->tooltip(fn($record) => $record->address)
+                TextColumn::make('hamlet')
+                    ->label('Dusun')
                     ->sortable()
                     ->searchable(),
 

@@ -21,38 +21,38 @@ class EditUser extends EditRecord
         ];
     }
 
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-        unset($data['roles']);
+    // protected function mutateFormDataBeforeSave(array $data): array
+    // {
+    //     unset($data['roles']);
 
-        return $data;
-    }
+    //     return $data;
+    // }
 
-    public function afterSave(): void
-    {
-        $selectedRoleIds = $this->form->getState()['roles'] ?? [];
+    // public function afterSave(): void
+    // {
+    //     $selectedRoleIds = $this->form->getState()['roles'] ?? [];
 
-        if (!is_array($selectedRoleIds)) {
-            $selectedRoleIds = [$selectedRoleIds];
-        }
+    //     if (!is_array($selectedRoleIds)) {
+    //         $selectedRoleIds = [$selectedRoleIds];
+    //     }
 
-        // Cek apakah nilai roles berubah dari sebelumnya
-        $currentRoleNames = $this->record->roles->pluck('name')->toArray();
-        $newRoleNames = \Spatie\Permission\Models\Role::whereIn('id', $selectedRoleIds)->pluck('name')->toArray();
+    //     // Cek apakah nilai roles berubah dari sebelumnya
+    //     $currentRoleNames = $this->record->roles->pluck('name')->toArray();
+    //     $newRoleNames = \Spatie\Permission\Models\Role::whereIn('id', $selectedRoleIds)->pluck('name')->toArray();
 
-        sort($currentRoleNames);
-        sort($newRoleNames);
+    //     sort($currentRoleNames);
+    //     sort($newRoleNames);
 
-        // Jika tidak berubah, tidak perlu sync
-        if ($currentRoleNames === $newRoleNames) {
-            return;
-        }
+    //     // Jika tidak berubah, tidak perlu sync
+    //     if ($currentRoleNames === $newRoleNames) {
+    //         return;
+    //     }
 
-        // Jika kosong atau masih punya role "none", tentukan role berdasarkan tanggal lahir
-        if (empty($newRoleNames) || $this->record->hasRole('none')) {
-            $newRoleNames = User::determineTypeOfUser($this->record->birth_date);
-        }
+    //     // Jika kosong atau masih punya role "none", tentukan role berdasarkan tanggal lahir
+    //     if (empty($newRoleNames) || $this->record->hasRole('none')) {
+    //         $newRoleNames = User::determineTypeOfUser($this->record->birth_date);
+    //     }
 
-        $this->record->syncRoles($newRoleNames);
-    }
+    //     $this->record->syncRoles($newRoleNames);
+    // }
 }

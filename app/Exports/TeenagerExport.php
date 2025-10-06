@@ -43,8 +43,8 @@ class TeenagerExport implements
     public function map($teenager): array
     {
         return [
-            $teenager->user?->father->name,
-            $teenager->user?->mother->name,
+            $teenager->user?->father?->name,
+            $teenager->user?->mother?->name,
             $teenager->user->name,
             $teenager->weight,
             $teenager->height,

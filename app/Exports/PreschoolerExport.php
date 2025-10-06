@@ -42,8 +42,8 @@ class PreschoolerExport implements
     public function map($preschooler): array
     {
         return [
-            $preschooler->user?->father->name,
-            $preschooler->user?->mother->name,
+            $preschooler->user?->father?->name,
+            $preschooler->user?->mother?->name,
             $preschooler->user->name,
             $preschooler->weight,
             $preschooler->height,
