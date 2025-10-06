@@ -51,11 +51,13 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
-    protected static function boot()
+    protected static function booted()
     {
-        parent::boot();
+        static::created(function ($user) {
+            if ($user->hasRole(['admin', 'cadre', 'resident', 'midwife'])) {
+                $user->syncRoles($user->roles->first());
+            }
 
-        static::creating(function ($user) {
             if (!$user->hasRole(['admin', 'cadre', 'resident', 'midwife'])) {
                 $user->syncRoles(self::determineTypeOfUser($user->birth_date));
             }
@@ -66,13 +68,17 @@ class User extends Authenticatable implements FilamentUser
                 unset($user->password);
             }
 
+            if ($user->hasRole(['admin', 'cadre', 'resident', 'midwife'])) {
+                $user->syncRoles($user->roles->first());
+            }
+
+            if (!$user->hasRole(['admin', 'cadre', 'resident', 'midwife'])) {
+                $user->syncRoles(self::determineTypeOfUser($user->birth_date));
+            }
+
             if ($user->isDirty('birth_date') && !$user->hasRole(['admin', 'cadre', 'resident', 'midwife'])) {
                 $user->syncRoles(self::determineTypeOfUser($user->birth_date));
             }
-        });
-
-        static::deleting(function ($user) {
-            $user->syncRoles([]);
         });
     }
 
