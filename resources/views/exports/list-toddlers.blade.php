@@ -65,8 +65,8 @@
             @endphp
 
             <tr>
-                <td>{{ $toddler->user?->father->name }}</td>
-                <td>{{ $toddler->user?->mother->name }}</td>
+                <td>{{ $toddler->user?->father?->name }}</td>
+                <td>{{ $toddler->user?->mother?->name }}</td>
                 <td>{{ $toddler->user->name }}</td>
                 <td style="text-align: right;">{{ $toddler->weight }}</td>
                 <td style="text-align: right;">{{ $toddler->height }}</td>

@@ -42,8 +42,8 @@ class ToddlerExport implements
     public function map($toddler): array
     {
         return [
-            $toddler->user?->father->name,
-            $toddler->user?->mother->name,
+            $toddler->user?->father?->name,
+            $toddler->user?->mother?->name,
             $toddler->user->name,
             $toddler->weight,
             $toddler->height,

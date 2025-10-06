@@ -73,8 +73,8 @@
     <tbody>
         @foreach ($preschoolers as $preschooler)
             @php
-                $fatherName = $preschooler->user?->father->name;
-                $motherName = $preschooler->user?->mother->name;
+                $fatherName = $preschooler->user?->father?->name;
+                $motherName = $preschooler->user?->mother?->name;
 
                 [$bgNutrition, $colorNutrition] = nutritionColor($preschooler->nutrition_status);
                 [$bgMotor, $colorMotor] = motorColor($preschooler->motor_development);
