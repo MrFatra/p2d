@@ -11,7 +11,6 @@ export default function ImmunizationSchedule() {
     const today = new Date();
     const [date, setDate] = useState(today);
 
-    // 🔹 Mapping schedules dari Laravel ke events untuk kalender
     const events = useMemo(() => {
         return schedules.map((schedule) => {
             const [openHour, openMinute] = schedule.time_opened.split(':').map(Number);
@@ -37,7 +36,6 @@ export default function ImmunizationSchedule() {
         });
     }, [schedules]);
 
-    // 🔹 Ambil event yang cocok dengan tanggal dipilih
     const getEvent = (selectedDate) => {
         return events.find(
             (event) => event.start.toDateString() === selectedDate.toDateString()
@@ -46,7 +44,6 @@ export default function ImmunizationSchedule() {
 
     return (
         <div id="schedule" className="container mx-auto py-20 max-w-7xl text-foreground">
-
             <div className="text-center">
                 <h2 className="text-2xl md:text-3xl font-bold text-custom-emerald mb-2">
                     Jadwal Kegiatan Posyandu
@@ -69,14 +66,11 @@ export default function ImmunizationSchedule() {
                             ) : null
                         }
                         tileClassName={({ date, view }) =>
-                            view === "month" &&
-                                date.toDateString() === today.toDateString()
+                            view === "month" && date.toDateString() === today.toDateString()
                                 ? "bg-custom-emerald text-white"
                                 : null
                         }
-                        activeStartDate={
-                            new Date(today.getFullYear(), today.getMonth(), 1)
-                        }
+                        activeStartDate={new Date(today.getFullYear(), today.getMonth(), 1)}
                         minDetail="month"
                         maxDetail="month"
                         locale="id-ID"
@@ -88,43 +82,47 @@ export default function ImmunizationSchedule() {
 
                 <div className="w-full lg:w-1/2 flex flex-col justify-center">
                     {getEvent(date) ? (
-                        <div className="relative bg-gradient-to-br from-custom-emerald/90 to-custom-emerald/70 text-white p-8 rounded-2xl shadow-lg transform hover:scale-[1.02] transition duration-300 ease-in-out">
+                        <div className="relative rounded-2xl transition duration-300 ease-in-out outline outline-custom-emerald">
 
                             {/* Judul Kegiatan */}
-                            <h3 className="text-[1.65rem] lg:text-3xl font-extrabold mb-4 flex items-center gap-2">
-                                📅 {getEvent(date).type}
-                            </h3>
+                            <div className="flex items-center gap-2 mb-6 bg-custom-emerald text-white rounded-t-xl p-4">
+                                <p className="text-2xl lg:text-3xl font-extrabold">📅</p>
+                                <div className="flex flex-col gap-1">
+                                    <h3 className="text-2xl lg:text-3xl font-extrabold flex items-center gap-2">
+                                        {getEvent(date).type}
+                                    </h3>
+                                    <p className="text-lg">
+                                        {getEvent(date).start.toLocaleDateString("id-ID", {
+                                            weekday: "long",
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric",
+                                        })}
+                                    </p>
+                                </div>
+                            </div>
 
-                            {/* Detail Tanggal */}
-                            <p className="mt-2 font-bold text-white text-lg">Tanggal Mulai:</p>
-                            <p>
-                                {getEvent(date).start.toLocaleDateString(
-                                    "id-ID",
-                                    {
-                                        weekday: "long",
-                                        year: "numeric",
-                                        month: "long",
-                                        day: "numeric",
-                                    }
-                                )}
-                            </p>
+                            <div className="px-8 py-4 bg-white rounded-b-xl text-custom-emerald">
 
-                            {/* Detail Waktu */}
-                            <p className="mt-2 font-bold text-white text-lg">Waktu Mulai:</p>
-                            <p>
-                                {getEvent(date).time_opened}
-                            </p>
+                                {/* Detail Waktu */}
+                                <div className="grid grid-cols-2 gap-8 mb-8">
+                                    <div className="text-center">
+                                        <p className="font-bold text-2xl">Mulai</p>
+                                        <p className="text-lg font-semibold">{getEvent(date).time_opened} WIB</p>
+                                    </div>
 
-                            <p className="mt-2 font-bold text-white text-lg">Waktu Selesai:</p>
-                            <p>
-                                {getEvent(date).time_closed}
-                            </p>
+                                    <div className="text-center">
+                                        <p className="font-bold text-2xl">Selesai</p>
+                                        <p className="text-lg font-semibold">{getEvent(date).time_closed} WIB</p>
+                                    </div>
+                                </div>
 
-                            {/* Deskripsi */}
-                            <p className="mt-2 font-bold text-white text-lg">Keterangan:</p>
-                            <p className="text-white/90 leading-relaxed">
-                                {getEvent(date).description}
-                            </p>
+                                {/* Deskripsi */}
+                                <div>
+                                    <p className="font-bold text-2xl mb-2">Keterangan Acara:</p>
+                                    <p className="text-base mb-2">{getEvent(date).description}</p>
+                                </div>
+                            </div>
                         </div>
                     ) : (
                         <div className="bg-gray-50 border border-gray-200 p-8 rounded-2xl shadow-sm text-center text-gray-500">
