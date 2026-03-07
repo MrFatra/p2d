@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/siposyan/public_html/
+    - export DEPLOYPATH=/home/siposyan/public_html/p2d
     - /bin/cp -r * $DEPLOYPATH
